@@ -28,11 +28,85 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (_refreshHeaderView == nil) {
+        
+        EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, self.view.frame.size.width, self.tableView.bounds.size.height)];
+        view.delegate = self;
+        [self.tableView addSubview:view];
+        _refreshHeaderView = view;        
+    }
+    
+    //  update the last update date
+    [_refreshHeaderView refreshLastUpdatedDate];
+    
 	// Do any additional setup after loading the view, typically from a nib.
     searchDuanZiList = [[NSMutableArray alloc] init];
     [self requestResultFromServer];
 
 }
+#pragma mark -
+#pragma mark Data Source Loading / Reloading Methods
+
+- (void)reloadTableViewDataSource{
+    
+    //  should be calling your tableviews data source model to reload
+    //  put here just for demo
+    _reloading = YES;
+    [self requestResultFromServer];
+}
+
+- (void)doneLoadingTableViewData{
+    
+    //  model should call this when its done loading
+    _reloading = NO;
+    [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+    
+}
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    
+    CGPoint contentOffsetPoint = tableView.contentOffset;
+    CGRect frame = tableView.frame;
+    if (contentOffsetPoint.y == tableView.contentSize.height - frame.size.height || tableView.contentSize.height < frame.size.height) 
+    {
+        NSLog(@"scroll to the end");
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    
+    [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+    
+}
+
+#pragma mark -
+#pragma mark EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+    
+    [self reloadTableViewDataSource];
+    [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
+    
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+    
+    return _reloading; // should return if data source model is reloading
+    
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+    
+    return [NSDate date]; // should return date data source was last changed
+    
+}
+
 - (void)loadUrl {
     url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=0&count=20"];
 }
@@ -164,6 +238,7 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
+        //【顶部】
         //微博名
         UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 0, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
         brandNameLabel.textAlignment = UITextAlignmentLeft;
@@ -197,7 +272,7 @@
         [layer setCornerRadius:5.0];  
         [layer setBorderWidth:1.0];  
         [layer setBorderColor:[[UIColor clearColor] CGColor]];  
-        
+        //【中部】
         //微博内容
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         label.tag = 1;
@@ -210,6 +285,28 @@
         //[[label layer] setBorderColor:[NoneAdultAppDelegate getColorFromRed:255 Green:0 Blue:0 Alpha:100]];
         [[label layer] setBackgroundColor:[NoneAdultAppDelegate getColorFromRed:200 Green:200 Blue:200 Alpha:100]];
         [cell.contentView addSubview:label];
+        
+        //【底部】
+        //顶踩评
+        UILabel *dingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[duanZi objectForKey:@"favorite_count"];
+        dingLabel.text = [NSString stringWithFormat:@"顶: %@",[favoriteCount stringValue]];
+        [cell.contentView addSubview:dingLabel];
+        dingLabel.tag = 2;
+
+        UILabel *caiLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        NSDecimalNumber *buryCount = (NSDecimalNumber *)[duanZi objectForKey:@"bury_count"];
+        caiLabel.text = [NSString stringWithFormat:@"踩: %@",[buryCount stringValue]];
+        [cell.contentView addSubview:caiLabel];
+        caiLabel.tag = 3;
+
+        UILabel *pingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        NSDecimalNumber *commentsCount = (NSDecimalNumber *)[duanZi objectForKey:@"comments_count"];
+        pingLabel.text = [NSString stringWithFormat:@"评论: %@",[commentsCount stringValue]];
+        pingLabel.textAlignment = UITextAlignmentRight;
+        [cell.contentView addSubview:pingLabel];
+        pingLabel.tag = 4;
+
     }
     
     //content内容自适应
@@ -228,29 +325,15 @@
         cellFrame.size.height = 50;
     }
     
+    UILabel *dingLabel = (UILabel *)[cell viewWithTag:2];
+    [dingLabel setFrame:CGRectMake(0, cellFrame.size.height + TOP_SECTION_HEIGHT, 75, BOTTOM_SECTION_HEIGHT)];
+    UILabel *caiLabel = (UILabel *)[cell viewWithTag:3];
+    [caiLabel setFrame:CGRectMake(75, cellFrame.size.height + TOP_SECTION_HEIGHT, 75, BOTTOM_SECTION_HEIGHT)];
+    UILabel *pingLabel = (UILabel *)[cell viewWithTag:4];
+    [pingLabel setFrame:CGRectMake(150, cellFrame.size.height + TOP_SECTION_HEIGHT, 320 - 150, BOTTOM_SECTION_HEIGHT)];
+
     
     [cell setFrame:cellFrame];
-    
-    /*
-
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:OffenceCustomCellIdentifier];
-    }
-    
-    int row = [indexPath row];
-   
-    NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
-    [cell.textLabel setText:[duanZi objectForKey:@"content"]];
-    [cell.textLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
-    [cell.textLabel setNumberOfLines:0];
-
-    [cell.detailTextLabel setText:[duanZi objectForKey:@"screen_name"]];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"profile_image_url"]] 
-                   placeholderImage:[UIImage imageNamed:@"shi.jpeg"]];
-    
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-     */
 	return cell;
 }
 
