@@ -17,14 +17,34 @@
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
 
++(CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha
+{
+    CGFloat r = (CGFloat) red/255.0;
+    CGFloat g = (CGFloat) green/255.0;
+    CGFloat b = (CGFloat) blue/255.0;
+    CGFloat a = (CGFloat) alpha/255.0;  
+    CGFloat components[4] = {r,g,b,a};
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+	CGColorRef color = (CGColorRef)CGColorCreate(colorSpace, components);
+    CGColorSpaceRelease(colorSpace);
+	
+    return color;
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    UIViewController *viewController1 = [[NoneAdultFirstViewController alloc] initWithNibName:@"NoneAdultFirstViewController" bundle:nil];
-    UIViewController *viewController2 = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
+    UIViewController *newController = [[NoneAdultFirstViewController alloc] initWithNibName:@"NoneAdultFirstViewController" bundle:nil];
+    UINavigationController *newNavViewController = [[UINavigationController alloc] initWithRootViewController:newController];
+    [newNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    
+    UIViewController *historyTopController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
+    UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
+    [historyTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:viewController1, viewController2, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:newNavViewController, historyTopNavViewController, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     return YES;
