@@ -42,6 +42,8 @@
     
 	// Do any additional setup after loading the view, typically from a nib.
     searchDuanZiList = [[NSMutableArray alloc] init];
+    loadOld = NO;
+    _reloading = YES;
     [self requestResultFromServer];
 
 }
@@ -76,6 +78,11 @@
     if (contentOffsetPoint.y == tableView.contentSize.height - frame.size.height || tableView.contentSize.height < frame.size.height) 
     {
         NSLog(@"scroll to the end");
+        if (!_reloading) {
+            loadOld = YES;
+            _reloading = YES;
+            [self requestResultFromServer];
+        }
     }
 }
 
@@ -107,8 +114,33 @@
     
 }
 
+/*
+ 第一次进来
+ http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=0&count=20
+ 1336003210 - 1335974028（作为max_behot_time）
+ 滑倒底
+ http://i.snssdk.com/essay/1/recent/?tag=joke&max_behot_time=1335974028&count=20
+ 下拉更新
+ http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=1336003210&count=20
+ */
+
 - (void)loadUrl {
-    url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=0&count=20"];
+    if (loadOld) {
+        NSDictionary *duanZi = [searchDuanZiList objectAtIndex:([searchDuanZiList count] - 1)];
+        NSDecimalNumber *currentMinTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
+        int currentMinTimestamp = [currentMinTimestampNumber intValue];
+        url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
+    } else {
+        if ([searchDuanZiList count] == 0) {
+            url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",0];
+        } else {
+            NSDictionary *duanZi = [searchDuanZiList objectAtIndex:0];
+            NSDecimalNumber *currentMaxTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
+            int currentMaxTimestamp = [currentMaxTimestampNumber intValue];
+            url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
+        }
+    }
+    NSLog(@"loadUrl: %@", url);
 }
 
 - (void)requestResultFromServer {
@@ -118,6 +150,7 @@
     
     //NSLog(@"requestTipInfoFromServer url:%@", url);
     [self loadUrl];
+    
     url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     //NSLog(@"requestTipInfoFromServer encoded url:%@", url);
 	
@@ -190,15 +223,23 @@
     //NSLog(responseString);
     NSDictionary *responseInfo = [UMSNSStringJson JSONValue:responseString]; 
     NSMutableArray *addedList = [responseInfo objectForKey:@"data"];
+    NSLog(@"result: %@", addedList);
     [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
     //[tableView reloadData];
 }
 
 -(void)appendTableWith:(NSMutableArray *)data
 {
-    for (int i=0;i<[data count];i++) {
-        [searchDuanZiList addObject:[data objectAtIndex:i]];
+    if (loadOld) {
+        for (int i=0;i<[data count];i++) {
+            [searchDuanZiList addObject:[data objectAtIndex:i]];
+        }
+    } else {
+        for (int i=[data count]-1;i>=0;i--) {
+            [searchDuanZiList insertObject:[data objectAtIndex:i] atIndex:0];
+        }
     }
+    
     NSMutableArray *insertIndexPaths = [NSMutableArray arrayWithCapacity:10];
     for (int ind = 0; ind < [data count]; ind++) {
         int row = [searchDuanZiList indexOfObject:[data objectAtIndex:ind]];
@@ -208,6 +249,7 @@
     [tableView beginUpdates];
     [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
     [tableView endUpdates];
+    _reloading = NO;
 }
 
 

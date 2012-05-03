@@ -27,6 +27,7 @@
     
     //  Reloading var should really be your tableviews datasource
     //  Putting it here for demo purposes
+    BOOL loadOld;
     BOOL _reloading;
 }
 @property(nonatomic, retain) UITableView *tableView;
