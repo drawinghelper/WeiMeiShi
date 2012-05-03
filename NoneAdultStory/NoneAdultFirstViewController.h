@@ -24,9 +24,12 @@
     NSMutableArray *searchDuanZiList;
     
     EGORefreshTableHeaderView *_refreshHeaderView;
+    UIActivityIndicatorView *activityIndicator;
     
     //  Reloading var should really be your tableviews datasource
     //  Putting it here for demo purposes
+    BOOL canLoadOld;
+    BOOL canLoadNew;
     BOOL loadOld;
     BOOL _reloading;
 }

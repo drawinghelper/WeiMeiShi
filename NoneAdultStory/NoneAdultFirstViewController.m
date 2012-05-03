@@ -29,6 +29,19 @@
 {
     [super viewDidLoad];
     
+    //创建UIActivityIndicatorView背底半透明View
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 424)];
+    [view setTag:103];
+    [view setBackgroundColor:[UIColor blackColor]];
+    [view setAlpha:0.6];
+    [self.view addSubview:view];
+    
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
+    [activityIndicator setCenter:view.center];
+    [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [activityIndicator startAnimating];
+    [view addSubview:activityIndicator];
+
     if (_refreshHeaderView == nil) {
         
         EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, self.view.frame.size.width, self.tableView.bounds.size.height)];
@@ -42,6 +55,8 @@
     
 	// Do any additional setup after loading the view, typically from a nib.
     searchDuanZiList = [[NSMutableArray alloc] init];
+    canLoadNew = YES;
+    canLoadOld = YES;
     loadOld = NO;
     _reloading = YES;
     [self requestResultFromServer];
@@ -54,8 +69,10 @@
     
     //  should be calling your tableviews data source model to reload
     //  put here just for demo
-    _reloading = YES;
-    [self requestResultFromServer];
+    if (canLoadNew) {
+        _reloading = YES;
+        [self requestResultFromServer];
+    }
 }
 
 - (void)doneLoadingTableViewData{
@@ -73,15 +90,17 @@
     
     [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
     
-    CGPoint contentOffsetPoint = tableView.contentOffset;
-    CGRect frame = tableView.frame;
-    if (contentOffsetPoint.y == tableView.contentSize.height - frame.size.height || tableView.contentSize.height < frame.size.height) 
-    {
-        NSLog(@"scroll to the end");
-        if (!_reloading) {
-            loadOld = YES;
-            _reloading = YES;
-            [self requestResultFromServer];
+    if (canLoadOld) {
+        CGPoint contentOffsetPoint = tableView.contentOffset;
+        CGRect frame = tableView.frame;
+        if (contentOffsetPoint.y == tableView.contentSize.height - frame.size.height || tableView.contentSize.height < frame.size.height) 
+        {
+            NSLog(@"scroll to the end");
+            if (!_reloading) {
+                loadOld = YES;
+                _reloading = YES;
+                [self requestResultFromServer];
+            }
         }
     }
 }
@@ -164,6 +183,9 @@
 	[request setValue:postLength forHTTPHeaderField:@"Content-Length"];  
 	[request setHTTPBody:postData];  
     [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    UIView *view = (UIView *)[self.view viewWithTag:103];
+    [view setHidden:NO];
 }
 #pragma mark -
 #pragma mark HTTP Response Methods
@@ -373,9 +395,11 @@
     [caiLabel setFrame:CGRectMake(75, cellFrame.size.height + TOP_SECTION_HEIGHT, 75, BOTTOM_SECTION_HEIGHT)];
     UILabel *pingLabel = (UILabel *)[cell viewWithTag:4];
     [pingLabel setFrame:CGRectMake(150, cellFrame.size.height + TOP_SECTION_HEIGHT, 320 - 150, BOTTOM_SECTION_HEIGHT)];
-
     
     [cell setFrame:cellFrame];
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
 	return cell;
 }
 

@@ -11,6 +11,7 @@
 #import "NoneAdultFirstViewController.h"
 
 #import "NoneAdultSecondViewController.h"
+#import "NoneAdultMonthTopViewController.h"
 
 @implementation NoneAdultAppDelegate
 
@@ -42,9 +43,16 @@
     UIViewController *historyTopController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
     UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
     [historyTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+   
+    UIViewController *monthTopController = [[NoneAdultMonthTopViewController alloc] initWithNibName:@"NoneAdultMonthTopViewController" bundle:nil];
+    UINavigationController *monthTopNavViewController = [[UINavigationController alloc] initWithRootViewController:monthTopController];
+    [monthTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:newNavViewController, historyTopNavViewController, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                                             newNavViewController, 
+                                             historyTopNavViewController,
+                                             monthTopNavViewController,nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     return YES;

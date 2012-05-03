@@ -1,30 +1,31 @@
 //
-//  NoneAdultSecondViewController.m
+//  NoneAdultMonthTopViewController.m
 //  NoneAdultStory
 //
-//  Created by 王 攀 on 12-5-2.
+//  Created by 王 攀 on 12-5-3.
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "NoneAdultSecondViewController.h"
+#import "NoneAdultMonthTopViewController.h"
 
-@interface NoneAdultSecondViewController ()
+@interface NoneAdultMonthTopViewController ()
 
 @end
 
-@implementation NoneAdultSecondViewController
+@implementation NoneAdultMonthTopViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(@"历史热门", @"Second");
+        self.title = NSLocalizedString(@"本月热门", @"Second");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
     }
     return self;
 }
+
 - (void)loadUrl {
-    url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/top/?tag=joke&offset=0&count=100"];
+    url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/top/?tag=joke&offset=0&count=100&days=30"];
     NSLog(@"loadUrl: %@", url);
 }
 
@@ -40,11 +41,12 @@
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 @end
