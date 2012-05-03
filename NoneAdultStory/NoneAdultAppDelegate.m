@@ -12,6 +12,7 @@
 
 #import "NoneAdultSecondViewController.h"
 #import "NoneAdultMonthTopViewController.h"
+#import "NoneAdultWeekTopViewController.h"
 
 @implementation NoneAdultAppDelegate
 
@@ -48,11 +49,17 @@
     UINavigationController *monthTopNavViewController = [[UINavigationController alloc] initWithRootViewController:monthTopController];
     [monthTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
+    UIViewController *weekTopController = [[NoneAdultWeekTopViewController alloc] initWithNibName:@"NoneAdultWeekTopViewController" bundle:nil];
+    UINavigationController *weekTopNavViewController = [[UINavigationController alloc] initWithRootViewController:weekTopController];
+    [weekTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                              newNavViewController, 
                                              historyTopNavViewController,
-                                             monthTopNavViewController,nil];
+                                             monthTopNavViewController,
+                                             weekTopNavViewController,
+                                             nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     return YES;
