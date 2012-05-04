@@ -54,7 +54,10 @@
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         NSString *statusContent = nil;
         NSString *weiboContent = [currentDuanZi objectForKey:@"content"];
-        weiboContent = [weiboContent substringToIndex:52];
+        int cuttedLength = 52;
+        if (cuttedLength < [weiboContent length]) {
+            weiboContent = [weiboContent substringToIndex:cuttedLength];
+        }
         statusContent = [NSString 
                          stringWithFormat:@"%@ %@（#%@# %@）",
                          weiboContent,
@@ -68,13 +71,17 @@
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeSina];
+            [UMSNSService shareToSina:self 
+                            andAppkey:@"4fa3232652701556cc00001e" 
+                            andStatus:statusContent];
 
             [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
-            NSLog(@"custom event share_sina_haoxiao!");
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeTenc];
+            NSLog(@"custom event share_sina_haoxiao!");            
+            [UMSNSService shareToTenc:self 
+                            andAppkey:@"4fa3232652701556cc00001e" 
+                            andStatus:statusContent];
 
             [UMSNSService setDataSendDelegate:self];
             return;

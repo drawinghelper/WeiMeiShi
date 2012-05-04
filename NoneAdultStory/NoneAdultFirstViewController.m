@@ -242,7 +242,7 @@
      机场列表响应 http:// fd.tourbox.me/getAirportList
      */
     NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    //NSLog(responseString);
+    NSLog(responseString);
     NSDictionary *responseInfo = [UMSNSStringJson JSONValue:responseString]; 
     NSMutableArray *addedList = [responseInfo objectForKey:@"data"];
     NSLog(@"result: %@", addedList);
@@ -300,9 +300,17 @@
     static NSString *CellIdentifier = @"OffenceCustomCellIdentifier";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
+    //清除已有数据，防止文字重叠
+    for(UIView *view in cell.contentView.subviews){
+        if ([view isKindOfClass:[UIView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+    
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
-        //【顶部】
+    }
+    //【顶部】
         //微博名
         UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 0, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
         brandNameLabel.textAlignment = UITextAlignmentLeft;
@@ -371,10 +379,9 @@
         [cell.contentView addSubview:pingLabel];
         pingLabel.tag = 4;
 
-    }
     
     //content内容自适应
-    UILabel *label = (UILabel *)[cell viewWithTag:1];
+    label = (UILabel *)[cell viewWithTag:1];
     CGRect cellFrame = [cell frame];
     cellFrame.origin = CGPointMake(0, TOP_SECTION_HEIGHT);
     
@@ -389,11 +396,11 @@
         cellFrame.size.height = 50;
     }
     
-    UILabel *dingLabel = (UILabel *)[cell viewWithTag:2];
+    dingLabel = (UILabel *)[cell viewWithTag:2];
     [dingLabel setFrame:CGRectMake(0, cellFrame.size.height + TOP_SECTION_HEIGHT, 75, BOTTOM_SECTION_HEIGHT)];
-    UILabel *caiLabel = (UILabel *)[cell viewWithTag:3];
+    caiLabel = (UILabel *)[cell viewWithTag:3];
     [caiLabel setFrame:CGRectMake(75, cellFrame.size.height + TOP_SECTION_HEIGHT, 75, BOTTOM_SECTION_HEIGHT)];
-    UILabel *pingLabel = (UILabel *)[cell viewWithTag:4];
+    pingLabel = (UILabel *)[cell viewWithTag:4];
     [pingLabel setFrame:CGRectMake(150, cellFrame.size.height + TOP_SECTION_HEIGHT, 320 - 150, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
@@ -412,6 +419,7 @@
     NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
     NoneAdultDetailViewController *detailViewController = [[NoneAdultDetailViewController alloc]initWithNibName:@"NoneAdultDetailViewController" bundle:nil];
     detailViewController.title = @"笑话详情";
+    NSLog(@"duanZi: %@", duanZi);
     detailViewController.currentDuanZi = duanZi;
     detailViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:detailViewController animated:YES];
