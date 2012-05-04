@@ -311,73 +311,86 @@
         cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
     }
     //【顶部】
-        //微博名
-        UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 0, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
-        brandNameLabel.textAlignment = UITextAlignmentLeft;
-        brandNameLabel.text = [duanZi objectForKey:@"screen_name"];
-        brandNameLabel.font = [UIFont fontWithName:@"Helvetica" size:18];
-        brandNameLabel.textColor = [UIColor blackColor];
-        brandNameLabel.backgroundColor = [UIColor clearColor];
-        [cell.contentView addSubview:brandNameLabel];
-        //发布时间
-        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 30, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT-30)];
-        timestampLabel.textAlignment = UITextAlignmentLeft;
-        NSDecimalNumber *number = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
-        NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[number doubleValue]];
-        
-        NSDateFormatter *dateTimeFormatter=[[NSDateFormatter alloc] init];
-        [dateTimeFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-        timestampLabel.text = [dateTimeFormatter stringFromDate:date];   
-        timestampLabel.font = [UIFont fontWithName:@"Helvetica" size:10];
-        timestampLabel.textColor = [UIColor blackColor];
-        timestampLabel.backgroundColor = [UIColor clearColor];
-        [cell.contentView addSubview:timestampLabel];
-        
-        //微博头像
-        UIImageView *brandLogoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shi.jpeg"]];
-        [brandLogoImageView setFrame:CGRectMake(1, 1, TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];        
-        [cell.contentView addSubview:brandLogoImageView];
-        [brandLogoImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"profile_image_url"]] 
-                           placeholderImage:[UIImage imageNamed:@"shi.jpeg"]];
-        CALayer * layer = [brandLogoImageView layer];  
-        [layer setMasksToBounds:YES];  
-        [layer setCornerRadius:5.0];  
-        [layer setBorderWidth:1.0];  
-        [layer setBorderColor:[[UIColor clearColor] CGColor]];  
-        //【中部】
-        //微博内容
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-        label.tag = 1;
-        label.lineBreakMode = UILineBreakModeWordWrap;
-        label.highlightedTextColor = [UIColor whiteColor];
-        label.numberOfLines = 0;
-        label.opaque = NO; // 选中Opaque表示视图后面的任何内容都不应该绘制
-        label.backgroundColor = [UIColor clearColor];
-        //[[label layer] setBorderWidth:1.0f];
-        //[[label layer] setBorderColor:[NoneAdultAppDelegate getColorFromRed:255 Green:0 Blue:0 Alpha:100]];
-        [[label layer] setBackgroundColor:[NoneAdultAppDelegate getColorFromRed:200 Green:200 Blue:200 Alpha:100]];
-        [cell.contentView addSubview:label];
-        
-        //【底部】
-        //顶踩评
-        UILabel *dingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[duanZi objectForKey:@"favorite_count"];
-        dingLabel.text = [NSString stringWithFormat:@"顶: %@",[favoriteCount stringValue]];
-        [cell.contentView addSubview:dingLabel];
-        dingLabel.tag = 2;
+    UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectZero];
+    [cell.contentView addSubview:bottomBgView];
+    [bottomBgView setBackgroundColor:[UIColor lightGrayColor]];
+    [bottomBgView setAlpha:0.3f];
+    [bottomBgView setFrame:CGRectMake(0, 0, 320, TOP_SECTION_HEIGHT)]; 
+    
+    //微博名
+    UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, -7, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
+    brandNameLabel.textAlignment = UITextAlignmentLeft;
+    brandNameLabel.text = [duanZi objectForKey:@"screen_name"];
+    brandNameLabel.font = [UIFont fontWithName:@"Helvetica" size:18];
+    brandNameLabel.textColor = [UIColor blackColor];
+    brandNameLabel.backgroundColor = [UIColor clearColor];
+    [cell.contentView addSubview:brandNameLabel];
+    //发布时间
+    UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 27, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT-30)];
+    timestampLabel.textAlignment = UITextAlignmentLeft;
+    NSDecimalNumber *number = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
+    NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[number doubleValue]];
+    
+    NSDateFormatter *dateTimeFormatter=[[NSDateFormatter alloc] init];
+    [dateTimeFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    timestampLabel.text = [dateTimeFormatter stringFromDate:date];   
+    timestampLabel.font = [UIFont fontWithName:@"Helvetica" size:11];
+    timestampLabel.textColor = [UIColor darkGrayColor];
+    timestampLabel.backgroundColor = [UIColor clearColor];
+    [cell.contentView addSubview:timestampLabel];
+    
+    //微博头像
+    UIImageView *brandLogoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shi.jpeg"]];
+    [brandLogoImageView setFrame:CGRectMake(5, 5, TOP_SECTION_HEIGHT-10, TOP_SECTION_HEIGHT-10)];        
+    [cell.contentView addSubview:brandLogoImageView];
+    [brandLogoImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"profile_image_url"]] 
+                       placeholderImage:[UIImage imageNamed:@"shi.jpeg"]];
+    CALayer *layer = [brandLogoImageView layer];  
+    [layer setMasksToBounds:YES];  
+    [layer setCornerRadius:17.5];  
+    [layer setBorderWidth:1.0];  
+    [layer setBorderColor:[[UIColor clearColor] CGColor]];  
+    //【中部】
+    //微博内容
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    label.tag = 1;
+    label.lineBreakMode = UILineBreakModeWordWrap;
+    label.highlightedTextColor = [UIColor whiteColor];
+    label.numberOfLines = 0;
+    label.opaque = NO; // 选中Opaque表示视图后面的任何内容都不应该绘制
+    label.backgroundColor = [UIColor clearColor];
+    //[[label layer] setBorderWidth:1.0f];
+    //[[label layer] setBorderColor:[NoneAdultAppDelegate getColorFromRed:255 Green:0 Blue:0 Alpha:100]];
+    //[[label layer] setBackgroundColor:[NoneAdultAppDelegate getColorFromRed:200 Green:200 Blue:200 Alpha:100]];
+    [cell.contentView addSubview:label];
+    
+    //【底部】
+    
+    //顶踩评
+    UILabel *dingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[duanZi objectForKey:@"favorite_count"];
+    dingLabel.text = [NSString stringWithFormat:@"顶: %@",[favoriteCount stringValue]];
+    dingLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    dingLabel.textColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1];
+    [cell.contentView addSubview:dingLabel];
+    dingLabel.tag = 2;
 
-        UILabel *caiLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        NSDecimalNumber *buryCount = (NSDecimalNumber *)[duanZi objectForKey:@"bury_count"];
-        caiLabel.text = [NSString stringWithFormat:@"踩: %@",[buryCount stringValue]];
-        [cell.contentView addSubview:caiLabel];
-        caiLabel.tag = 3;
+    UILabel *caiLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    NSDecimalNumber *buryCount = (NSDecimalNumber *)[duanZi objectForKey:@"bury_count"];
+    caiLabel.text = [NSString stringWithFormat:@"踩: %@",[buryCount stringValue]];
+    caiLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    caiLabel.textColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1];
+    [cell.contentView addSubview:caiLabel];
+    caiLabel.tag = 3;
 
-        UILabel *pingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        NSDecimalNumber *commentsCount = (NSDecimalNumber *)[duanZi objectForKey:@"comments_count"];
-        pingLabel.text = [NSString stringWithFormat:@"评论: %@",[commentsCount stringValue]];
-        pingLabel.textAlignment = UITextAlignmentRight;
-        [cell.contentView addSubview:pingLabel];
-        pingLabel.tag = 4;
+    UILabel *pingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    NSDecimalNumber *commentsCount = (NSDecimalNumber *)[duanZi objectForKey:@"comments_count"];
+    pingLabel.text = [NSString stringWithFormat:@"评论: %@",[commentsCount stringValue]];
+    pingLabel.textAlignment = UITextAlignmentRight;
+    pingLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    pingLabel.textColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1];
+    [cell.contentView addSubview:pingLabel];
+    pingLabel.tag = 4;
 
     
     //content内容自适应
@@ -397,11 +410,11 @@
     }
     
     dingLabel = (UILabel *)[cell viewWithTag:2];
-    [dingLabel setFrame:CGRectMake(0, cellFrame.size.height + TOP_SECTION_HEIGHT, 75, BOTTOM_SECTION_HEIGHT)];
+    [dingLabel setFrame:CGRectMake(5, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
     caiLabel = (UILabel *)[cell viewWithTag:3];
-    [caiLabel setFrame:CGRectMake(75, cellFrame.size.height + TOP_SECTION_HEIGHT, 75, BOTTOM_SECTION_HEIGHT)];
+    [caiLabel setFrame:CGRectMake(80, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
     pingLabel = (UILabel *)[cell viewWithTag:4];
-    [pingLabel setFrame:CGRectMake(150, cellFrame.size.height + TOP_SECTION_HEIGHT, 320 - 150, BOTTOM_SECTION_HEIGHT)];
+    [pingLabel setFrame:CGRectMake(155, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320 - 160, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;

@@ -135,8 +135,14 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
         //【顶部】
+        UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectZero];
+        [cell.contentView addSubview:bottomBgView];
+        [bottomBgView setBackgroundColor:[UIColor lightGrayColor]];
+        [bottomBgView setAlpha:0.3f];
+        [bottomBgView setFrame:CGRectMake(0, 0, 320, TOP_SECTION_HEIGHT)];
+        
         //微博名
-        UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 0, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
+        UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, -7, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
         brandNameLabel.textAlignment = UITextAlignmentLeft;
         brandNameLabel.text = [duanZi objectForKey:@"screen_name"];
         brandNameLabel.font = [UIFont fontWithName:@"Helvetica" size:18];
@@ -144,7 +150,7 @@
         brandNameLabel.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:brandNameLabel];
         //发布时间
-        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 30, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT-30)];
+        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 27, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT-30)];
         timestampLabel.textAlignment = UITextAlignmentLeft;
         NSDecimalNumber *number = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
         NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[number doubleValue]];
@@ -152,20 +158,20 @@
         NSDateFormatter *dateTimeFormatter=[[NSDateFormatter alloc] init];
         [dateTimeFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         timestampLabel.text = [dateTimeFormatter stringFromDate:date];   
-        timestampLabel.font = [UIFont fontWithName:@"Helvetica" size:10];
-        timestampLabel.textColor = [UIColor blackColor];
+        timestampLabel.font = [UIFont fontWithName:@"Helvetica" size:11];
+        timestampLabel.textColor = [UIColor darkGrayColor];
         timestampLabel.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:timestampLabel];
         
         //微博头像
         UIImageView *brandLogoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shi.jpeg"]];
-        [brandLogoImageView setFrame:CGRectMake(1, 1, TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];        
+        [brandLogoImageView setFrame:CGRectMake(5, 5, TOP_SECTION_HEIGHT-10, TOP_SECTION_HEIGHT-10)];        
         [cell.contentView addSubview:brandLogoImageView];
         [brandLogoImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"profile_image_url"]] 
                            placeholderImage:[UIImage imageNamed:@"shi.jpeg"]];
         CALayer * layer = [brandLogoImageView layer];  
         [layer setMasksToBounds:YES];  
-        [layer setCornerRadius:5.0];  
+        [layer setCornerRadius:17.5f];  
         [layer setBorderWidth:1.0];  
         [layer setBorderColor:[[UIColor clearColor] CGColor]];  
         //【中部】
@@ -179,7 +185,7 @@
         label.backgroundColor = [UIColor clearColor];
         //[[label layer] setBorderWidth:1.0f];
         //[[label layer] setBorderColor:[NoneAdultAppDelegate getColorFromRed:255 Green:0 Blue:0 Alpha:100]];
-        [[label layer] setBackgroundColor:[NoneAdultAppDelegate getColorFromRed:200 Green:200 Blue:200 Alpha:100]];
+        //[[label layer] setBackgroundColor:[NoneAdultAppDelegate getColorFromRed:200 Green:200 Blue:200 Alpha:100]];
         [cell.contentView addSubview:label];
         
         //【底部】
