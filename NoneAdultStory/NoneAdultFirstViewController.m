@@ -19,7 +19,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(@"最新段子", @"First");
+        self.title = NSLocalizedString(@"最新笑话", @"First");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
     }
     return self;
@@ -408,23 +408,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSLog(@"didSelectRowAtIndexPath...");
-//    int row = [indexPath row];
-//    if (row == [searchVideoList count]) {
-//        [MobClick event:@"clickLoadMore" label:[self getFuncNameStr]];
-//		UITableViewCell *loadMoreCell=[tableView cellForRowAtIndexPath:indexPath];
-//		loadMoreCell.textLabel.text=@"                           加载中...";
-//        
-//        [self performSelector:@selector(requestBoyResultFromServer) withObject:nil];
-//        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//        return;
-//    } else {
-//        NSDictionary *video = [searchVideoList objectAtIndex:row];
-//        MVUSDetailViewController *detailViewController = [[MVUSDetailViewController alloc]initWithNibName:@"MVUSDetailViewController" bundle:nil];
-//        detailViewController.title = @"详细信息";
-//        detailViewController.videoId = [video objectForKey:@"videoId"];
-//        [self.navigationController pushViewController:detailViewController animated:YES];
-//        
-//    }
+    int row = [indexPath row];
+    NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
+    NoneAdultDetailViewController *detailViewController = [[NoneAdultDetailViewController alloc]initWithNibName:@"NoneAdultDetailViewController" bundle:nil];
+    detailViewController.title = @"笑话详情";
+    detailViewController.currentDuanZi = duanZi;
+    detailViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:detailViewController animated:YES];
+    detailViewController.hidesBottomBarWhenPushed = NO;//马上设置回NO
+        
 }
 
 - (void)viewDidUnload

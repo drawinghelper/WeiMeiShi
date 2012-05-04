@@ -35,6 +35,9 @@
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Socialize storeConsumerKey:@"dd52d1dc-170e-49e5-bb5c-7d5ecc6fe879"];
+    [Socialize storeConsumerSecret:@"a9ba6011-96e8-4c5f-be41-c2e1d37e1cb6"];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     UIViewController *newController = [[NoneAdultFirstViewController alloc] initWithNibName:@"NoneAdultFirstViewController" bundle:nil];

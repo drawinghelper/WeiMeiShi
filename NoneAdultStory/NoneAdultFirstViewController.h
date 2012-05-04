@@ -12,6 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+WebCache.h"
 #import "EGORefreshTableHeaderView.h"
+#import "NoneAdultDetailViewController.h"
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 45.0f
 #define BOTTOM_SECTION_HEIGHT 30.0f
