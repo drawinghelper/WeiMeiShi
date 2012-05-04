@@ -37,13 +37,12 @@
     self.actionBar = [SocializeActionBar actionBarWithKey:socializeKey name:socializeKey presentModalInController:self];
     self.actionBar.delegate = self;
     
-    
     [self.view addSubview:self.actionBar.view];
 }
 - (void)actionBar:(SocializeActionBar*)actionBar wantsDisplayActionSheet:(UIActionSheet*)actionSheet {
-    actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self
+    actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享到" delegate:self
                        cancelButtonTitle:@"取消" destructiveButtonTitle:nil
-                       otherButtonTitles: @"新浪微博",@"腾讯微博", @"邮件分享", nil];     
+                                     otherButtonTitles: @"新浪微博",@"腾讯微博", nil];//@"邮件分享", nil];     
     [actionSheet showFromRect:CGRectMake(50, 50, 50, 50) inView:self.view animated:YES];
 }
 #pragma mark - Action Sheet Delegate
@@ -54,39 +53,29 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         NSString *statusContent = nil;
+        NSString *weiboContent = [currentDuanZi objectForKey:@"content"];
+        weiboContent = [weiboContent substringToIndex:52];
+        statusContent = [NSString 
+                         stringWithFormat:@"%@ %@（#%@# %@）",
+                         weiboContent,
+                         [currentDuanZi objectForKey:@"data_url"],
+                         @"内涵笑话",
+                         @"http://itunes.apple.com/app/id483805940"
+                         //[MobClick getConfigParams:@"appname"],
+                         //[MobClick getConfigParams:@"storeurl"],
+                         ];
+        
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
             NSLog(@"custom event share_sina_budong!");
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:@"测试文字" image:nil platform:UMShareToTypeSina];
-            /*[MobClick event:@"share_sina_budong"];
-            statusContent = [NSString 
-                             stringWithFormat:@"我没看懂这幅漫画，向大家求解??? 来自 #%@# （点击下载 %@）。%@",
-                             [MobClick getConfigParams:@"appname"],
-                             [MobClick getConfigParams:@"storeurl"],
-                             [self captionForPhoto:[self photoAtIndex:_currentPageIndex]] ];
-            UIImage *image = [self imageForPhoto:[self photoAtIndex:_currentPageIndex]];
-            [UMSNSService shareToSina:self 
-                            andAppkey:@"4f3df4ce5270157ed50000f4" 
-                            andStatus:statusContent
-                      andImageToShare:image];
-             */
+            /*[MobClick event:@"share_sina_budong"];*/
+            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeSina];
+
             [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
             NSLog(@"custom event share_sina_haoxiao!");
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:@"测试文字" image:nil platform:UMShareToTypeTenc];
+            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeTenc];
 
-            /*[MobClick event:@"share_sina_haoxiao"];
-            statusContent = [NSString 
-                             stringWithFormat:@"嘿嘿，这幅漫画太逗啦!!! 来自 #%@# （推荐大家也下一个 %@）。%@",
-                             [MobClick getConfigParams:@"appname"],
-                             [MobClick getConfigParams:@"storeurl"],
-                             [self captionForPhoto:[self photoAtIndex:_currentPageIndex]] ];
-            UIImage *image = [self imageForPhoto:[self photoAtIndex:_currentPageIndex]];
-            [UMSNSService shareToSina:self 
-                            andAppkey:@"4f3df4ce5270157ed50000f4" 
-                            andStatus:statusContent
-                      andImageToShare:image];
-             */
             [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
