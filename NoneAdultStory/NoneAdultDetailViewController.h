@@ -11,12 +11,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+WebCache.h"
 #import <Socialize/Socialize.h>
+#import "UMSNSService.h"
 
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 45.0f
 #define BOTTOM_SECTION_HEIGHT 30.0f
 
-@interface NoneAdultDetailViewController : UITableViewController<SocializeActionBarDelegate, UIActionSheetDelegate>{
+@interface NoneAdultDetailViewController : UITableViewController<SocializeActionBarDelegate, UIActionSheetDelegate, UMSNSDataSendDelegate>{
     NSDictionary *currentDuanZi;
     SocializeActionBar *actionBar;
 }

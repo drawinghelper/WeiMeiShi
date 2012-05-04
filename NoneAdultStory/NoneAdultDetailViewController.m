@@ -47,16 +47,16 @@
     [actionSheet showFromRect:CGRectMake(50, 50, 50, 50) inView:self.view animated:YES];
 }
 #pragma mark - Action Sheet Delegate
-/*
 - (void)dataSendDidFinish:(UIViewController *)viewController andReturnStatus:(UMReturnStatusType)returnStatus andPlatformType:(UMShareToType)platfrom {
     [viewController dismissModalViewControllerAnimated:YES];
-}*/
+}
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         NSString *statusContent = nil;
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
             NSLog(@"custom event share_sina_budong!");
+            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:@"测试文字" image:nil platform:UMShareToTypeSina];
             /*[MobClick event:@"share_sina_budong"];
             statusContent = [NSString 
                              stringWithFormat:@"我没看懂这幅漫画，向大家求解??? 来自 #%@# （点击下载 %@）。%@",
@@ -68,11 +68,13 @@
                             andAppkey:@"4f3df4ce5270157ed50000f4" 
                             andStatus:statusContent
                       andImageToShare:image];
-            [UMSNSService setDataSendDelegate:self];
              */
+            [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
             NSLog(@"custom event share_sina_haoxiao!");
+            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:@"测试文字" image:nil platform:UMShareToTypeTenc];
+
             /*[MobClick event:@"share_sina_haoxiao"];
             statusContent = [NSString 
                              stringWithFormat:@"嘿嘿，这幅漫画太逗啦!!! 来自 #%@# （推荐大家也下一个 %@）。%@",
@@ -84,7 +86,8 @@
                             andAppkey:@"4f3df4ce5270157ed50000f4" 
                             andStatus:statusContent
                       andImageToShare:image];
-            [UMSNSService setDataSendDelegate:self];*/
+             */
+            [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
             NSLog(@"custom event share_email!");
