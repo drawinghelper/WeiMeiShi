@@ -23,7 +23,10 @@
     }
     return self;
 }
-
+-(void)showInfo {
+    NSLog(@"showInfo...");
+    [UMFeedback showFeedback:self withAppkey:@"4fa3232652701556cc00001e"];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -37,6 +40,11 @@
     self.actionBar = [SocializeActionBar actionBarWithKey:socializeKey name:socializeKey presentModalInController:self];
     self.actionBar.delegate = self;
     
+    UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
+    [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
+    [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+
     [self.view addSubview:self.actionBar.view];
 }
 - (void)actionBar:(SocializeActionBar*)actionBar wantsDisplayActionSheet:(UIActionSheet*)actionSheet {

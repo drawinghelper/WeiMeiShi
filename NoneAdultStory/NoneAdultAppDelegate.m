@@ -35,6 +35,10 @@
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [MobClick startWithAppkey:@"4fa3232652701556cc00001e" reportPolicy:REALTIME channelId:nil];
+    [MobClick checkUpdate];
+    [MobClick updateOnlineConfig];
+    
     [Socialize storeConsumerKey:@"dd52d1dc-170e-49e5-bb5c-7d5ecc6fe879"];
     [Socialize storeConsumerSecret:@"a9ba6011-96e8-4c5f-be41-c2e1d37e1cb6"];
     
@@ -64,6 +68,7 @@
                                              weekTopNavViewController,
                                              nil];
     self.window.rootViewController = self.tabBarController;
+    [NSThread sleepForTimeInterval:2.0];
     [self.window makeKeyAndVisible];
     return YES;
 }

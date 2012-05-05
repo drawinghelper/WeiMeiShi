@@ -24,10 +24,16 @@
     }
     return self;
 }
-							
+	
+-(void)showInfo {
+    NSLog(@"showInfo...");
+    [UMFeedback showFeedback:self withAppkey:@"4fa3232652701556cc00001e"];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //NSLog(@"param: %@",  [MobClick getConfigParams:@"param"]);
     
     //创建UIActivityIndicatorView背底半透明View
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 424)];
@@ -41,6 +47,11 @@
     [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [activityIndicator startAnimating];
     [view addSubview:activityIndicator];
+
+    UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
+    [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
+    [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
 
     if (_refreshHeaderView == nil) {
         
