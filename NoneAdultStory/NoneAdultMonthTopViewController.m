@@ -25,7 +25,11 @@
 }
 
 - (void)loadUrl {
-    url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/top/?tag=joke&offset=0&count=100&days=30"];
+    if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+        url = [[NSString alloc] initWithString:@"http://nh.tourbox.me/hot.json?tag=joke&offset=0&count=100&days=30"];
+    } else {
+        url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/top/?tag=joke&offset=0&count=100&days=30"];
+    }
     NSLog(@"loadUrl: %@", url);
 }
 

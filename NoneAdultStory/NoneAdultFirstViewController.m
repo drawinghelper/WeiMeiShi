@@ -48,11 +48,22 @@
     [activityIndicator startAnimating];
     [view addSubview:activityIndicator];
 
+//    UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
+//    [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
+//    [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+    
     UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
     [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
     [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
-
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                              target:self
+                                              action:@selector(performRefresh)];
+    
+    
     if (_refreshHeaderView == nil) {
         
         EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, self.view.frame.size.width, self.tableView.bounds.size.height)];
@@ -65,13 +76,20 @@
     [_refreshHeaderView refreshLastUpdatedDate];
     
 	// Do any additional setup after loading the view, typically from a nib.
-    searchDuanZiList = [[NSMutableArray alloc] init];
+    //searchDuanZiList = [[NSMutableArray alloc] init];
     canLoadNew = YES;
     canLoadOld = YES;
     loadOld = NO;
     _reloading = YES;
-    [self requestResultFromServer];
+    
+    [self performRefresh];
+}
 
+-(void) performRefresh {
+    loadOld = NO;
+    searchDuanZiList = [[NSMutableArray alloc] init];
+    [self performSelector:@selector(requestResultFromServer) withObject:nil];
+    
 }
 #pragma mark -
 #pragma mark Data Source Loading / Reloading Methods
@@ -159,15 +177,27 @@
         NSDictionary *duanZi = [searchDuanZiList objectAtIndex:([searchDuanZiList count] - 1)];
         NSDecimalNumber *currentMinTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
         int currentMinTimestamp = [currentMinTimestampNumber intValue];
-        url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
+        if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+            url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
+        } else {
+            url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
+        }
     } else {
         if ([searchDuanZiList count] == 0) {
-            url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",0];
+            if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+                url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&min_behot_time=%d&count=20",0];
+            } else {
+                url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",0];
+            }
         } else {
             NSDictionary *duanZi = [searchDuanZiList objectAtIndex:0];
             NSDecimalNumber *currentMaxTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
             int currentMaxTimestamp = [currentMaxTimestampNumber intValue];
-            url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
+            if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+                url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
+            } else {
+                url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
+            }
         }
     }
     NSLog(@"loadUrl: %@", url);
@@ -253,12 +283,12 @@
      机场列表响应 http:// fd.tourbox.me/getAirportList
      */
     NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    NSLog(responseString);
+    //NSLog(responseString);
     NSDictionary *responseInfo = [UMSNSStringJson JSONValue:responseString]; 
     NSMutableArray *addedList = [responseInfo objectForKey:@"data"];
-    NSLog(@"result: %@", addedList);
-    [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
-    //[tableView reloadData];
+    //NSLog(@"result: %@", addedList);
+    
+        [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
 }
 
 -(void)appendTableWith:(NSMutableArray *)data
@@ -279,9 +309,10 @@
         NSIndexPath *newPath =  [NSIndexPath indexPathForRow:row inSection:0];
         [insertIndexPaths addObject:newPath];
     }
-    [tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [tableView endUpdates];
+    //[tableView beginUpdates];
+    //[self.tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadData];
+    //[tableView endUpdates];
     _reloading = NO;
 }
 
@@ -443,7 +474,6 @@
     NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
     NoneAdultDetailViewController *detailViewController = [[NoneAdultDetailViewController alloc]initWithNibName:@"NoneAdultDetailViewController" bundle:nil];
     detailViewController.title = @"笑话详情";
-    NSLog(@"duanZi: %@", duanZi);
     detailViewController.currentDuanZi = duanZi;
     detailViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:detailViewController animated:YES];
