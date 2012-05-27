@@ -20,6 +20,9 @@
     if (self) {
         self.title = NSLocalizedString(@"本月热门", @"Second");
         self.tabBarItem.image = [UIImage imageNamed:@"monthhot"];
+        
+        UILabel *label = (UILabel *)self.navigationItem.titleView;
+        [label setText:NSLocalizedString(@"本月热门", @"Second")];
     }
     return self;
 }

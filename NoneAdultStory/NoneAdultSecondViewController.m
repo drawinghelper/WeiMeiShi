@@ -20,6 +20,9 @@
     if (self) {
         self.title = NSLocalizedString(@"历史热门", @"Second");
         self.tabBarItem.image = [UIImage imageNamed:@"historyhot"];
+        
+        UILabel *label = (UILabel *)self.navigationItem.titleView;
+        [label setText:NSLocalizedString(@"历史热门", @"Second")];
     }
     return self;
 }

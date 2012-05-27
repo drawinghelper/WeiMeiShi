@@ -14,8 +14,8 @@
 #import "EGORefreshTableHeaderView.h"
 #import "NoneAdultDetailViewController.h"
 #define FONT_SIZE 14.0f
-#define TOP_SECTION_HEIGHT 45.0f
-#define BOTTOM_SECTION_HEIGHT 25.0f
+#define TOP_SECTION_HEIGHT 52.0f
+#define BOTTOM_SECTION_HEIGHT 34.0f
 
 @interface NoneAdultFirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate> {
     IBOutlet UITableView *tableView;

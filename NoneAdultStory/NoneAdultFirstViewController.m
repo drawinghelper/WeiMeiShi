@@ -21,6 +21,18 @@
     if (self) {
         self.title = NSLocalizedString(@"最新笑话", @"First");
         self.tabBarItem.image = [UIImage imageNamed:@"new"];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont boldSystemFontOfSize:20.0];
+        label.shadowColor = [UIColor colorWithRed:219.0f/255 green:241.0f/225 blue:241.0f/255 alpha:1];     
+        label.textAlignment = UITextAlignmentCenter;
+        label.textColor = [UIColor colorWithRed:53.0f/255 green:146.0f/225 blue:146.0f/255 alpha:1];        
+        [label setShadowOffset:CGSizeMake(0, 1.0)];
+        
+        self.navigationItem.titleView = label;
+        label.text = NSLocalizedString(@"最新笑话", @"");
+        [label sizeToFit];
     }
     return self;
 }
@@ -62,7 +74,8 @@
                                               initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                               target:self
                                               action:@selector(performRefresh)];
-    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] 
+                                                  forBarMetrics:UIBarMetricsDefault];   
     
     if (_refreshHeaderView == nil) {
         
@@ -353,11 +366,11 @@
         cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
     }
     //【顶部】
-    UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectZero];
-    [cell.contentView addSubview:bottomBgView];
-    [bottomBgView setBackgroundColor:[UIColor lightGrayColor]];
-    [bottomBgView setAlpha:0.3f];
-    [bottomBgView setFrame:CGRectMake(0, 0, 320, TOP_SECTION_HEIGHT)]; 
+    UIView *topBgView = [[UIView alloc] initWithFrame:CGRectZero];
+    [cell.contentView addSubview:topBgView];
+    //[bottomBgView setBackgroundColor:[UIColor lightGrayColor]];
+    [topBgView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"duanzi_bg_top.png"]]];
+    [topBgView setFrame:CGRectMake(0, 0, 320, TOP_SECTION_HEIGHT)]; 
     
     //微博名
     UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, -7, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
@@ -387,11 +400,13 @@
     [cell.contentView addSubview:brandLogoImageView];
     [brandLogoImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"profile_image_url"]] 
                        placeholderImage:[UIImage imageNamed:@"shi.jpeg"]];
-    CALayer *layer = [brandLogoImageView layer];  
+    /*CALayer *layer = [brandLogoImageView layer];  
     [layer setMasksToBounds:YES];  
     [layer setCornerRadius:17.5];  
     [layer setBorderWidth:1.0];  
     [layer setBorderColor:[[UIColor clearColor] CGColor]];  
+    */
+    
     //【中部】
     //微博内容
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -405,14 +420,21 @@
     //[[label layer] setBorderColor:[NoneAdultAppDelegate getColorFromRed:255 Green:0 Blue:0 Alpha:100]];
     //[[label layer] setBackgroundColor:[NoneAdultAppDelegate getColorFromRed:200 Green:200 Blue:200 Alpha:100]];
     [cell.contentView addSubview:label];
+    [cell.contentView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"duanzi_bg_middle.png"]]];
     
     //【底部】
+    UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectZero];
+    [cell.contentView addSubview:bottomBgView];
+    //[bottomBgView setBackgroundColor:[UIColor lightGrayColor]];
+    [bottomBgView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"duanzi_bg_bottom.png"]]];
+    bottomBgView.tag = 1000;
     
     //顶踩评
     UILabel *dingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[duanZi objectForKey:@"favorite_count"];
     dingLabel.text = [NSString stringWithFormat:@"顶: %@",[favoriteCount stringValue]];
     dingLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    [dingLabel setBackgroundColor:[UIColor clearColor]];
     dingLabel.textColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1];
     [cell.contentView addSubview:dingLabel];
     dingLabel.tag = 2;
@@ -421,6 +443,7 @@
     NSDecimalNumber *buryCount = (NSDecimalNumber *)[duanZi objectForKey:@"bury_count"];
     caiLabel.text = [NSString stringWithFormat:@"踩: %@",[buryCount stringValue]];
     caiLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    [caiLabel setBackgroundColor:[UIColor clearColor]];
     caiLabel.textColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1];
     [cell.contentView addSubview:caiLabel];
     caiLabel.tag = 3;
@@ -430,6 +453,7 @@
     pingLabel.text = [NSString stringWithFormat:@"评论: %@",[commentsCount stringValue]];
     pingLabel.textAlignment = UITextAlignmentRight;
     pingLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    [pingLabel setBackgroundColor:[UIColor clearColor]];
     pingLabel.textColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1];
     [cell.contentView addSubview:pingLabel];
     pingLabel.tag = 4;
@@ -450,6 +474,9 @@
     else {
         cellFrame.size.height = 50;
     }
+    
+    [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
+
     
     dingLabel = (UILabel *)[cell viewWithTag:2];
     [dingLabel setFrame:CGRectMake(5, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
