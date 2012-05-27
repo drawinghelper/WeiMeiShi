@@ -12,17 +12,21 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+WebCache.h"
 #import "EGORefreshTableHeaderView.h"
+#import "MBProgressHUD.h"
 #import "NoneAdultDetailViewController.h"
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 52.0f
 #define BOTTOM_SECTION_HEIGHT 34.0f
 
-@interface NoneAdultFirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate> {
+@interface NoneAdultFirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate> {
+    MBProgressHUD *HUD;
+
     IBOutlet UITableView *tableView;
 
     NSMutableData *responseData;   
     NSString *url;
     NSMutableArray *searchDuanZiList;
+    NSDictionary *currentDuanZi;
     
     EGORefreshTableHeaderView *_refreshHeaderView;
     UIActivityIndicatorView *activityIndicator;
@@ -38,5 +42,5 @@
 
 - (void)reloadTableViewDataSource;
 - (void)doneLoadingTableViewData;
-
+- (void)goShare:(id)sender;
 @end

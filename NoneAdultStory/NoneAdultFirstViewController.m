@@ -48,18 +48,23 @@
     //NSLog(@"param: %@",  [MobClick getConfigParams:@"param"]);
     
     //创建UIActivityIndicatorView背底半透明View
+    /*
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 424)];
     [view setTag:103];
     [view setBackgroundColor:[UIColor blackColor]];
     [view setAlpha:0.6];
     [self.view addSubview:view];
+    */
     
+    
+    /*
     activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
     [activityIndicator setCenter:view.center];
     [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [activityIndicator startAnimating];
     [view addSubview:activityIndicator];
-
+     */
+     
 //    UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
 //    [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
 //    [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
@@ -70,10 +75,14 @@
     [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                              initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                              target:self
-                                              action:@selector(performRefresh)];
+    UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
+    btnRefresh.frame = CGRectMake(320 - 15 - 35, 10, 30, 30);
+    [btnRefresh addTarget:self action:@selector(performRefresh) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *btnImage = [UIImage imageNamed:@"refresh.png"];
+    [btnRefresh setImage:btnImage forState:UIControlStateNormal];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnRefresh];;
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] 
                                                   forBarMetrics:UIBarMetricsDefault];   
     
@@ -238,8 +247,8 @@
 	[request setHTTPBody:postData];  
     [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
-    UIView *view = (UIView *)[self.view viewWithTag:103];
-    [view setHidden:NO];
+    HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    [HUD setOpacity:0.5f];
 }
 #pragma mark -
 #pragma mark HTTP Response Methods
@@ -254,9 +263,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    UIView *view = (UIView *)[self.view viewWithTag:103];
-    [view setHidden:YES];
-    NSLog(@"error: %@", [error description]);
+    [HUD hide:YES afterDelay:0];
 }
 /*
  {
@@ -290,8 +297,8 @@
  */
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	NSLog(@"CafeCarFirstViewController.connectionDidFinishLoading...");
-    UIView *view = (UIView *)[self.view viewWithTag:103];
-    [view setHidden:YES];
+    [HUD hide:YES afterDelay:0];
+    
     /*
      机场列表响应 http:// fd.tourbox.me/getAirportList
      */
@@ -302,6 +309,15 @@
     //NSLog(@"result: %@", addedList);
     
         [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
+}
+
+#pragma mark -
+#pragma mark MBProgressHUDDelegate methods
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+	// Remove HUD from screen when the HUD was hidded
+	[HUD removeFromSuperview];
+	HUD = nil;
 }
 
 -(void)appendTableWith:(NSMutableArray *)data
@@ -347,6 +363,72 @@
     return [searchDuanZiList count];
 }
 
+
+-(void)goShare:(id)sender{  
+    //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
+    int i = [sender tag] - 1000;
+    [self shareDuanZiAtRow:i];
+}
+
+- (void)shareDuanZiAtRow:(int)row {
+    currentDuanZi = [searchDuanZiList objectAtIndex:row];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享到" 
+                                                             delegate:self
+                                                    cancelButtonTitle:@"取消" 
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles: @"新浪微博",@"腾讯微博", nil];//@"邮件分享", nil];     
+    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        NSString *statusContent = nil;
+        NSString *weiboContent = [currentDuanZi objectForKey:@"content"];
+        int cuttedLength = 52;
+        if (cuttedLength < [weiboContent length]) {
+            weiboContent = [weiboContent substringToIndex:cuttedLength];
+        }
+        statusContent = [NSString 
+                         stringWithFormat:@"%@ %@（#%@# %@）",
+                         weiboContent,
+                         [currentDuanZi objectForKey:@"data_url"],
+                         @"内涵笑话",
+                         @"http://itunes.apple.com/app/id524913475"
+                         //[MobClick getConfigParams:@"appname"],
+                         //[MobClick getConfigParams:@"storeurl"],
+                         ];
+        
+        if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            NSLog(@"custom event share_sina_budong!");
+            /*[MobClick event:@"share_sina_budong"];*/
+            [UMSNSService shareToSina:self 
+                            andAppkey:@"4fa3232652701556cc00001e" 
+                            andStatus:statusContent];
+            
+            [UMSNSService setDataSendDelegate:self];
+            return;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
+            NSLog(@"custom event share_sina_haoxiao!");            
+            [UMSNSService shareToTenc:self 
+                            andAppkey:@"4fa3232652701556cc00001e" 
+                            andStatus:statusContent];
+            
+            [UMSNSService setDataSendDelegate:self];
+            return;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
+            NSLog(@"custom event share_email!");
+            /*[MobClick event:@"share_email"];
+             [self emailPhoto]; 
+             */
+            return;  
+        }
+    }
+}
+#pragma mark - Action Sheet Delegate
+- (void)dataSendDidFinish:(UIViewController *)viewController andReturnStatus:(UMReturnStatusType)returnStatus andPlatformType:(UMShareToType)platfrom {
+    [viewController dismissModalViewControllerAnimated:YES];
+}
+
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     int row = [indexPath row];
@@ -373,15 +455,15 @@
     [topBgView setFrame:CGRectMake(0, 0, 320, TOP_SECTION_HEIGHT)]; 
     
     //微博名
-    UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, -7, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
+    UILabel *brandNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, -3, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT)];
     brandNameLabel.textAlignment = UITextAlignmentLeft;
     brandNameLabel.text = [duanZi objectForKey:@"screen_name"];
-    brandNameLabel.font = [UIFont fontWithName:@"Helvetica" size:18];
-    brandNameLabel.textColor = [UIColor blackColor];
+    brandNameLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
+    brandNameLabel.textColor = [UIColor darkGrayColor];
     brandNameLabel.backgroundColor = [UIColor clearColor];
     [cell.contentView addSubview:brandNameLabel];
     //发布时间
-    UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 27, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT-30)];
+    UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(TOP_SECTION_HEIGHT+5, 29, 320 - TOP_SECTION_HEIGHT, TOP_SECTION_HEIGHT-30)];
     timestampLabel.textAlignment = UITextAlignmentLeft;
     NSDecimalNumber *number = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
     NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[number doubleValue]];
@@ -396,16 +478,26 @@
     
     //微博头像
     UIImageView *brandLogoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shi.jpeg"]];
-    [brandLogoImageView setFrame:CGRectMake(5, 5, TOP_SECTION_HEIGHT-10, TOP_SECTION_HEIGHT-10)];        
+    [brandLogoImageView setFrame:CGRectMake(17, 13, TOP_SECTION_HEIGHT-20, TOP_SECTION_HEIGHT-20)];        
     [cell.contentView addSubview:brandLogoImageView];
     [brandLogoImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"profile_image_url"]] 
                        placeholderImage:[UIImage imageNamed:@"shi.jpeg"]];
-    /*CALayer *layer = [brandLogoImageView layer];  
+    CALayer *layer = [brandLogoImageView layer];  
     [layer setMasksToBounds:YES];  
-    [layer setCornerRadius:17.5];  
+    [layer setCornerRadius:1.5];  
     [layer setBorderWidth:1.0];  
     [layer setBorderColor:[[UIColor clearColor] CGColor]];  
-    */
+    
+    //分享的按钮
+    UIButton *btnTwo = [UIButton buttonWithType:UIButtonTypeCustom]; 
+    btnTwo.frame = CGRectMake(320 - 15 - 35, 10, 40, 40);
+    [btnTwo setTitle:@"" forState:UIControlStateNormal];
+    [btnTwo setTag:(row + 1000)];
+    
+    [btnTwo addTarget:self action:@selector(goShare:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.contentView addSubview:btnTwo];
+    UIImage *btnImage = [UIImage imageNamed:@"share_normal.png"];
+    [btnTwo setImage:btnImage forState:UIControlStateNormal];
     
     //【中部】
     //微博内容
@@ -416,6 +508,9 @@
     label.numberOfLines = 0;
     label.opaque = NO; // 选中Opaque表示视图后面的任何内容都不应该绘制
     label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont fontWithName:@"Helvetica" size:15];
+    label.textColor = [UIColor darkGrayColor];
+
     //[[label layer] setBorderWidth:1.0f];
     //[[label layer] setBorderColor:[NoneAdultAppDelegate getColorFromRed:255 Green:0 Blue:0 Alpha:100]];
     //[[label layer] setBackgroundColor:[NoneAdultAppDelegate getColorFromRed:200 Green:200 Blue:200 Alpha:100]];
@@ -462,8 +557,9 @@
     //content内容自适应
     label = (UILabel *)[cell viewWithTag:1];
     CGRect cellFrame = [cell frame];
-    cellFrame.origin = CGPointMake(0, TOP_SECTION_HEIGHT);
-    
+    cellFrame.origin = CGPointMake(15, TOP_SECTION_HEIGHT);
+    cellFrame.size.width = 320 - 30;
+
     label.text = [duanZi objectForKey:@"content"];
     CGRect rect = CGRectInset(cellFrame, 2, 2);
     label.frame = rect;
@@ -479,11 +575,11 @@
 
     
     dingLabel = (UILabel *)[cell viewWithTag:2];
-    [dingLabel setFrame:CGRectMake(5, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
     caiLabel = (UILabel *)[cell viewWithTag:3];
-    [caiLabel setFrame:CGRectMake(80, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
     pingLabel = (UILabel *)[cell viewWithTag:4];
-    [pingLabel setFrame:CGRectMake(155, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320 - 160, BOTTOM_SECTION_HEIGHT)];
+    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320 - 180, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -498,6 +594,7 @@
 {
 	NSLog(@"didSelectRowAtIndexPath...");
     int row = [indexPath row];
+    /*
     NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
     NoneAdultDetailViewController *detailViewController = [[NoneAdultDetailViewController alloc]initWithNibName:@"NoneAdultDetailViewController" bundle:nil];
     detailViewController.title = @"笑话详情";
@@ -505,7 +602,8 @@
     detailViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:detailViewController animated:YES];
     detailViewController.hidesBottomBarWhenPushed = NO;//马上设置回NO
-        
+    */
+    [self shareDuanZiAtRow:row];
 }
 
 - (void)viewDidUnload
