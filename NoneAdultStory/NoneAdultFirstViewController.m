@@ -14,7 +14,7 @@
 
 @implementation NoneAdultFirstViewController
 @synthesize tableView;
-
+@synthesize adView;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -42,11 +42,61 @@
     [UMFeedback showFeedback:self withAppkey:@"4fa3232652701556cc00001e"];
 }
 
+
+
+- (NSString *)adMoGoApplicationKey{
+    return @"e93cf5b2fb784f98b19b1c40500f521a"; //此字符串为您的 App 在芒果上的唯一
+}
+
+-(UIViewController *)viewControllerForPresentingModalView{
+    return self;//返回的对象为 adView 的父视图控制器
+}
+
+- (void)adjustAdSize {	
+	[UIView beginAnimations:@"AdResize" context:nil];
+	[UIView setAnimationDuration:0.7];
+	CGSize adSize = [adView actualAdSize];
+	CGRect newFrame = adView.frame;
+	newFrame.size.height = adSize.height;
+	newFrame.size.width = adSize.width;
+	newFrame.origin.x = (self.view.bounds.size.width - adSize.width)/2;
+    newFrame.origin.y = self.view.bounds.size.height - adSize.height;
+	adView.frame = newFrame;
+    
+	[UIView commitAnimations];
+} 
+
+- (void)adMoGoDidReceiveAd:(AdMoGoView *)adMoGoView {
+	//广告成功展示时调用
+    [self adjustAdSize];
+}
+
+- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView 
+                     usingBackup:(BOOL)yesOrNo {
+    //请求广告失败
+}
+
+- (void)adMoGoWillPresentFullScreenModal {
+    //点击广告后打开内置浏览器时调用
+}
+
+- (void)adMoGoDidDismissFullScreenModal {
+    //关闭广告内置浏览器时调用 
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     //NSLog(@"param: %@",  [MobClick getConfigParams:@"param"]);
     
+    //增加广告条显示
+    self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
+                                                ExpressMode:NO];
+    [adView setFrame:CGRectZero];
+    NSString *showAd = [MobClick getConfigParams:@"showAd"];
+    if ([showAd isEqualToString:@"on"]) {
+        [self.view addSubview:adView];
+    }
     //创建UIActivityIndicatorView背底半透明View
     /*
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 424)];
