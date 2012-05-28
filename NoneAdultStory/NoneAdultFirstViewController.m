@@ -27,7 +27,7 @@
         label.font = [UIFont boldSystemFontOfSize:20.0];
         label.shadowColor = [UIColor colorWithRed:219.0f/255 green:241.0f/225 blue:241.0f/255 alpha:1];     
         label.textAlignment = UITextAlignmentCenter;
-        label.textColor = [UIColor colorWithRed:53.0f/255 green:146.0f/225 blue:146.0f/255 alpha:1];        
+        label.textColor = [UIColor colorWithRed:37.0f/255 green:149.0f/225 blue:149.0f/255 alpha:1];        
         [label setShadowOffset:CGSizeMake(0, 1.0)];
         
         self.navigationItem.titleView = label;
@@ -76,7 +76,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
     
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
-    btnRefresh.frame = CGRectMake(320 - 15 - 35, 10, 30, 30);
+    btnRefresh.frame = CGRectMake(0, 0, 44, 44);
     [btnRefresh addTarget:self action:@selector(performRefresh) forControlEvents:UIControlEventTouchUpInside];
     UIImage *btnImage = [UIImage imageNamed:@"refresh.png"];
     [btnRefresh setImage:btnImage forState:UIControlStateNormal];
@@ -508,8 +508,9 @@
     label.numberOfLines = 0;
     label.opaque = NO; // 选中Opaque表示视图后面的任何内容都不应该绘制
     label.backgroundColor = [UIColor clearColor];
-    label.font = [UIFont fontWithName:@"Helvetica" size:15];
-    label.textColor = [UIColor darkGrayColor];
+    label.font = [UIFont fontWithName:@"STHeiti K" size:14];
+    //label.font = [UIFont fontWithName:@"STHeiti SC" size:16];
+    label.textColor = [UIColor colorWithRed:109.0f/255 green:109.0f/225 blue:109.0f/255 alpha:1]; 
 
     //[[label layer] setBorderWidth:1.0f];
     //[[label layer] setBorderColor:[NoneAdultAppDelegate getColorFromRed:255 Green:0 Blue:0 Alpha:100]];
