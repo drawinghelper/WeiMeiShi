@@ -11,6 +11,7 @@
 #import <Socialize/Socialize.h>
 #import "MobClick.h"
 #import "UMFeedback.h"
+#import "UAirship.h"
 
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
 
