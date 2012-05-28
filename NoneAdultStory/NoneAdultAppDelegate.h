@@ -12,6 +12,7 @@
 #import "MobClick.h"
 #import "UMFeedback.h"
 #import "UAirship.h"
+#import "Appirater.h"
 
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
 
