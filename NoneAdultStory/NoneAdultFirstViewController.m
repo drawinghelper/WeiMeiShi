@@ -433,7 +433,7 @@
                                                              delegate:self
                                                     cancelButtonTitle:@"取消" 
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles: @"新浪微博",@"腾讯微博", nil];//@"邮件分享", nil];     
+                                                    otherButtonTitles: @"新浪微博",@"腾讯微博",@"复制文本", nil];//@"邮件分享", nil];     
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -441,16 +441,15 @@
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         NSString *statusContent = nil;
         NSString *weiboContent = [currentDuanZi objectForKey:@"content"];
-        int cuttedLength = 52;
+        NSString *cuttedContent = [[NSString alloc] initWithString:weiboContent];
+        int cuttedLength = 136;
         if (cuttedLength < [weiboContent length]) {
-            weiboContent = [weiboContent substringToIndex:cuttedLength];
+            cuttedContent = [weiboContent substringToIndex:cuttedLength];
         }
         statusContent = [NSString 
-                         stringWithFormat:@"%@ %@（#%@# %@）",
-                         weiboContent,
-                         [currentDuanZi objectForKey:@"data_url"],
-                         @"内涵笑话",
-                         @"http://itunes.apple.com/app/id524913475"
+                         stringWithFormat:@"%@#%@#",
+                         cuttedContent,
+                         @"内涵笑话"
                          //[MobClick getConfigParams:@"appname"],
                          //[MobClick getConfigParams:@"storeurl"],
                          ];
@@ -477,6 +476,15 @@
             /*[MobClick event:@"share_email"];
              [self emailPhoto]; 
              */
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = weiboContent;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"内容已成功复制到剪贴板"
+                                                                 message:nil
+                                                                delegate:self
+                                                       cancelButtonTitle:@"确定"
+                                                       otherButtonTitles:nil];
+            [alertView show];
+            
             return;  
         }
     }
