@@ -36,13 +36,6 @@
     }
     return self;
 }
-	
--(void)showInfo {
-    NSLog(@"showInfo...");
-    [UMFeedback showFeedback:self withAppkey:@"4fa3232652701556cc00001e"];
-}
-
-
 
 - (NSString *)adMoGoApplicationKey{
     return @"e93cf5b2fb784f98b19b1c40500f521a"; //此字符串为您的 App 在芒果上的唯一
@@ -119,12 +112,7 @@
 //    [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
 //    [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
-    
-    UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
-    [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
-    [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
-    
+        
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
     btnRefresh.frame = CGRectMake(0, 0, 44, 44);
     [btnRefresh addTarget:self action:@selector(performRefresh) forControlEvents:UIControlEventTouchUpInside];

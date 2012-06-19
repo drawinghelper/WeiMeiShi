@@ -13,12 +13,13 @@
 #import "NoneAdultSecondViewController.h"
 #import "NoneAdultMonthTopViewController.h"
 #import "NoneAdultWeekTopViewController.h"
+#import "NoneAdultSettingViewController.h"
 
 @implementation NoneAdultAppDelegate
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
-@synthesize configContentsource;
+@synthesize configContentsource, configVersionForReview;
 
 +(CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha
 {
@@ -48,10 +49,13 @@
     return configContentsource;
 }
 
+- (NSString *)getConfigVersionForReview {
+    return configVersionForReview;
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Parse setApplicationId:@"M4Us3F1c90BC1xVLst5S4XWRDNvIRNr5tryvoOAc"
-                  clientKey:@"5YPdfSxNlsHwzQxfoE5df6EnD4vmv5yiJqZzwf4W"];
+    [Parse setApplicationId:@"wqZfQJvWNjK0zQY7U4G388xJIi4c2C8bOgJXx9Q6"
+                  clientKey:@"n8FYn4lelC9FNyshKu1D8hmngdJSYJzKn0H1ZanK"];
     
     //加载各种配置
     //1.服务器接口来源标识
@@ -63,6 +67,17 @@
         PFObject *contentsource = [objects objectAtIndex:0];
         configContentsource = [contentsource objectForKey:@"settingValue"];
         NSLog(@"contentsource: %@", configContentsource);
+    }
+    
+    //2.加载当前审核的版本号字段
+    query = [PFQuery queryWithClassName:@"setting"];
+    [query whereKey:@"settingField" equalTo:@"versionForReview"];
+    objects = [query findObjects];
+    NSLog(@"Successfully retrieved %d versionForReview setting.", objects.count);
+    if (objects.count != 0) {
+        PFObject *versionForReview = [objects objectAtIndex:0];
+        configVersionForReview = [versionForReview objectForKey:@"settingValue"];
+        NSLog(@"configVersionForReview: %@", configVersionForReview);
     }
     
     //Init Airship launch options
@@ -104,15 +119,20 @@
     UINavigationController *weekTopNavViewController = [[UINavigationController alloc] initWithRootViewController:weekTopController];
     [weekTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
+    UIViewController *settingViewController = [[NoneAdultSettingViewController alloc] initWithNibName:@"NoneAdultSettingViewController" bundle:nil];
+    UINavigationController *settingNavViewController = [[UINavigationController alloc] initWithRootViewController:settingViewController];
+    [settingNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                              newNavViewController, 
                                              historyTopNavViewController,
                                              monthTopNavViewController,
                                              weekTopNavViewController,
+                                             settingNavViewController,
                                              nil];
     self.window.rootViewController = self.tabBarController;
-    [NSThread sleepForTimeInterval:2.0];
+    //[NSThread sleepForTimeInterval:2.0];
     [self.window makeKeyAndVisible];
     [Appirater appLaunched:YES];
     return YES;

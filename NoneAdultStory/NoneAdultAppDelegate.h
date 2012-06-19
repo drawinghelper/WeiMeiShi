@@ -17,13 +17,16 @@
 
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>{
     NSString *configContentsource;
+    NSString *configVersionForReview;
 }
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NSString *configContentsource;
+@property (strong, nonatomic) NSString *configVersionForReview;
 
 @property (strong, nonatomic) UITabBarController *tabBarController;
 + (CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha;
 + (NoneAdultAppDelegate *)sharedAppDelegate;
 - (NSString *)getConfigContentsource;
+- (NSString *)getConfigVersionForReview;
 @end
