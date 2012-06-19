@@ -13,11 +13,17 @@
 #import "UMFeedback.h"
 #import "UAirship.h"
 #import "Appirater.h"
+#import <Parse/Parse.h>
 
-@interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
+@interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>{
+    NSString *configContentsource;
+}
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) NSString *configContentsource;
 
 @property (strong, nonatomic) UITabBarController *tabBarController;
-+(CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha;
++ (CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha;
++ (NoneAdultAppDelegate *)sharedAppDelegate;
+- (NSString *)getConfigContentsource;
 @end

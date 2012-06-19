@@ -245,18 +245,23 @@
  */
 
 - (void)loadUrl {
+    NSString *configContentsource = [[NoneAdultAppDelegate sharedAppDelegate] getConfigContentsource];
     if (loadOld) {
         NSDictionary *duanZi = [searchDuanZiList objectAtIndex:([searchDuanZiList count] - 1)];
         NSDecimalNumber *currentMinTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
         int currentMinTimestamp = [currentMinTimestampNumber intValue];
-        if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+        if ([configContentsource isEqualToString:@"0"]) {
+            url = [[NSString alloc] initWithFormat:@"http://211.157.111.244:6090/weibo.json?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
+        } else if ([configContentsource isEqualToString:@"1"]) {
             url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
         } else {
             url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
         }
     } else {
         if ([searchDuanZiList count] == 0) {
-            if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+            if ([configContentsource isEqualToString:@"0"]) {
+                url = [[NSString alloc] initWithFormat:@"http://211.157.111.244:6090/weibo.json?tag=joke&min_behot_time=%d&count=20",0];
+            } else if ([configContentsource isEqualToString:@"1"]) {
                 url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&min_behot_time=%d&count=20",0];
             } else {
                 url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",0];
@@ -265,7 +270,9 @@
             NSDictionary *duanZi = [searchDuanZiList objectAtIndex:0];
             NSDecimalNumber *currentMaxTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
             int currentMaxTimestamp = [currentMaxTimestampNumber intValue];
-            if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+            if ([configContentsource isEqualToString:@"0"]) {
+                url = [[NSString alloc] initWithFormat:@"http://211.157.111.244:6090/weibo.json?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
+            } else if ([configContentsource isEqualToString:@"1"]) {
                 url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
             } else {
                 url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
@@ -284,7 +291,7 @@
     [self loadUrl];
     
     url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    //NSLog(@"requestTipInfoFromServer encoded url:%@", url);
+    NSLog(@"requestTipInfoFromServer encoded url:%@", url);
 	
     NSString *post = nil;  
 	post = [[NSString alloc] initWithString:@""];

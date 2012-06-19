@@ -28,7 +28,10 @@
 }
 
 - (void)loadUrl {
-    if ([[MobClick getConfigParams:@"contentsource"] isEqualToString:@"0"]) {
+    NSString *configContentsource = [[NoneAdultAppDelegate sharedAppDelegate] getConfigContentsource];
+    if ([configContentsource isEqualToString:@"0"]) {
+        url = [[NSString alloc] initWithString:@"http://211.157.111.244:6090/hot.json?tag=joke&offset=0&count=100&days=30"];
+    } else if ([configContentsource isEqualToString:@"1"]) {
         url = [[NSString alloc] initWithString:@"http://nh.tourbox.me/hot.json?tag=joke&offset=0&count=100&days=30"];
     } else {
         url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/top/?tag=joke&offset=0&count=100&days=30"];

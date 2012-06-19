@@ -18,6 +18,7 @@
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
+@synthesize configContentsource;
 
 +(CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha
 {
@@ -38,8 +39,32 @@
     [[UAirship shared] registerDeviceToken:deviceToken];
 }
 
++ (NoneAdultAppDelegate *)sharedAppDelegate
+{
+    return (NoneAdultAppDelegate *) [UIApplication sharedApplication].delegate;
+}
+
+- (NSString *)getConfigContentsource {
+    return configContentsource;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Parse setApplicationId:@"M4Us3F1c90BC1xVLst5S4XWRDNvIRNr5tryvoOAc"
+                  clientKey:@"5YPdfSxNlsHwzQxfoE5df6EnD4vmv5yiJqZzwf4W"];
+    
+    //加载各种配置
+    //1.服务器接口来源标识
+    PFQuery *query = [PFQuery queryWithClassName:@"setting"];
+    [query whereKey:@"settingField" equalTo:@"contentsource"];
+    NSArray *objects = [query findObjects];
+    NSLog(@"Successfully retrieved %d contentsource setting.", objects.count);
+    if (objects.count != 0) {
+        PFObject *contentsource = [objects objectAtIndex:0];
+        configContentsource = [contentsource objectForKey:@"settingValue"];
+        NSLog(@"contentsource: %@", configContentsource);
+    }
+    
     //Init Airship launch options
     NSMutableDictionary *takeOffOptions = [[NSMutableDictionary alloc] init];
     [takeOffOptions setValue:launchOptions forKey:UAirshipTakeOffOptionsLaunchOptionsKey];
