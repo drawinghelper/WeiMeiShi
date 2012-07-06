@@ -119,7 +119,7 @@
     UIImage *btnImage = [UIImage imageNamed:@"refresh.png"];
     [btnRefresh setImage:btnImage forState:UIControlStateNormal];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnRefresh];;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnRefresh];
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] 
                                                   forBarMetrics:UIBarMetricsDefault];   
