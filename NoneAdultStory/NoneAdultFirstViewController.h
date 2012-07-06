@@ -15,6 +15,7 @@
 #import "MBProgressHUD.h"
 #import "AdMoGoView.h"
 #import "NoneAdultDetailViewController.h"
+#import "NSString+HTML.h"
 
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 52.0f
@@ -41,6 +42,9 @@
     BOOL canLoadNew;
     BOOL loadOld;
     BOOL _reloading;
+    
+    NSDictionary *tempPropertyDic;
+    NSMutableArray *originalNewDuanZiList;
 }
 @property(nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) AdMoGoView *adView;

@@ -233,40 +233,19 @@
  */
 
 - (void)loadUrl {
-    NSString *configContentsource = [[NoneAdultAppDelegate sharedAppDelegate] getConfigContentsource];
-    if (loadOld) {
-        NSDictionary *duanZi = [searchDuanZiList objectAtIndex:([searchDuanZiList count] - 1)];
-        NSDecimalNumber *currentMinTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
+    NSString *recentUrlPrefix = [NSString stringWithFormat:@"http://c.t.qq.com/asyn/selectedAutoUpdate.php?cid=%@&top=1&turn=1&version=0&r=1339057285481&p=2&apiType=7&apiHost=http%3A%2F%2Fapi.t.qq.com&_r=1339057285481&n=20", @"40"];
+    NSLog(@".........%@", recentUrlPrefix);
+    
+    if (loadOld && [originalNewDuanZiList count] > 0 ) {
+        NSDictionary *lastDuanZi = [originalNewDuanZiList objectAtIndex:([originalNewDuanZiList count] - 1)];
+        NSDecimalNumber *currentMinTimestampNumber = (NSDecimalNumber *)[lastDuanZi objectForKey:@"timestamp"];
+        NSString *lastId = [lastDuanZi objectForKey:@"id"];
         int currentMinTimestamp = [currentMinTimestampNumber intValue];
-        if ([configContentsource isEqualToString:@"0"]) {
-            url = [[NSString alloc] initWithFormat:@"http://211.157.111.244:6090/weibo.json?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
-        } else if ([configContentsource isEqualToString:@"1"]) {
-            url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
-        } else {
-            url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&max_behot_time=%d&count=20",currentMinTimestamp];
-        }
+        url = [[NSString alloc] initWithFormat:@"%@&time=%d&id=%@", recentUrlPrefix, currentMinTimestamp, lastId];
     } else {
-        if ([searchDuanZiList count] == 0) {
-            if ([configContentsource isEqualToString:@"0"]) {
-                url = [[NSString alloc] initWithFormat:@"http://211.157.111.244:6090/weibo.json?tag=joke&min_behot_time=%d&count=20",0];
-            } else if ([configContentsource isEqualToString:@"1"]) {
-                url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&min_behot_time=%d&count=20",0];
-            } else {
-                url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",0];
-            }
-        } else {
-            NSDictionary *duanZi = [searchDuanZiList objectAtIndex:0];
-            NSDecimalNumber *currentMaxTimestampNumber = (NSDecimalNumber *)[duanZi objectForKey:@"timestamp"];
-            int currentMaxTimestamp = [currentMaxTimestampNumber intValue];
-            if ([configContentsource isEqualToString:@"0"]) {
-                url = [[NSString alloc] initWithFormat:@"http://211.157.111.244:6090/weibo.json?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
-            } else if ([configContentsource isEqualToString:@"1"]) {
-                url = [[NSString alloc] initWithFormat:@"http://nh.tourbox.me/weibo.json?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
-            } else {
-                url = [[NSString alloc] initWithFormat:@"http://i.snssdk.com/essay/1/recent/?tag=joke&min_behot_time=%d&count=20",currentMaxTimestamp];
-            }
-        }
+        url = [[NSString alloc] initWithFormat:@"%@", recentUrlPrefix];
     }
+    
     NSLog(@"loadUrl: %@", url);
 }
 
@@ -289,6 +268,7 @@
 	[request setURL:[NSURL URLWithString:url]];  
 	[request setHTTPMethod:@"GET"]; 
 	[request setValue:postLength forHTTPHeaderField:@"Content-Length"];  
+    [request setValue:@"http://c.t.qq.com/i/843?top=1" forHTTPHeaderField:@"Referer"];
 	[request setHTTPBody:postData];  
     [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
@@ -350,10 +330,12 @@
     NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
     //NSLog(responseString);
     NSDictionary *responseInfo = [UMSNSStringJson JSONValue:responseString]; 
-    NSMutableArray *addedList = [responseInfo objectForKey:@"data"];
-    //NSLog(@"result: %@", addedList);
+    NSDictionary *dataDic = [responseInfo objectForKey:@"info"];
+    NSMutableArray *addedList = [dataDic objectForKey:@"talk"];
+    tempPropertyDic = [dataDic objectForKey:@"selectedMap"];
+    NSLog(@"result: %@", addedList);
     
-        [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
 }
 
 #pragma mark -
@@ -365,15 +347,54 @@
 	HUD = nil;
 }
 
+//从享评接口格式适配到腾讯微频道接口格式
+- (void)adaptDic:(NSMutableDictionary *)dic {
+    NSString *idString = [dic objectForKey:@"id"];
+    NSString *screenName = [dic objectForKey:@"nick"];
+    NSString *profileImageUrl = [dic objectForKey:@"pic"];
+    NSString *weiboContent = [dic objectForKey:@"content"];
+
+    NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[dic objectForKey:@"count"];
+    NSDecimalNumber *buryCount = [[NSDecimalNumber alloc] initWithInt:0];
+    
+    [dic setObject:screenName forKey:@"screen_name"];
+    [dic setObject:profileImageUrl forKey:@"profile_image_url"];
+    [dic setObject:[weiboContent stringByConvertingHTMLToPlainText] forKey:@"content"];
+    [dic setObject:favoriteCount forKey:@"favorite_count"];
+    [dic setObject:buryCount forKey:@"bury_count"];
+
+    [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"]
+            forKey:@"width"];
+    [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] 
+            forKey:@"height"];
+}
 -(void)appendTableWith:(NSMutableArray *)data
 {
+    int minWordCount = 20;
+    NSMutableDictionary *dic = nil;
     if (loadOld) {
         for (int i=0;i<[data count];i++) {
-            [searchDuanZiList addObject:[data objectAtIndex:i]];
+            dic = [data objectAtIndex:i];
+            [self adaptDic:dic];
+            [originalNewDuanZiList addObject:dic];
+
+            NSString *weiboContent = [dic objectForKey:@"content"];
+            if (weiboContent.length < minWordCount) {
+                continue;
+            }
+            [searchDuanZiList addObject:dic];
         }
     } else {
         for (int i=[data count]-1;i>=0;i--) {
-            [searchDuanZiList insertObject:[data objectAtIndex:i] atIndex:0];
+            dic = [data objectAtIndex:i];
+            [self adaptDic:dic];
+            [originalNewDuanZiList insertObject:dic atIndex:0];
+
+            NSString *weiboContent = [dic objectForKey:@"content"];
+            if (weiboContent.length < minWordCount) {
+                continue;
+            }
+            [searchDuanZiList insertObject:dic atIndex:0];
         }
     }
     
