@@ -14,7 +14,6 @@
 
 @implementation NoneAdultDetailViewController
 @synthesize currentDuanZi;
-@synthesize actionBar;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -36,23 +35,13 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    NSString *socializeKey = [self.currentDuanZi objectForKey:@"data_url"];
-    self.actionBar = [SocializeActionBar actionBarWithKey:socializeKey name:socializeKey presentModalInController:self];
-    self.actionBar.delegate = self;
     
     UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
     [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
     [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+}
 
-    [self.view addSubview:self.actionBar.view];
-}
-- (void)actionBar:(SocializeActionBar*)actionBar wantsDisplayActionSheet:(UIActionSheet*)actionSheet {
-    actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享到" delegate:self
-                       cancelButtonTitle:@"取消" destructiveButtonTitle:nil
-                                     otherButtonTitles: @"新浪微博",@"腾讯微博", nil];//@"邮件分享", nil];     
-    [actionSheet showFromRect:CGRectMake(50, 50, 50, 50) inView:self.view animated:YES];
-}
 #pragma mark - Action Sheet Delegate
 - (void)dataSendDidFinish:(UIViewController *)viewController andReturnStatus:(UMReturnStatusType)returnStatus andPlatformType:(UMShareToType)platfrom {
     [viewController dismissModalViewControllerAnimated:YES];

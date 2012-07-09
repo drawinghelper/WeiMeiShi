@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import <Socialize/Socialize.h>
 #import "MobClick.h"
 #import "UMFeedback.h"
 #import "Appirater.h"
