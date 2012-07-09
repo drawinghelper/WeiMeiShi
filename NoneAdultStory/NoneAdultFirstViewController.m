@@ -148,6 +148,7 @@
 -(void) performRefresh {
     loadOld = NO;
     searchDuanZiList = [[NSMutableArray alloc] init];
+    originalNewDuanZiList = [[NSMutableArray alloc] init];
     [self performSelector:@selector(requestResultFromServer) withObject:nil];
     
 }
@@ -356,13 +357,14 @@
 
     NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[dic objectForKey:@"count"];
     NSDecimalNumber *buryCount = [[NSDecimalNumber alloc] initWithInt:0];
+    NSDecimalNumber *commentCount = [[NSDecimalNumber alloc] initWithInt:0];
     
     [dic setObject:screenName forKey:@"screen_name"];
     [dic setObject:profileImageUrl forKey:@"profile_image_url"];
     [dic setObject:[weiboContent stringByConvertingHTMLToPlainText] forKey:@"content"];
     [dic setObject:favoriteCount forKey:@"favorite_count"];
     [dic setObject:buryCount forKey:@"bury_count"];
-
+    [dic setObject:commentCount forKey:@"comments_count"];
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"]
             forKey:@"width"];
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] 
@@ -370,7 +372,7 @@
 }
 -(void)appendTableWith:(NSMutableArray *)data
 {
-    int minWordCount = 20;
+    int minWordCount = 40;
     NSMutableDictionary *dic = nil;
     if (loadOld) {
         for (int i=0;i<[data count];i++) {
@@ -436,6 +438,11 @@
     [self shareDuanZiAtRow:i];
 }
 
+-(void)goStar:(id)sender{  
+    //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
+    int i = [sender tag] - 1000;
+    //[self shareDuanZiAtRow:i];
+}
 - (void)shareDuanZiAtRow:(int)row {
     currentDuanZi = [searchDuanZiList objectAtIndex:row];
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享到" 
@@ -620,14 +627,24 @@
 
     UILabel *pingLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     NSDecimalNumber *commentsCount = (NSDecimalNumber *)[duanZi objectForKey:@"comments_count"];
-    pingLabel.text = [NSString stringWithFormat:@"评论: %@",[commentsCount stringValue]];
-    pingLabel.textAlignment = UITextAlignmentRight;
+    pingLabel.text = [NSString stringWithFormat:@"评: %@",[commentsCount stringValue]];
+    //pingLabel.textAlignment = UITextAlignmentRight;
     pingLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
     [pingLabel setBackgroundColor:[UIColor clearColor]];
     pingLabel.textColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1];
     [cell.contentView addSubview:pingLabel];
     pingLabel.tag = 4;
-
+    
+    //收藏按钮
+    UIButton *btnStar = [UIButton buttonWithType:UIButtonTypeCustom]; 
+    [btnStar setTitle:@"" forState:UIControlStateNormal];
+    [btnStar setTag:(row + 1000)];
+    [btnStar addTarget:self action:@selector(goStar:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.contentView addSubview:btnStar];
+    UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
+    UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
+    [btnStar setImage:btnStarImage forState:UIControlStateNormal];
+    [btnStar setImage:btnStarImagePressed forState:UIControlStateHighlighted];
     
     //content内容自适应
     label = (UILabel *)[cell viewWithTag:1];
@@ -654,7 +671,9 @@
     caiLabel = (UILabel *)[cell viewWithTag:3];
     [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
     pingLabel = (UILabel *)[cell viewWithTag:4];
-    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320 - 180, BOTTOM_SECTION_HEIGHT)];
+    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    
+    [btnStar setFrame:CGRectMake(240, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-240, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;

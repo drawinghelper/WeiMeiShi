@@ -11,7 +11,6 @@
 #import <Socialize/Socialize.h>
 #import "MobClick.h"
 #import "UMFeedback.h"
-#import "UAirship.h"
 #import "Appirater.h"
 #import <Parse/Parse.h>
 
