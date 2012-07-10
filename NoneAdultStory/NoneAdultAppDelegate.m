@@ -140,6 +140,8 @@
     [MobClick checkUpdate];
     [MobClick updateOnlineConfig];
     
+    [self createCollectTable];
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     UIViewController *newController = [[NoneAdultFirstViewController alloc] initWithNibName:@"NoneAdultFirstViewController" bundle:nil];
@@ -151,12 +153,11 @@
     UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:controller];
     [historyTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
-    [self createCollectTable];
+    UIViewController *secondViewController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
+    UINavigationController *secondNavViewController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+    [secondNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+
     /*
-    UIViewController *historyTopController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
-    UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
-    [historyTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
-   
     UIViewController *monthTopController = [[NoneAdultMonthTopViewController alloc] initWithNibName:@"NoneAdultMonthTopViewController" bundle:nil];
     UINavigationController *monthTopNavViewController = [[UINavigationController alloc] initWithRootViewController:monthTopController];
     [monthTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
@@ -173,6 +174,7 @@
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                              newNavViewController, 
                                              historyTopNavViewController,
+                                             secondNavViewController,
                                              //monthTopNavViewController,
                                              //weekTopNavViewController,
                                              settingNavViewController,

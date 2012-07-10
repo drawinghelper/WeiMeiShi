@@ -80,14 +80,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //NSLog(@"param: %@",  [MobClick getConfigParams:@"param"]);
-    
-    //增加广告条显示
-    self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
-                                                ExpressMode:NO];
-    [adView setFrame:CGRectZero];
+    //NSLog(@"param: %@", [MobClick getConfigParams:@"param"]);
+
     NSString *showAd = [MobClick getConfigParams:@"showAd"];
     if ([showAd isEqualToString:@"on"]) {
+        //增加广告条显示
+        self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
+                                                    ExpressMode:NO];
+        [adView setFrame:CGRectZero];
         [self.view addSubview:adView];
     }
     //创建UIActivityIndicatorView背底半透明View
@@ -145,7 +145,7 @@
     [self performRefresh];
 }
 
--(void) performRefresh {
+-(void)performRefresh {
     loadOld = NO;
     searchDuanZiList = [[NSMutableArray alloc] init];
     originalNewDuanZiList = [[NSMutableArray alloc] init];
@@ -366,10 +366,8 @@
     [dic setObject:favoriteCount forKey:@"favorite_count"];
     [dic setObject:buryCount forKey:@"bury_count"];
     [dic setObject:commentCount forKey:@"comments_count"];
-    [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"]
-            forKey:@"width"];
-    [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] 
-            forKey:@"height"];
+    //[dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"] forKey:@"width"];
+    //[dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] forKey:@"height"];
 }
 -(void)appendTableWith:(NSMutableArray *)data
 {
@@ -439,7 +437,7 @@
     [self shareDuanZiAtRow:i];
 }
 
--(void)goStar:(id)sender{  
+-(void)goCollect:(id)sender{  
     //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
     int i = [sender tag] - 1000;
     [self starDuanZiAtRow:i];
@@ -673,7 +671,7 @@
     UIButton *btnStar = [UIButton buttonWithType:UIButtonTypeCustom]; 
     [btnStar setTitle:@"" forState:UIControlStateNormal];
     [btnStar setTag:(row + 1000)];
-    [btnStar addTarget:self action:@selector(goStar:) forControlEvents:UIControlEventTouchUpInside];
+    [btnStar addTarget:self action:@selector(goCollect:) forControlEvents:UIControlEventTouchUpInside];
     [cell.contentView addSubview:btnStar];
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
     UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
@@ -707,7 +705,7 @@
     pingLabel = (UILabel *)[cell viewWithTag:4];
     [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
     
-    [btnStar setFrame:CGRectMake(240, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-240, BOTTOM_SECTION_HEIGHT)];
+    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-260, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;

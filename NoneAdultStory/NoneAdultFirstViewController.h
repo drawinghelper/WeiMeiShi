@@ -52,4 +52,5 @@
 - (void)reloadTableViewDataSource;
 - (void)doneLoadingTableViewData;
 - (void)goShare:(id)sender;
+- (void)performRefresh;
 @end

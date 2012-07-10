@@ -142,7 +142,7 @@
     [self shareDuanZiAtRow:i];
 }
 
--(void)goStar:(id)sender{  
+-(void)goCollect:(id)sender{  
     //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
     int i = [sender tag] - 1000;
     [self starDuanZiAtRow:i];
@@ -404,7 +404,7 @@
     UIButton *btnStar = [UIButton buttonWithType:UIButtonTypeCustom]; 
     [btnStar setTitle:@"" forState:UIControlStateNormal];
     [btnStar setTag:(row + 1000)];
-    [btnStar addTarget:self action:@selector(goStar:) forControlEvents:UIControlEventTouchUpInside];
+    [btnStar addTarget:self action:@selector(goCollect:) forControlEvents:UIControlEventTouchUpInside];
     [cell.contentView addSubview:btnStar];
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
     UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
@@ -438,7 +438,7 @@
     pingLabel = (UILabel *)[cell viewWithTag:4];
     [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
     
-    [btnStar setFrame:CGRectMake(240, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-240, BOTTOM_SECTION_HEIGHT)];
+    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-260, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;
