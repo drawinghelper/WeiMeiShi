@@ -357,8 +357,8 @@
     NSString *weiboContent = [dic objectForKey:@"content"];
 
     NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[dic objectForKey:@"count"];
-    NSDecimalNumber *buryCount = [[NSDecimalNumber alloc] initWithInt:0];
-    NSDecimalNumber *commentCount = [[NSDecimalNumber alloc] initWithInt:0];
+    NSDecimalNumber *buryCount = [[NSDecimalNumber alloc] initWithInt:([favoriteCount intValue]/5)];
+    NSDecimalNumber *commentCount = [[NSDecimalNumber alloc] initWithInt:([favoriteCount intValue]/3)];
     
     [dic setObject:screenName forKey:@"screen_name"];
     [dic setObject:profileImageUrl forKey:@"profile_image_url"];
@@ -483,7 +483,7 @@
         NSLog(@"Could not open db."); 
         return ;  
     }
-    [db executeUpdate:@"insert into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+    [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
 }
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex != actionSheet.cancelButtonIndex) {

@@ -69,13 +69,13 @@
         return ;  
     }
     
-    [db executeUpdate:@"DROP TABLE collected"];
+    //[db executeUpdate:@"DROP TABLE collected"];
 
     //创建一个名为User的表，有两个字段分别为string类型的Name，integer类型的 Age
     NSString *createSQL = @"CREATE TABLE IF NOT EXISTS collected (";
 	createSQL = [createSQL stringByAppendingString:@" ID INTEGER PRIMARY KEY AUTOINCREMENT,"];
 
-    createSQL = [createSQL stringByAppendingString:@" weiboId INTEGER,"];//微博的id
+    createSQL = [createSQL stringByAppendingString:@" weiboId INTEGER UNIQUE,"];//微博的id
 	createSQL = [createSQL stringByAppendingString:@" profile_image_url TEXT,"];//博主头像图片地址
     createSQL = [createSQL stringByAppendingString:@" screen_name TEXT,"];//微博名
     createSQL = [createSQL stringByAppendingString:@" timestamp INTEGER,"];//微博发表时间
@@ -134,7 +134,6 @@
      registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
                                          UIRemoteNotificationTypeSound |
                                          UIRemoteNotificationTypeAlert)];
-    
     
     [MobClick startWithAppkey:@"4fa3232652701556cc00001e" reportPolicy:REALTIME channelId:nil];
     [MobClick checkUpdate];

@@ -39,7 +39,7 @@
     } 
 
     NSMutableArray *addedList = [[NSMutableArray alloc] init];
-    FMResultSet *rs=[db executeQuery:@"SELECT * FROM collected"];
+    FMResultSet *rs=[db executeQuery:@"SELECT * FROM collected ORDER BY collect_time DESC"];
     NSMutableDictionary *dic = nil;
     while ([rs next]){
         dic = [[NSMutableDictionary alloc] init];
@@ -59,33 +59,8 @@
         [addedList addObject:dic];
     }
     [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
-    
-    /*
-    NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    //NSLog(responseString);
-    NSDictionary *responseInfo = [UMSNSStringJson JSONValue:responseString]; 
-    NSDictionary *dataDic = [responseInfo objectForKey:@"info"];
-    NSMutableArray *addedList = [dataDic objectForKey:@"talk"];
-    tempPropertyDic = [dataDic objectForKey:@"selectedMap"];
-    NSLog(@"result: %@", addedList);
-    
-    [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
-     */
-    
 }
-/*
-- (void)loadUrl {
-    NSString *configContentsource = [[NoneAdultAppDelegate sharedAppDelegate] getConfigContentsource];
-    if ([configContentsource isEqualToString:@"0"]) {
-        url = [[NSString alloc] initWithString:@"http://211.157.111.244:6090/hot.json?tag=joke&offset=0&count=100"];
-    } else if ([configContentsource isEqualToString:@"1"]) {
-        url = [[NSString alloc] initWithString:@"http://nh.tourbox.me/hot.json?tag=joke&offset=0&count=100"];
-    } else {
-        url = [[NSString alloc] initWithString:@"http://i.snssdk.com/essay/1/top/?tag=joke&offset=0&count=100"];
-    }
-    NSLog(@"loadUrl: %@", url);
-}
-*/
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -96,7 +71,9 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    [self performRefresh];
+    if ([originalNewDuanZiList count] != 0) {
+        [self performRefresh];
+    }
 }
 
 - (void)viewDidUnload
