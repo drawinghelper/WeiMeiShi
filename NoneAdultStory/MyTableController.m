@@ -527,7 +527,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+	NSLog(@"didSelectRowAtIndexPath...");
+    int row = [indexPath row];
+    /*
+     NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
+     NoneAdultDetailViewController *detailViewController = [[NoneAdultDetailViewController alloc]initWithNibName:@"NoneAdultDetailViewController" bundle:nil];
+     detailViewController.title = @"笑话详情";
+     detailViewController.currentDuanZi = duanZi;
+     detailViewController.hidesBottomBarWhenPushed = YES;
+     [self.navigationController pushViewController:detailViewController animated:YES];
+     detailViewController.hidesBottomBarWhenPushed = NO;//马上设置回NO
+     */
+    [self shareDuanZiAtRow:row];
 }
 
 
