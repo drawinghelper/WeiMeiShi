@@ -9,6 +9,7 @@
 #import "NoneAdultAppDelegate.h"
 
 #import "NoneAdultFirstViewController.h"
+#import "MyTableController.h"
 
 #import "NoneAdultSecondViewController.h"
 #import "NoneAdultMonthTopViewController.h"
@@ -51,6 +52,50 @@
 - (NSString *)getConfigVersionForReview {
     return configVersionForReview;
 }
+
+-(NSString *)getDbPath{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);  
+    NSString *documentDirectory = [paths objectAtIndex:0];  
+    //dbPath： 数据库路径，在Document中。  
+    NSString *dbPath = [documentDirectory stringByAppendingPathComponent:@"NeiHanStoryTencent.db"];  
+    NSLog(@"dbPath: %@", dbPath);
+    return dbPath;
+}
+
+- (void)createCollectTable {
+    FMDatabase *db= [FMDatabase databaseWithPath:[self getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    }
+    
+    [db executeUpdate:@"DROP TABLE collected"];
+
+    //创建一个名为User的表，有两个字段分别为string类型的Name，integer类型的 Age
+    NSString *createSQL = @"CREATE TABLE IF NOT EXISTS collected (";
+	createSQL = [createSQL stringByAppendingString:@" ID INTEGER PRIMARY KEY AUTOINCREMENT,"];
+
+    createSQL = [createSQL stringByAppendingString:@" weiboId INTEGER,"];//微博的id
+	createSQL = [createSQL stringByAppendingString:@" profile_image_url TEXT,"];//博主头像图片地址
+    createSQL = [createSQL stringByAppendingString:@" screen_name TEXT,"];//微博名
+    createSQL = [createSQL stringByAppendingString:@" timestamp INTEGER,"];//微博发表时间
+    
+	createSQL = [createSQL stringByAppendingString:@" content TEXT,"];//文字内容
+    createSQL = [createSQL stringByAppendingString:@" imageurl TEXT,"];//图片内容
+    createSQL = [createSQL stringByAppendingString:@" width INTEGER,"];//图片宽度
+    createSQL = [createSQL stringByAppendingString:@" height INTEGER,"];//图片高度
+    createSQL = [createSQL stringByAppendingString:@" gif INTEGER,"];//图片是否为gif，0为不是gif，1是gif
+
+    createSQL = [createSQL stringByAppendingString:@" favorite_count INTEGER,"];
+    createSQL = [createSQL stringByAppendingString:@" bury_count INTEGER,"];//
+    createSQL = [createSQL stringByAppendingString:@" comments_count INTEGER,"];//
+    
+    createSQL = [createSQL stringByAppendingString:@" collect_time INTEGER"];
+    createSQL = [createSQL stringByAppendingString:@");"];
+
+    [db executeUpdate:createSQL];
+    
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [Parse setApplicationId:@"wqZfQJvWNjK0zQY7U4G388xJIi4c2C8bOgJXx9Q6"
@@ -58,6 +103,7 @@
     
     //加载各种配置
     //1.服务器接口来源标识
+    /*
     PFQuery *query = [PFQuery queryWithClassName:@"setting"];
     [query whereKey:@"settingField" equalTo:@"contentsource"];
     NSArray *objects = [query findObjects];
@@ -67,8 +113,11 @@
         configContentsource = [contentsource objectForKey:@"settingValue"];
         NSLog(@"contentsource: %@", configContentsource);
     }
+    */
+    configContentsource = @"0";
     
     //2.加载当前审核的版本号字段
+    /*
     query = [PFQuery queryWithClassName:@"setting"];
     [query whereKey:@"settingField" equalTo:@"versionForReview"];
     objects = [query findObjects];
@@ -78,7 +127,8 @@
         configVersionForReview = [versionForReview objectForKey:@"settingValue"];
         NSLog(@"configVersionForReview: %@", configVersionForReview);
     }
-    
+    */
+    configVersionForReview = @"-1";
     // Register for notifications
     [[UIApplication sharedApplication]
      registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
@@ -96,6 +146,13 @@
     UINavigationController *newNavViewController = [[UINavigationController alloc] initWithRootViewController:newController];
     [newNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
+    MyTableController *controller = [[MyTableController alloc] init];
+    UIViewController *historyTopController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
+    UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [historyTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    
+    [self createCollectTable];
+    /*
     UIViewController *historyTopController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
     UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
     [historyTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
@@ -107,7 +164,7 @@
     UIViewController *weekTopController = [[NoneAdultWeekTopViewController alloc] initWithNibName:@"NoneAdultWeekTopViewController" bundle:nil];
     UINavigationController *weekTopNavViewController = [[UINavigationController alloc] initWithRootViewController:weekTopController];
     [weekTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
-    
+    */
     UIViewController *settingViewController = [[NoneAdultSettingViewController alloc] initWithNibName:@"NoneAdultSettingViewController" bundle:nil];
     UINavigationController *settingNavViewController = [[UINavigationController alloc] initWithRootViewController:settingViewController];
     [settingNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
@@ -116,8 +173,8 @@
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                              newNavViewController, 
                                              historyTopNavViewController,
-                                             monthTopNavViewController,
-                                             weekTopNavViewController,
+                                             //monthTopNavViewController,
+                                             //weekTopNavViewController,
                                              settingNavViewController,
                                              nil];
     self.window.rootViewController = self.tabBarController;

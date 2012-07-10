@@ -12,6 +12,7 @@
 #import "UMFeedback.h"
 #import "Appirater.h"
 #import <Parse/Parse.h>
+#import "FMDatabase.h"
 
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>{
     NSString *configContentsource;
@@ -24,6 +25,7 @@
 
 @property (strong, nonatomic) UITabBarController *tabBarController;
 + (CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha;
+-(NSString *)getDbPath;
 + (NoneAdultAppDelegate *)sharedAppDelegate;
 - (NSString *)getConfigContentsource;
 - (NSString *)getConfigVersionForReview;

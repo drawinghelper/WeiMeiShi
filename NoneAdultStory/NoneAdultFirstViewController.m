@@ -274,7 +274,8 @@
     [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    [HUD setOpacity:0.5f];
+    HUD.labelText = @"努力加载中...";
+    [HUD setOpacity:1.0f];
 }
 #pragma mark -
 #pragma mark HTTP Response Methods
@@ -441,7 +442,7 @@
 -(void)goStar:(id)sender{  
     //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
     int i = [sender tag] - 1000;
-    //[self shareDuanZiAtRow:i];
+    [self starDuanZiAtRow:i];
 }
 - (void)shareDuanZiAtRow:(int)row {
     currentDuanZi = [searchDuanZiList objectAtIndex:row];
@@ -452,7 +453,40 @@
                                                     otherButtonTitles: @"新浪微博",@"腾讯微博",@"复制文本", nil];//@"邮件分享", nil];     
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
-
+- (void)starDuanZiAtRow:(int)row {
+    currentDuanZi = [searchDuanZiList objectAtIndex:row];
+    NSDate *nowDate = [[NSDate alloc] init];
+    NSArray *dataArray = [NSArray arrayWithObjects:
+                          [currentDuanZi objectForKey:@"id"], 
+                          [currentDuanZi objectForKey:@"profile_image_url"], 
+                          [currentDuanZi objectForKey:@"screen_name"],
+                          [currentDuanZi objectForKey:@"timestamp"],
+                          [currentDuanZi objectForKey:@"content"],
+                          
+                          /*[currentDuanZi objectForKey:@"imageurl"], 
+                          [currentDuanZi objectForKey:@"width"],
+                          [currentDuanZi objectForKey:@"height"],
+                          [currentDuanZi objectForKey:@"gif"],
+                          */
+                          [[NSString alloc] initWithString:@""],
+                          [[NSNumber alloc] initWithInt:0],
+                          [[NSNumber alloc] initWithInt:0],
+                          [[NSNumber alloc] initWithInt:0],
+                          
+                          [currentDuanZi objectForKey:@"favorite_count"], 
+                          [currentDuanZi objectForKey:@"bury_count"],
+                          [currentDuanZi objectForKey:@"comments_count"],
+                          [[NSNumber alloc] initWithLongLong:[nowDate timeIntervalSince1970]],
+                          //[currentDuanZi objectForKey:@"collect_time"],
+                          nil
+                          ];
+    FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    }
+    [db executeUpdate:@"insert into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+}
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         NSString *statusContent = nil;
