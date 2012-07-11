@@ -595,17 +595,13 @@
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
-            [UMSNSService shareToSina:self 
-                            andAppkey:@"4fa3232652701556cc00001e" 
-                            andStatus:statusContent];
+            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeSina];
             
             [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
             NSLog(@"custom event share_sina_haoxiao!");            
-            [UMSNSService shareToTenc:self 
-                            andAppkey:@"4fa3232652701556cc00001e" 
-                            andStatus:statusContent];
+            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeTenc];
             
             [UMSNSService setDataSendDelegate:self];
             return;
