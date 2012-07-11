@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "NoneAdultFirstViewController.h"
-@interface NoneAdultSecondViewController : NoneAdultFirstViewController
+@interface NoneAdultSecondViewController : NoneAdultFirstViewController{
+    BOOL firstLoaded;
+}
 
 @end

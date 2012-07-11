@@ -124,6 +124,34 @@
 
     // This method is called every time objects are loaded from Parse via the PFQuery
     NSLog(@"加载完成...");
+    [self loadCollectedIds];
+    NSMutableDictionary *dic = nil;
+    newObjectArray = [[NSMutableArray alloc] init];
+    for (int i=0;i<[self.objects count];i++) {
+        dic = [self.objects objectAtIndex:i];
+        [self adaptDic:dic];
+        [self checkCollected:dic];
+        [newObjectArray addObject:dic];
+    }
+    [self.tableView reloadData];
+}
+
+- (void)adaptDic:(NSMutableDictionary *)dic {
+    NSString *idString = [dic objectForKey:@"weiboId"];
+    [dic setObject:idString forKey:@"id"];
+}
+
+- (void)checkCollected:(NSMutableDictionary *)dic {
+    
+    NSString *idString = [dic objectForKey:@"id"];
+    
+    if ([collectedIdsDic objectForKey:idString] != nil) {
+        NSLog(@"idString YES: %@", idString);
+        [dic setObject:@"YES" forKey:@"collected_tag"];
+    } else {
+        NSLog(@"idString NO: %@", idString);
+        [dic setObject:@"NO" forKey:@"collected_tag"];
+    }
 }
 
 - (void)objectsWillLoad {
@@ -136,23 +164,50 @@
     NSLog(@"开始加载...");
 }
 
+- (void)loadCollectedIds {
+    FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    } 
+    
+    collectedIdsDic = [[NSMutableDictionary alloc] init];
+    FMResultSet *rs=[db executeQuery:@"SELECT * FROM collected ORDER BY collect_time DESC"];
+    while ([rs next]){
+        NSString *weiboId = [NSString stringWithFormat:@"%lld", [rs longLongIntForColumn:@"weiboId"]];
+        [collectedIdsDic setObject:[[NSNumber alloc] initWithInt:1] forKey:weiboId];
+    }
+}
+
 -(void)goShare:(id)sender{  
     //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
     int i = [sender tag] - 1000;
-    [self shareDuanZiAtRow:i];
+    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+    currentDuanZi = [self objectAtIndex:currentIndexPath];
+    [self shareDuanZi];
 }
 
 -(void)goCollect:(id)sender{  
     //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
     int i = [sender tag] - 2000;
-    [self starDuanZiAtRow:i];
+    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+    currentDuanZi = [self objectAtIndex:currentIndexPath];
+    
+    BOOL tag = YES;
+    NSString *collectedTag = [currentDuanZi objectForKey:@"collected_tag"];
+    if ([collectedTag isEqual:@"YES"]) {
+        tag = NO;
+        [currentDuanZi setObject:@"NO" forKey:@"collected_tag"];
+    } else {
+        tag = YES;
+        [currentDuanZi setObject:@"YES" forKey:@"collected_tag"];
+    }
+    [self toggleHeart:tag withSender:sender];
+    [self collectDuanZi:tag];
+    [self collectHUDMessage:tag];   
 }
 
-- (void)shareDuanZiAtRow:(int)row {
-    NSLog(@"row: %d", row);
-    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
-
-    currentDuanZi = [self objectAtIndex:currentIndexPath];
+- (void)shareDuanZi {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享到" 
                                                              delegate:self
                                                     cancelButtonTitle:@"取消" 
@@ -160,42 +215,78 @@
                                                     otherButtonTitles:@"新浪微博",@"腾讯微博",@"复制文本", nil];     
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
-- (void)starDuanZiAtRow:(int)row {
-    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    currentDuanZi = [self objectAtIndex:currentIndexPath];
-    NSDate *nowDate = [[NSDate alloc] init];
-    NSArray *dataArray = [NSArray arrayWithObjects:
-                          [currentDuanZi objectForKey:@"weiboId"], 
 
-                          [currentDuanZi objectForKey:@"profile_image_url"], 
-                          [currentDuanZi objectForKey:@"screen_name"],
-                          [currentDuanZi objectForKey:@"timestamp"],
-                          [currentDuanZi objectForKey:@"content"],
-                          
-                          /*[currentDuanZi objectForKey:@"imageurl"], 
-                           [currentDuanZi objectForKey:@"width"],
-                           [currentDuanZi objectForKey:@"height"],
-                           [currentDuanZi objectForKey:@"gif"],
-                           */
-                          [[NSString alloc] initWithString:@""],
-                          [[NSNumber alloc] initWithInt:0],
-                          [[NSNumber alloc] initWithInt:0],
-                          [[NSNumber alloc] initWithInt:0],
-                          
-                          [currentDuanZi objectForKey:@"favorite_count"], 
-                          [currentDuanZi objectForKey:@"bury_count"],
-                          [currentDuanZi objectForKey:@"comments_count"],
-                          [[NSNumber alloc] initWithLongLong:[nowDate timeIntervalSince1970]],
-                          //[currentDuanZi objectForKey:@"collect_time"],
-                          nil
-                          ];
+-(void)toggleHeart:(BOOL)tag withSender:(id)sender {
+    UIButton *heartButton = (UIButton *)sender;
+    UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
+    UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
+    if (tag) {
+        [heartButton setImage:btnStarImagePressed forState:UIControlStateNormal];
+        [heartButton setImage:btnStarImage forState:UIControlStateHighlighted];
+    } else {
+        [heartButton setImage:btnStarImage forState:UIControlStateNormal];
+        [heartButton setImage:btnStarImagePressed forState:UIControlStateHighlighted];
+    }
+}
+
+- (void)collectDuanZi:(BOOL)tag {
     FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  
     if (![db open]) {  
         NSLog(@"Could not open db."); 
         return ;  
     }
-    [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+    if (tag) {
+        NSDate *nowDate = [[NSDate alloc] init];
+        NSArray *dataArray = [NSArray arrayWithObjects:
+                              [currentDuanZi objectForKey:@"weiboId"], 
+
+                              [currentDuanZi objectForKey:@"profile_image_url"], 
+                              [currentDuanZi objectForKey:@"screen_name"],
+                              [currentDuanZi objectForKey:@"timestamp"],
+                              [currentDuanZi objectForKey:@"content"],
+                              
+                              /*[currentDuanZi objectForKey:@"imageurl"], 
+                               [currentDuanZi objectForKey:@"width"],
+                               [currentDuanZi objectForKey:@"height"],
+                               [currentDuanZi objectForKey:@"gif"],
+                               */
+                              [[NSString alloc] initWithString:@""],
+                              [[NSNumber alloc] initWithInt:0],
+                              [[NSNumber alloc] initWithInt:0],
+                              [[NSNumber alloc] initWithInt:0],
+                              
+                              [currentDuanZi objectForKey:@"favorite_count"], 
+                              [currentDuanZi objectForKey:@"bury_count"],
+                              [currentDuanZi objectForKey:@"comments_count"],
+                              [[NSNumber alloc] initWithLongLong:[nowDate timeIntervalSince1970]],
+                              //[currentDuanZi objectForKey:@"collect_time"],
+                              nil
+                              ];
+        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+    } else {
+        NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"id"], nil];
+        [db executeUpdate:@"delete from collected where weiboId = ?" withArgumentsInArray:dataArray];
+    }
 }
+
+/*
+ YES - 收藏成功，
+ NO - 取消收藏
+ */
+-(void)collectHUDMessage:(BOOL)tag{
+    HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+	HUD.mode = MBProgressHUDModeText;
+    if (tag) {
+        HUD.labelText = @"收藏成功";
+    } else {
+        HUD.labelText = @"取消收藏";
+    }
+	HUD.margin = 10.f;
+	HUD.yOffset = 150.f;
+	HUD.removeFromSuperViewOnHide = YES;
+	[HUD hide:YES afterDelay:1];
+}
+
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         NSString *statusContent = nil;
@@ -278,8 +369,9 @@
 
  // Override to customize the look of a cell representing an object. The default is to display
  // a UITableViewCellStyleDefault style cell with the label being the first key in the object. 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)duanZi {
-    int row = [indexPath row];    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)duanZiPFObject {
+    int row = [indexPath row];   
+    NSMutableDictionary *duanZi = [newObjectArray objectAtIndex:row];
     static NSString *CellIdentifier = @"OffenceCustomCellIdentifier";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -408,8 +500,13 @@
     [cell.contentView addSubview:btnStar];
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
     UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
-    [btnStar setImage:btnStarImage forState:UIControlStateNormal];
-    [btnStar setImage:btnStarImagePressed forState:UIControlStateHighlighted];
+    if ([[duanZi objectForKey:@"collected_tag"] isEqual:@"YES"]) {
+        [btnStar setImage:btnStarImagePressed forState:UIControlStateNormal];
+        [btnStar setImage:btnStarImage forState:UIControlStateHighlighted];
+    } else {
+        [btnStar setImage:btnStarImage forState:UIControlStateNormal];
+        [btnStar setImage:btnStarImagePressed forState:UIControlStateHighlighted];
+    }
     
     //content内容自适应
     label = (UILabel *)[cell viewWithTag:1];
@@ -538,7 +635,9 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      detailViewController.hidesBottomBarWhenPushed = NO;//马上设置回NO
      */
-    [self shareDuanZiAtRow:row];
+    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    currentDuanZi = [self objectAtIndex:currentIndexPath];
+    [self shareDuanZi];
 }
 
 

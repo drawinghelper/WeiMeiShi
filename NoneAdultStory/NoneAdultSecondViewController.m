@@ -67,6 +67,7 @@
     //刷新一下本页
     [self performRefresh];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -74,12 +75,14 @@
     canLoadOld = NO;
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.rightBarButtonItem = nil;
+    firstLoaded = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    if ([originalNewDuanZiList count] != 0) {
+    if (!firstLoaded) {
         [self performRefresh];
     }
+    firstLoaded = NO;
 }
 
 - (void)viewDidUnload

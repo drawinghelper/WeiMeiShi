@@ -572,7 +572,7 @@
 	HUD.margin = 10.f;
 	HUD.yOffset = 150.f;
 	HUD.removeFromSuperViewOnHide = YES;
-	[HUD hide:YES afterDelay:1];
+	[HUD hide:YES afterDelay:0.5f];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {

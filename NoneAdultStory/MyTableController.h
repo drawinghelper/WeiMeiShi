@@ -20,6 +20,9 @@
 @interface MyTableController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate> {
     MBProgressHUD *HUD;
     PFObject *currentDuanZi;
+    
+    NSMutableDictionary *collectedIdsDic;
+    NSMutableArray *newObjectArray;
 }
 
 @end
