@@ -71,7 +71,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return starCommentVisible ? 2 : 1;
+    return starCommentVisible ? 3 : 2;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -118,7 +118,10 @@
             cell.text = starCommentVisible ? @"评五星鼓励我" : @"用着不爽提意见";
             break;
         case 1:
-            cell.text = @"用着不爽提意见";
+            cell.text = starCommentVisible ? @"用着不爽提意见" : @"精彩应用推荐";
+            break;
+        case 2:
+            cell.text = @"精彩应用推荐";
             break;
         default:
             break;
@@ -143,12 +146,24 @@
         } else {
             [self umengFeedback];
         }
-    }else if (row == 1) {
-        [self umengFeedback];
-	}
+    } else if (row == 1) {
+        if (starCommentVisible) {
+            [self umengFeedback];
+        } else {
+            [self showLianMeng];
+        }
+    } else {
+        [self showLianMeng];
+    }
 	[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 	NSLog(@"...didSelectRowAtIndexPath");
     
+}
+
+- (void)showLianMeng {
+    UMTableViewDemo *lianMengViewController = [[UMTableViewDemo alloc]init];   
+    lianMengViewController.title = @"精彩应用推荐";
+    [self.navigationController pushViewController:lianMengViewController animated:YES];
 }
 
 - (void)umengFeedback {

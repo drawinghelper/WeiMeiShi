@@ -11,6 +11,7 @@
 #import "UMFeedback.h"
 #import "Appirater.h"
 #import "NoneAdultAppDelegate.h"
+#import "UMTableViewDemo.h"
 @interface NoneAdultSettingViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>{
     IBOutlet UITableView *tableView;
     
