@@ -61,8 +61,6 @@
                          [currentDuanZi objectForKey:@"data_url"],
                          @"内涵笑话",
                          @"http://itunes.apple.com/app/id483805940"
-                         //[MobClick getConfigParams:@"appname"],
-                         //[MobClick getConfigParams:@"storeurl"],
                          ];
         
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {

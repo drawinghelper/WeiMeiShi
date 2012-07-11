@@ -300,8 +300,6 @@
                          stringWithFormat:@"%@#%@#",
                          cuttedContent,
                          @"内涵笑话"
-                         //[MobClick getConfigParams:@"appname"],
-                         //[MobClick getConfigParams:@"storeurl"],
                          ];
         NSLog(@"statusContent: %@", statusContent);
         

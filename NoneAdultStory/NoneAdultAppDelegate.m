@@ -12,15 +12,12 @@
 #import "MyTableController.h"
 
 #import "NoneAdultSecondViewController.h"
-#import "NoneAdultMonthTopViewController.h"
-#import "NoneAdultWeekTopViewController.h"
 #import "NoneAdultSettingViewController.h"
 
 @implementation NoneAdultAppDelegate
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
-@synthesize configContentsource, configVersionForReview;
 
 +(CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha
 {
@@ -43,14 +40,6 @@
 + (NoneAdultAppDelegate *)sharedAppDelegate
 {
     return (NoneAdultAppDelegate *) [UIApplication sharedApplication].delegate;
-}
-
-- (NSString *)getConfigContentsource {
-    return configContentsource;
-}
-
-- (NSString *)getConfigVersionForReview {
-    return configVersionForReview;
 }
 
 -(NSString *)getDbPath{
@@ -101,34 +90,6 @@
     [Parse setApplicationId:@"wqZfQJvWNjK0zQY7U4G388xJIi4c2C8bOgJXx9Q6"
                   clientKey:@"n8FYn4lelC9FNyshKu1D8hmngdJSYJzKn0H1ZanK"];
     
-    //加载各种配置
-    //1.服务器接口来源标识
-    /*
-    PFQuery *query = [PFQuery queryWithClassName:@"setting"];
-    [query whereKey:@"settingField" equalTo:@"contentsource"];
-    NSArray *objects = [query findObjects];
-    NSLog(@"Successfully retrieved %d contentsource setting.", objects.count);
-    if (objects.count != 0) {
-        PFObject *contentsource = [objects objectAtIndex:0];
-        configContentsource = [contentsource objectForKey:@"settingValue"];
-        NSLog(@"contentsource: %@", configContentsource);
-    }
-    */
-    configContentsource = @"0";
-    
-    //2.加载当前审核的版本号字段
-    /*
-    query = [PFQuery queryWithClassName:@"setting"];
-    [query whereKey:@"settingField" equalTo:@"versionForReview"];
-    objects = [query findObjects];
-    NSLog(@"Successfully retrieved %d versionForReview setting.", objects.count);
-    if (objects.count != 0) {
-        PFObject *versionForReview = [objects objectAtIndex:0];
-        configVersionForReview = [versionForReview objectForKey:@"settingValue"];
-        NSLog(@"configVersionForReview: %@", configVersionForReview);
-    }
-    */
-    configVersionForReview = @"-1";
     // Register for notifications
     [[UIApplication sharedApplication]
      registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |

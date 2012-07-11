@@ -80,9 +80,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //NSLog(@"param: %@", [MobClick getConfigParams:@"param"]);
 
     NSString *showAd = [MobClick getConfigParams:@"showAd"];
+    if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
+        showAd = @"off";
+    }
     if ([showAd isEqualToString:@"on"]) {
         //增加广告条显示
         self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
@@ -588,8 +590,6 @@
                          stringWithFormat:@"%@#%@#",
                          cuttedContent,
                          @"内涵笑话"
-                         //[MobClick getConfigParams:@"appname"],
-                         //[MobClick getConfigParams:@"storeurl"],
                          ];
         
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {

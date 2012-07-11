@@ -45,10 +45,14 @@
     
     // Do any additional setup after loading the view from its nib.
     currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
-    versionForReview = [[NoneAdultAppDelegate sharedAppDelegate] getConfigVersionForReview];
+    NSString *versionForReview = [MobClick getConfigParams:@"versionForReview"];
 
     starCommentVisible = YES;
     if ([currentAppVersion isEqualToString:versionForReview]) {
+        starCommentVisible = NO;
+    }
+    
+    if (versionForReview == nil || versionForReview == [NSNull null]  || [versionForReview isEqualToString:@""]) {
         starCommentVisible = NO;
     }
 }
