@@ -86,6 +86,8 @@
     if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
         showAd = @"off";
     }
+    //总：AudioToolbox、CoreLocation、CoreTelephony、MessageUI、SystemConfiguration、QuartzCore、EventKit、MapKit、libxml2
+
     if ([showAd isEqualToString:@"on"]) {
         //增加广告条显示
         self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
