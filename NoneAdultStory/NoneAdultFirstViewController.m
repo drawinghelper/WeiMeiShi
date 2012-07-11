@@ -100,10 +100,7 @@
     [view setBackgroundColor:[UIColor blackColor]];
     [view setAlpha:0.6];
     [self.view addSubview:view];
-    */
-    
-    
-    /*
+
     activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
     [activityIndicator setCenter:view.center];
     [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -430,7 +427,7 @@
     NSDictionary *dataDic = [responseInfo objectForKey:@"info"];
     NSMutableArray *addedList = [dataDic objectForKey:@"talk"];
     tempPropertyDic = [dataDic objectForKey:@"selectedMap"];
-    NSLog(@"result: %@", addedList);
+    //NSLog(@"result: %@", addedList);
     
     [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
 }
