@@ -117,15 +117,6 @@
     UINavigationController *secondNavViewController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
     [secondNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
 
-    /*
-    UIViewController *monthTopController = [[NoneAdultMonthTopViewController alloc] initWithNibName:@"NoneAdultMonthTopViewController" bundle:nil];
-    UINavigationController *monthTopNavViewController = [[UINavigationController alloc] initWithRootViewController:monthTopController];
-    [monthTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
-    
-    UIViewController *weekTopController = [[NoneAdultWeekTopViewController alloc] initWithNibName:@"NoneAdultWeekTopViewController" bundle:nil];
-    UINavigationController *weekTopNavViewController = [[UINavigationController alloc] initWithRootViewController:weekTopController];
-    [weekTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
-    */
     UIViewController *settingViewController = [[NoneAdultSettingViewController alloc] initWithNibName:@"NoneAdultSettingViewController" bundle:nil];
     UINavigationController *settingNavViewController = [[UINavigationController alloc] initWithRootViewController:settingViewController];
     [settingNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
@@ -135,15 +126,77 @@
                                              newNavViewController, 
                                              historyTopNavViewController,
                                              secondNavViewController,
-                                             //monthTopNavViewController,
-                                             //weekTopNavViewController,
                                              settingNavViewController,
                                              nil];
     self.window.rootViewController = self.tabBarController;
     //[NSThread sleepForTimeInterval:2.0];
     [self.window makeKeyAndVisible];
     [Appirater appLaunched:YES];
+    
+    application.applicationIconBadgeNumber = 0;
+    [self buryRoutineNotification];
+    
     return YES;
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    //这里，你就可以通过notification的useinfo，干一些你想做的事情了
+    application.applicationIconBadgeNumber -= 1;
+    
+    [self buryRoutineNotification];
+}
+
+- (void)buryRoutineNotification {
+    //删除所有本地应用外推送
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+    //设置明天的这个时候推送
+    NSDate *date = [NSDate dateWithTimeIntervalSinceNow:60*60*24];
+    //NSDate *date = [NSDate dateWithTimeIntervalSinceNow:30];
+    //创建一个本地推送
+    UILocalNotification *noti = [[UILocalNotification alloc] init];
+    if (noti) {
+        //设置推送时间
+        noti.fireDate = date;
+        //设置重复间隔
+        noti.repeatInterval = NSWeekCalendarUnit;
+        NSString *localNotiRepeatInterval = [MobClick getConfigParams:@"localNotiRepeatInterval"];
+        if (localNotiRepeatInterval != nil 
+            && localNotiRepeatInterval != [NSNull null] 
+            && ![localNotiRepeatInterval isEqualToString:@""]) {
+            
+            if ([localNotiRepeatInterval isEqualToString:@"week"]) {
+                noti.repeatInterval = NSWeekCalendarUnit;
+            } else if ([localNotiRepeatInterval isEqualToString:@"day"]) {
+                noti.repeatInterval = NSDayCalendarUnit;
+            } else {
+                noti.repeatInterval = 0;                
+            }
+        }
+        
+        //内容
+        noti.alertBody = @"今天又有新笑话啦，来看看吧！";
+        NSString *localNotiAlertBody = [MobClick getConfigParams:@"localNotiAlertBody"];
+        if (localNotiAlertBody != nil 
+            && localNotiAlertBody != [NSNull null] 
+            && ![localNotiAlertBody isEqualToString:@""]) {
+            noti.alertBody = localNotiAlertBody;
+        }
+        
+        //设置时区
+        noti.timeZone = [NSTimeZone defaultTimeZone];
+        //推送声音
+        noti.soundName = UILocalNotificationDefaultSoundName;
+        //显示在icon上的红色圈中的数子
+        noti.applicationIconBadgeNumber = 1;
+        //设置userinfo 方便在之后需要撤销的时候使用
+        NSDictionary *infoDic = [NSDictionary dictionaryWithObject:@"name" forKey:@"key"];
+        noti.userInfo = infoDic;
+        //添加推送到uiapplication        
+        UIApplication *app = [UIApplication sharedApplication];
+        [app scheduleLocalNotification:noti];  
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
