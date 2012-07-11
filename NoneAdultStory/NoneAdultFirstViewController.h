@@ -21,7 +21,7 @@
 #define TOP_SECTION_HEIGHT 52.0f
 #define BOTTOM_SECTION_HEIGHT 34.0f
 
-@interface NoneAdultFirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdMoGoDelegate> {
+@interface NoneAdultFirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdMoGoDelegate> {
     AdMoGoView *adView;
 
     MBProgressHUD *HUD;
@@ -47,6 +47,9 @@
     NSMutableArray *originalNewDuanZiList;
     
     NSMutableDictionary *collectedIdsDic;
+    
+    NSDictionary *pullmessageInfo;
+
 }
 @property(nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) AdMoGoView *adView;

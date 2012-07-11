@@ -80,6 +80,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self processPullMessage];
 
     NSString *showAd = [MobClick getConfigParams:@"showAd"];
     if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
@@ -127,7 +128,6 @@
                                                   forBarMetrics:UIBarMetricsDefault];   
     
     if (_refreshHeaderView == nil) {
-        
         EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, self.view.frame.size.width, self.tableView.bounds.size.height)];
         view.delegate = self;
         [self.tableView addSubview:view];
@@ -154,6 +154,99 @@
     [self performSelector:@selector(requestResultFromServer) withObject:nil];
     
 }
+
+//处理应用内消息
+- (void)processPullMessage {
+    NSString *pullmessage = [MobClick getConfigParams:@"pullmessage"];
+    if (pullmessage != nil 
+        && pullmessage != [NSNull null]
+        && ![pullmessage isEqualToString:@""]) {
+        
+        pullmessageInfo = [UMSNSStringJson JSONValue:pullmessage]; 
+        NSString *pullmessageTimestamp = [pullmessageInfo objectForKey:@"timestamp"];
+        
+        //1. 读取已展现消息的时间戳数组
+        NSMutableArray *showedMessageTimestampArray = [[NSMutableArray alloc] init];
+        NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
+        NSData *dataRepresentingSavedArray = [currentDefaults objectForKey:@"showedMessageTimestampArray"];
+        if (dataRepresentingSavedArray != nil)
+        {
+            NSArray *oldSavedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataRepresentingSavedArray];
+            if (oldSavedArray != nil)
+                showedMessageTimestampArray = [[NSMutableArray alloc] initWithArray:oldSavedArray];
+            else
+                showedMessageTimestampArray = [[NSMutableArray alloc] init];
+        }
+        
+        //2. 遍历时间戳数组，与本次消息的时间戳做对比
+        BOOL showedTag = NO;
+        for (int i = 0; i < [showedMessageTimestampArray count]; i++) {
+            NSString *showedMessageTimestamp = [showedMessageTimestampArray objectAtIndex:i];
+            if ([showedMessageTimestamp isEqualToString:pullmessageTimestamp]) {
+                showedTag = YES;
+                break;
+            }
+        }
+        
+        //是否匹配渠道与版本号
+        NSString *currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
+        NSString *channelId = kChannelId;
+        NSString *pullmessageChannelIdList = [pullmessageInfo objectForKey:@"channelId"];
+        NSString *pullmessageAppversionList = [pullmessageInfo objectForKey:@"appversion"];
+        BOOL channelTargeted = NO;
+        if ([pullmessageChannelIdList isEqualToString:@""]
+            ||[pullmessageChannelIdList rangeOfString:channelId].length > 0 ) {
+            channelTargeted = YES;
+        }
+        BOOL versionTargeted = NO;
+        if ([pullmessageAppversionList isEqualToString:@""]
+            ||[pullmessageAppversionList rangeOfString:currentAppVersion].length > 0 ) {
+            versionTargeted = YES;
+        }
+        
+        if (versionTargeted && channelTargeted) {
+            //3. 无匹配项，则显示此消息
+            if (!showedTag) {
+                UIAlertView *pullmessageAlertView = [[UIAlertView alloc] initWithTitle:[pullmessageInfo objectForKey:@"title"]
+                                                                  message:[pullmessageInfo objectForKey:@"message"]
+                                                                 delegate:self
+                                                        cancelButtonTitle:[pullmessageInfo objectForKey:@"oktitle"]
+                                                        otherButtonTitles:[pullmessageInfo objectForKey:@"canceltitle"], nil];
+                [pullmessageAlertView show];
+                
+                [showedMessageTimestampArray addObject:pullmessageTimestamp];
+                [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:showedMessageTimestampArray] forKey:@"showedMessageTimestampArray"];
+            }
+        }
+        
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+        {          
+            NSString *okUrl = [pullmessageInfo objectForKey:@"okurl"];
+            if (![okUrl isEqualToString:@""]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:okUrl]];
+            }
+            break;
+        }
+        case 1:
+        {
+            // they want to rate it
+            NSString *cancelUrl = [pullmessageInfo objectForKey:@"cancelurl"];
+            if (![cancelUrl isEqualToString:@""]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:cancelUrl]];
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
+}
+
 #pragma mark -
 #pragma mark Data Source Loading / Reloading Methods
 

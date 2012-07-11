@@ -14,6 +14,8 @@
 #import <Parse/Parse.h>
 #import "FMDatabase.h"
 
+#define kChannelId @"App Store"
+
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>{
 }
 
