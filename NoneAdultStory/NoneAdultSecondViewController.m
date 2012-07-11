@@ -43,6 +43,7 @@
     NSMutableDictionary *dic = nil;
     while ([rs next]){
         dic = [[NSMutableDictionary alloc] init];
+        [dic setObject:[rs stringForColumn:@"weiboId"] forKey:@"id"];
         [dic setObject:[rs stringForColumn:@"screen_name"] forKey:@"nick"];
         [dic setObject:[rs stringForColumn:@"profile_image_url"] forKey:@"pic"];
         NSNumber *number = [[NSNumber alloc] initWithInt:[rs intForColumn:@"timestamp"]];
@@ -61,6 +62,11 @@
     [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
 }
 
+-(void)goCollect:(id)sender{  
+    [super goCollect:sender];
+    //刷新一下本页
+    [self performRefresh];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];

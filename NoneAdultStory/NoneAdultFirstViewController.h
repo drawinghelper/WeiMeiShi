@@ -31,7 +31,7 @@
     NSMutableData *responseData;   
     NSString *url;
     NSMutableArray *searchDuanZiList;
-    NSDictionary *currentDuanZi;
+    NSMutableDictionary *currentDuanZi;
     
     EGORefreshTableHeaderView *_refreshHeaderView;
     UIActivityIndicatorView *activityIndicator;
@@ -45,6 +45,8 @@
     
     NSDictionary *tempPropertyDic;
     NSMutableArray *originalNewDuanZiList;
+    
+    NSMutableDictionary *collectedIdsDic;
 }
 @property(nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) AdMoGoView *adView;
@@ -52,5 +54,6 @@
 - (void)reloadTableViewDataSource;
 - (void)doneLoadingTableViewData;
 - (void)goShare:(id)sender;
+- (void)goCollect:(id)sender;
 - (void)performRefresh;
 @end

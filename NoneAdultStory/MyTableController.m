@@ -144,7 +144,7 @@
 
 -(void)goCollect:(id)sender{  
     //这个sender其实就是UIButton，因此通过sender.tag就可以拿到刚才的参数  
-    int i = [sender tag] - 1000;
+    int i = [sender tag] - 2000;
     [self starDuanZiAtRow:i];
 }
 
@@ -403,7 +403,7 @@
     //收藏按钮
     UIButton *btnStar = [UIButton buttonWithType:UIButtonTypeCustom]; 
     [btnStar setTitle:@"" forState:UIControlStateNormal];
-    [btnStar setTag:(row + 1000)];
+    [btnStar setTag:(row + 2000)];
     [btnStar addTarget:self action:@selector(goCollect:) forControlEvents:UIControlEventTouchUpInside];
     [cell.contentView addSubview:btnStar];
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
