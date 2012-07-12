@@ -1,21 +1,21 @@
 //
-//  MyTableController.m
+//  HistoryPathViewController.m
 //  ParseStarterProject
 //
 //  Created by James Yu on 12/29/11.
 //  Copyright (c) 2011 Parse Inc. All rights reserved.
 //
 
-#import "MyTableController.h"
+#import "NewPathViewController.h"
 
-@implementation MyTableController
+@implementation NewPathViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.title = NSLocalizedString(@"历史热门", @"Second");
-        self.tabBarItem.image = [UIImage imageNamed:@"historyhot"];
+        self.title = NSLocalizedString(@"最新精选", @"Second");
+        self.tabBarItem.image = [UIImage imageNamed:@"new"];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         label.backgroundColor = [UIColor clearColor];
@@ -26,12 +26,12 @@
         [label setShadowOffset:CGSizeMake(0, 1.0)];
         
         self.navigationItem.titleView = label;
-        label.text = NSLocalizedString(@"历史热门", @"");
+        label.text = NSLocalizedString(@"最新精选", @"");
         [label sizeToFit];
         
         // Custom the table
         // The className to query on
-        self.className = @"Todo";
+        self.className = @"newfiltered";
         
         // The key of the PFObject to display in the label of the default cell style
         //self.keyToDisplay = @"text";
@@ -43,7 +43,7 @@
         self.paginationEnabled = YES;
         
         // The number of objects to show per page
-        self.objectsPerPage = 50;
+        self.objectsPerPage = 20;
     }
     return self;
 }
@@ -85,6 +85,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self loadCollectedIds];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -121,11 +122,12 @@
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     [HUD hide:YES afterDelay:0];
-
+    
     // This method is called every time objects are loaded from Parse via the PFQuery
     NSLog(@"加载完成...");
+    
     [self loadCollectedIds];
-    NSMutableDictionary *dic = nil;
+    /*NSMutableDictionary *dic = nil;
     newObjectArray = [[NSMutableArray alloc] init];
     for (int i=0;i<[self.objects count];i++) {
         dic = [self.objects objectAtIndex:i];
@@ -134,16 +136,17 @@
         [newObjectArray addObject:dic];
     }
     [self.tableView reloadData];
+     */
 }
 
-- (void)adaptDic:(NSMutableDictionary *)dic {
-    NSString *idString = [dic objectForKey:@"weiboId"];
-    [dic setObject:idString forKey:@"id"];
-}
+//- (void)adaptDic:(NSMutableDictionary *)dic {
+//    NSString *idString = [dic objectForKey:@"weiboId"];
+//    [dic setObject:idString forKey:@"id"];
+//}
 
-- (void)checkCollected:(NSMutableDictionary *)dic {
+/*- (void)checkCollected:(NSMutableDictionary *)dic {
     
-    NSString *idString = [dic objectForKey:@"id"];
+    NSString *idString = [dic objectForKey:@"weiboId"];
     
     if ([collectedIdsDic objectForKey:idString] != nil) {
         NSLog(@"idString YES: %@", idString);
@@ -152,7 +155,7 @@
         NSLog(@"idString NO: %@", idString);
         [dic setObject:@"NO" forKey:@"collected_tag"];
     }
-}
+}*/
 
 - (void)objectsWillLoad {
     [super objectsWillLoad];
@@ -239,7 +242,7 @@
         NSDate *nowDate = [[NSDate alloc] init];
         NSArray *dataArray = [NSArray arrayWithObjects:
                               [currentDuanZi objectForKey:@"weiboId"], 
-
+                              
                               [currentDuanZi objectForKey:@"profile_image_url"], 
                               [currentDuanZi objectForKey:@"screen_name"],
                               [currentDuanZi objectForKey:@"timestamp"],
@@ -264,7 +267,7 @@
                               ];
         [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
     } else {
-        NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"id"], nil];
+        NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"weiboId"], nil];
         [db executeUpdate:@"delete from collected where weiboId = ?" withArgumentsInArray:dataArray];
     }
 }
@@ -340,19 +343,19 @@
     [viewController dismissModalViewControllerAnimated:YES];
 }
 
- // Override to customize what kind of query to perform on the class. The default is to query for
- // all objects ordered by createdAt descending.
+// Override to customize what kind of query to perform on the class. The default is to query for
+// all objects ordered by createdAt descending.
 - (PFQuery *)queryForTable {
     PFQuery *query = [PFQuery queryWithClassName:self.className];
- 
+    
     // If no objects are loaded in memory, we look to the cache first to fill the table
     // and then subsequently do a query against the network.
     if ([self.objects count] == 0) {
         query.cachePolicy = kPFCachePolicyCacheThenNetwork;
     }
- 
+    
     [query orderByDescending:@"timestamp"];
- 
+    
     return query;
 }
 
@@ -361,11 +364,22 @@
     return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT;
 }
 
- // Override to customize the look of a cell representing an object. The default is to display
- // a UITableViewCellStyleDefault style cell with the label being the first key in the object. 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)duanZiPFObject {
-    int row = [indexPath row];   
-    NSMutableDictionary *duanZi = [newObjectArray objectAtIndex:row];
+// Override to customize the look of a cell representing an object. The default is to display
+// a UITableViewCellStyleDefault style cell with the label being the first key in the object. 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)duanZi {
+    int row = [indexPath row];
+    
+    //打上是否收藏过的标记
+    NSString *idString = [duanZi objectForKey:@"weiboId"];
+    if ([collectedIdsDic objectForKey:idString] != nil) {
+        NSLog(@"idString YES: %@", idString);
+        [duanZi setObject:@"YES" forKey:@"collected_tag"];
+    } else {
+        NSLog(@"idString NO: %@", idString);
+        [duanZi setObject:@"NO" forKey:@"collected_tag"];
+    }
+    
+    //NSMutableDictionary *duanZi = [newObjectArray objectAtIndex:row];
     static NSString *CellIdentifier = @"OffenceCustomCellIdentifier";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     

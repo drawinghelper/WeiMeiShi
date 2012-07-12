@@ -1,18 +1,18 @@
 //
-//  NoneAdultFirstViewController.m
+//  NewCommonViewController.m
 //  NoneAdultStory
 //
 //  Created by 王 攀 on 12-5-2.
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "NoneAdultFirstViewController.h"
+#import "NewCommonViewController.h"
 
-@interface NoneAdultFirstViewController ()
+@interface NewCommonViewController ()
 
 @end
 
-@implementation NoneAdultFirstViewController
+@implementation NewCommonViewController
 @synthesize tableView;
 @synthesize adView;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -95,25 +95,6 @@
         [adView setFrame:CGRectZero];
         [self.view addSubview:adView];
     }
-    //创建UIActivityIndicatorView背底半透明View
-    /*
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 424)];
-    [view setTag:103];
-    [view setBackgroundColor:[UIColor blackColor]];
-    [view setAlpha:0.6];
-    [self.view addSubview:view];
-
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
-    [activityIndicator setCenter:view.center];
-    [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [activityIndicator startAnimating];
-    [view addSubview:activityIndicator];
-     */
-     
-//    UIButton *infoButton = [UIButton buttonWithType: UIButtonTypeInfoLight];
-//    [infoButton setFrame:CGRectMake(0.0, 100.0, 25.0, 25.0)];
-//    [infoButton addTarget:self action:@selector(showInfo) forControlEvents:UIControlEventTouchDown];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
         
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
     btnRefresh.frame = CGRectMake(0, 0, 44, 44);
@@ -137,7 +118,6 @@
     [_refreshHeaderView refreshLastUpdatedDate];
     
 	// Do any additional setup after loading the view, typically from a nib.
-    //searchDuanZiList = [[NSMutableArray alloc] init];
     canLoadNew = YES;
     canLoadOld = YES;
     loadOld = NO;
@@ -591,9 +571,28 @@
     }
     [self toggleHeart:tag withSender:sender];
     [self collectDuanZi:tag];
-    [self collectHUDMessage:tag];    
+    [self collectHUDMessage:tag]; 
+    //初期用于提纯内容的，和审核的
+    [self storeIntoParseDB:tag];
 }
 
+- (void)storeIntoParseDB:(BOOL)tag {
+    if (!tag) {
+        return;
+    }
+
+    PFObject *newFiltered = [PFObject objectWithClassName:@"newfiltered"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"id"] forKey:@"weiboId"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"profile_image_url"] forKey:@"profile_image_url"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"screen_name"] forKey:@"screen_name"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"content"] forKey:@"content"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"favorite_count"] forKey:@"favorite_count"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"bury_count"] forKey:@"bury_count"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"comments_count"] forKey:@"comments_count"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"timestamp"] forKey:@"timestamp"];
+    [newFiltered saveEventually];
+}
+    
 -(void)toggleHeart:(BOOL)tag withSender:(id)sender {
     UIButton *heartButton = (UIButton *)sender;
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];

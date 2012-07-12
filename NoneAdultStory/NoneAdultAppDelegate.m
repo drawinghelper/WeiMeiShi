@@ -7,11 +7,11 @@
 //
 
 #import "NoneAdultAppDelegate.h"
+#import "NewPathViewController.h"
+#import "NewCommonViewController.h"
+#import "HistoryPathViewController.h"
 
-#import "NoneAdultFirstViewController.h"
-#import "MyTableController.h"
-
-#import "NoneAdultSecondViewController.h"
+#import "CollectedViewController.h"
 #import "NoneAdultSettingViewController.h"
 
 @implementation NoneAdultAppDelegate
@@ -115,16 +115,17 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    UIViewController *newController = [[NoneAdultFirstViewController alloc] initWithNibName:@"NoneAdultFirstViewController" bundle:nil];
-    UINavigationController *newNavViewController = [[UINavigationController alloc] initWithRootViewController:newController];
-    [newNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
-    MyTableController *controller = [[MyTableController alloc] init];
-    UIViewController *historyTopController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
-    UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:controller];
-    [historyTopNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    UIViewController *newCommonViewController = [[NewCommonViewController alloc] initWithNibName:@"NewCommonViewController" bundle:nil];
+    UINavigationController *newCommonNavViewController = [[UINavigationController alloc] initWithRootViewController:newCommonViewController];
     
-    UIViewController *secondViewController = [[NoneAdultSecondViewController alloc] initWithNibName:@"NoneAdultSecondViewController" bundle:nil];
+    UIViewController *newPathViewController = [[NewPathViewController alloc] init];
+    UINavigationController *newPathNavViewController = [[UINavigationController alloc] initWithRootViewController:newPathViewController];
+    
+    HistoryPathViewController *historyTopController = [[HistoryPathViewController alloc] init];
+    UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
+    
+    UIViewController *secondViewController = [[CollectedViewController alloc] initWithNibName:@"CollectedViewController" bundle:nil];
     UINavigationController *secondNavViewController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
     [secondNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
 
@@ -134,13 +135,14 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                             newNavViewController, 
+                                             newCommonNavViewController, 
+                                             newPathNavViewController,
                                              historyTopNavViewController,
                                              secondNavViewController,
                                              settingNavViewController,
                                              nil];
     self.window.rootViewController = self.tabBarController;
-    //[NSThread sleepForTimeInterval:2.0];
+    [NSThread sleepForTimeInterval:1.0];
     [self.window makeKeyAndVisible];
     [Appirater appLaunched:YES];
     

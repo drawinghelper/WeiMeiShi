@@ -1,5 +1,5 @@
 //
-//  NoneAdultSecondViewController.h
+//  CollectedViewController.h
 //  NoneAdultStory
 //
 //  Created by 王 攀 on 12-5-2.
@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NoneAdultFirstViewController.h"
-@interface NoneAdultSecondViewController : NoneAdultFirstViewController{
+#import "NewCommonViewController.h"
+@interface CollectedViewController : NewCommonViewController{
     BOOL firstLoaded;
 }
 

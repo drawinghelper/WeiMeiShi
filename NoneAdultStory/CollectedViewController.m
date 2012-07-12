@@ -1,18 +1,18 @@
 //
-//  NoneAdultSecondViewController.m
+//  CollectedViewController.m
 //  NoneAdultStory
 //
 //  Created by 王 攀 on 12-5-2.
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "NoneAdultSecondViewController.h"
+#import "CollectedViewController.h"
 
-@interface NoneAdultSecondViewController ()
+@interface CollectedViewController ()
 
 @end
 
-@implementation NoneAdultSecondViewController
+@implementation CollectedViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,7 +28,7 @@
 }
 
 - (void)requestResultFromServer {
-    NSLog(@"NoneAdultSecondViewController.requestResultFromServer...");
+    NSLog(@"CollectedViewController.requestResultFromServer...");
     //[HUD hide:YES afterDelay:0];
     
     FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  

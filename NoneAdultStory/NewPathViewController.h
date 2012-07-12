@@ -1,5 +1,5 @@
 //
-//  MyTableController.h
+//  HistoryPathViewController.h
 //  ParseStarterProject
 //
 //  Created by James Yu on 12/29/11.
@@ -17,7 +17,7 @@
 #define TOP_SECTION_HEIGHT 52.0f
 #define BOTTOM_SECTION_HEIGHT 34.0f
 
-@interface MyTableController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate> {
+@interface NewPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate> {
     MBProgressHUD *HUD;
     PFObject *currentDuanZi;
     

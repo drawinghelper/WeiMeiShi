@@ -1,5 +1,5 @@
 //
-//  NoneAdultFirstViewController.h
+//  NewCommonViewController.h
 //  NoneAdultStory
 //
 //  Created by 王 攀 on 12-5-2.
@@ -21,7 +21,7 @@
 #define TOP_SECTION_HEIGHT 52.0f
 #define BOTTOM_SECTION_HEIGHT 34.0f
 
-@interface NoneAdultFirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdMoGoDelegate> {
+@interface NewCommonViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdMoGoDelegate> {
     AdMoGoView *adView;
 
     MBProgressHUD *HUD;
