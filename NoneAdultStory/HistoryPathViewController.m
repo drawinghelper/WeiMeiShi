@@ -9,6 +9,7 @@
 #import "HistoryPathViewController.h"
 
 @implementation HistoryPathViewController
+@synthesize adView;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -40,12 +41,53 @@
         self.pullToRefreshEnabled = YES;
         
         // Whether the built-in pagination is enabled
-        self.paginationEnabled = YES;
+        self.paginationEnabled = NO;
         
         // The number of objects to show per page
-        self.objectsPerPage = 50;
+        self.objectsPerPage = 100;
     }
     return self;
+}
+#pragma mark -
+#pragma mark AdMogo Methods
+- (NSString *)adMoGoApplicationKey{
+    return @"e93cf5b2fb784f98b19b1c40500f521a"; //此字符串为您的 App 在芒果上的唯一
+}
+
+-(UIViewController *)viewControllerForPresentingModalView{
+    return self;//返回的对象为 adView 的父视图控制器
+}
+
+- (void)adjustAdSize {	
+	[UIView beginAnimations:@"AdResize" context:nil];
+	[UIView setAnimationDuration:0.7];
+	CGSize adSize = [adView actualAdSize];
+	CGRect newFrame = adView.frame;
+	newFrame.size.height = adSize.height;
+	newFrame.size.width = adSize.width;
+	newFrame.origin.x = (self.view.bounds.size.width - adSize.width)/2;
+    newFrame.origin.y = self.navigationController.view.bounds.size.height - adSize.height;
+	adView.frame = newFrame;
+    
+	[UIView commitAnimations];
+} 
+
+- (void)adMoGoDidReceiveAd:(AdMoGoView *)adMoGoView {
+	//广告成功展示时调用
+    [self adjustAdSize];
+}
+
+- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView 
+                     usingBackup:(BOOL)yesOrNo {
+    //请求广告失败
+}
+
+- (void)adMoGoWillPresentFullScreenModal {
+    //点击广告后打开内置浏览器时调用
+}
+
+- (void)adMoGoDidDismissFullScreenModal {
+    //关闭广告内置浏览器时调用 
 }
 
 #pragma mark - View lifecycle
@@ -58,7 +100,19 @@
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSString *showAd = [MobClick getConfigParams:@"showAd"];
+    if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
+        showAd = @"off";
+    }
+    //总：AudioToolbox、CoreLocation、CoreTelephony、MessageUI、SystemConfiguration、QuartzCore、EventKit、MapKit、libxml2
+    
+    if ([showAd isEqualToString:@"on"]) {
+        //增加广告条显示
+        self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
+                                                    ExpressMode:NO];
+        [adView setFrame:CGRectZero];
+        [self.navigationController.view addSubview:adView];
+    }
     
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
     btnRefresh.frame = CGRectMake(0, 0, 44, 44);
@@ -70,6 +124,8 @@
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] 
                                                   forBarMetrics:UIBarMetricsDefault]; 
+    self.tableView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1];
+
 }
 
 - (void)performRefresh {
@@ -619,8 +675,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSLog(@"didSelectRowAtIndexPath...");
-    int row = [indexPath row];
     /*
+    int row = [indexPath row];
      NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
      NoneAdultDetailViewController *detailViewController = [[NoneAdultDetailViewController alloc]initWithNibName:@"NoneAdultDetailViewController" bundle:nil];
      detailViewController.title = @"笑话详情";
@@ -628,10 +684,10 @@
      detailViewController.hidesBottomBarWhenPushed = YES;
      [self.navigationController pushViewController:detailViewController animated:YES];
      detailViewController.hidesBottomBarWhenPushed = NO;//马上设置回NO
-     */
     NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
     currentDuanZi = [self objectAtIndex:currentIndexPath];
     [self shareDuanZi];
+     */
 }
 
 

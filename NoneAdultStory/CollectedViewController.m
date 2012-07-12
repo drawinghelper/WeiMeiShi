@@ -76,6 +76,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.rightBarButtonItem = nil;
     firstLoaded = YES;
+    self.tableView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
