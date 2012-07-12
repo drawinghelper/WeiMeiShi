@@ -134,13 +134,36 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     [settingNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
     self.tabBarController = [[UITabBarController alloc] init];
+    
+    NSString *showFilteredNew = [MobClick getConfigParams:@"showFilteredNew"];
+    if (showFilteredNew == nil || showFilteredNew == [NSNull null]  || [showFilteredNew isEqualToString:@""]) {
+        showFilteredNew = @"YES";
+    }
+    //为过审和推广初期内容高质量，只显示最新精选；之后可以显示未精选过的最新笑话
+    if ([showFilteredNew isEqualToString:@"YES"]) {
+        self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                                                 newPathNavViewController,
+                                                 historyTopNavViewController,
+                                                 secondNavViewController,
+                                                 settingNavViewController,
+                                                 nil];
+    } else {
+        self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                                                 newCommonNavViewController, 
+                                                 historyTopNavViewController,
+                                                 secondNavViewController,
+                                                 settingNavViewController,
+                                                 nil];
+    }
+    /*
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                             newCommonNavViewController, 
                                              newPathNavViewController,
+                                             newCommonNavViewController, 
                                              historyTopNavViewController,
                                              secondNavViewController,
                                              settingNavViewController,
                                              nil];
+    */
     self.window.rootViewController = self.tabBarController;
     [NSThread sleepForTimeInterval:1.0];
     [self.window makeKeyAndVisible];
