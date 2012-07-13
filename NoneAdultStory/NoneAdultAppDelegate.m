@@ -80,10 +80,10 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     createSQL = [createSQL stringByAppendingString:@" timestamp INTEGER,"];//微博发表时间
     
 	createSQL = [createSQL stringByAppendingString:@" content TEXT,"];//文字内容
-    createSQL = [createSQL stringByAppendingString:@" imageurl TEXT,"];//图片内容
+    createSQL = [createSQL stringByAppendingString:@" large_url TEXT,"];//图片内容
     createSQL = [createSQL stringByAppendingString:@" width INTEGER,"];//图片宽度
     createSQL = [createSQL stringByAppendingString:@" height INTEGER,"];//图片高度
-    createSQL = [createSQL stringByAppendingString:@" gif INTEGER,"];//图片是否为gif，0为不是gif，1是gif
+    createSQL = [createSQL stringByAppendingString:@" gif_mark INTEGER,"];//图片是否为gif，0为不是gif，1是gif
 
     createSQL = [createSQL stringByAppendingString:@" favorite_count INTEGER,"];
     createSQL = [createSQL stringByAppendingString:@" bury_count INTEGER,"];//

@@ -373,16 +373,11 @@
                               [currentDuanZi objectForKey:@"timestamp"],
                               [currentDuanZi objectForKey:@"content"],
                               
-                              /*[currentDuanZi objectForKey:@"imageurl"], 
-                               [currentDuanZi objectForKey:@"width"],
-                               [currentDuanZi objectForKey:@"height"],
-                               [currentDuanZi objectForKey:@"gif"],
-                               */
-                              [[NSString alloc] initWithString:@""],
+                              [currentDuanZi objectForKey:@"large_url"], 
+                              [currentDuanZi objectForKey:@"width"],
+                              [currentDuanZi objectForKey:@"height"],
                               [[NSNumber alloc] initWithInt:0],
-                              [[NSNumber alloc] initWithInt:0],
-                              [[NSNumber alloc] initWithInt:0],
-                              
+                               
                               [currentDuanZi objectForKey:@"favorite_count"], 
                               [currentDuanZi objectForKey:@"bury_count"],
                               [currentDuanZi objectForKey:@"comments_count"],
@@ -390,7 +385,7 @@
                               //[currentDuanZi objectForKey:@"collect_time"],
                               nil
                               ];
-        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif_mark, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
     } else {
         NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"weiboId"], nil];
         [db executeUpdate:@"delete from collected where weiboId = ?" withArgumentsInArray:dataArray];

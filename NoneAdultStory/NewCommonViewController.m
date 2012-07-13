@@ -663,7 +663,7 @@
                               //[currentDuanZi objectForKey:@"collect_time"],
                               nil
                               ];
-        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif_mark, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
     } else {
         NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"id"], nil];
         [db executeUpdate:@"delete from collected where weiboId = ?" withArgumentsInArray:dataArray];

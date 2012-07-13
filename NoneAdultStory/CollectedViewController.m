@@ -49,6 +49,14 @@
         NSNumber *number = [[NSNumber alloc] initWithInt:[rs intForColumn:@"timestamp"]];
         [dic setObject:number forKey:@"timestamp"];
         [dic setObject:[rs stringForColumn:@"content"] forKey:@"content"];
+        
+        [dic setObject:[rs stringForColumn:@"large_url"] forKey:@"large_url"];
+        [dic setObject:[[NSNumber alloc] initWithInt:[rs intForColumn:@"width"]]
+                forKey:@"width"];
+        [dic setObject:[[NSNumber alloc] initWithInt:[rs intForColumn:@"height"]]
+                forKey:@"height"];
+        [dic setObject:[[NSNumber alloc] initWithInt:[rs intForColumn:@"gif_mark"]]
+                forKey:@"gif_mark"];
 
         number = [[NSNumber alloc] initWithInt:[rs intForColumn:@"favorite_count"]];
         [dic setObject:number forKey:@"count"];
@@ -60,6 +68,25 @@
         [addedList addObject:dic];
     }
     [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
+}
+
+//从享评接口格式适配到腾讯微频道接口格式
+- (void)adaptDic:(NSMutableDictionary *)dic {
+    NSString *idString = [dic objectForKey:@"id"];
+    NSString *screenName = [dic objectForKey:@"nick"];
+    NSString *profileImageUrl = [dic objectForKey:@"pic"];
+    NSString *weiboContent = [dic objectForKey:@"content"];
+    
+    NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[dic objectForKey:@"count"];
+    NSDecimalNumber *buryCount = [[NSDecimalNumber alloc] initWithInt:([favoriteCount intValue]/5)];
+    NSDecimalNumber *commentCount = [[NSDecimalNumber alloc] initWithInt:([favoriteCount intValue]/3)];
+    
+    [dic setObject:screenName forKey:@"screen_name"];
+    [dic setObject:profileImageUrl forKey:@"profile_image_url"];
+    [dic setObject:[weiboContent stringByConvertingHTMLToPlainText] forKey:@"content"];
+    [dic setObject:favoriteCount forKey:@"favorite_count"];
+    [dic setObject:buryCount forKey:@"bury_count"];
+    [dic setObject:commentCount forKey:@"comments_count"];
 }
 
 -(void)goCollect:(id)sender{  
