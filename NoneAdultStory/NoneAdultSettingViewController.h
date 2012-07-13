@@ -12,7 +12,7 @@
 #import "Appirater.h"
 #import "NoneAdultAppDelegate.h"
 #import "UMTableViewDemo.h"
-@interface NoneAdultSettingViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>{
+@interface NoneAdultSettingViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, UIAlertViewDelegate>{
     IBOutlet UITableView *tableView;
     
     NSString *versionForReview;

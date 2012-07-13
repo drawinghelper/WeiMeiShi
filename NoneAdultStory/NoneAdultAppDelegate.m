@@ -101,6 +101,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     [Parse setApplicationId:@"wqZfQJvWNjK0zQY7U4G388xJIi4c2C8bOgJXx9Q6"
                   clientKey:@"n8FYn4lelC9FNyshKu1D8hmngdJSYJzKn0H1ZanK"];
     
+    // Set defualt ACLs
+    PFACL *defaultACL = [PFACL ACL];
+    [defaultACL setPublicReadAccess:YES];
+    [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
+    
     // Register for notifications
     [[UIApplication sharedApplication]
      registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
@@ -157,8 +162,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     }
     /*
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                             newPathNavViewController,
                                              newCommonNavViewController, 
+                                             newPathNavViewController,
                                              historyTopNavViewController,
                                              secondNavViewController,
                                              settingNavViewController,
