@@ -127,7 +127,7 @@
                 cell.text = @"精彩应用推荐";
             } else {
                 if (user) {
-                    cell.text = [NSString stringWithFormat:@"%@ 已登入", user.username];
+                    cell.text = [NSString stringWithFormat:@"%@ 已登录", user.username];
                 } else {
                     cell.text = @"登录";
                 }
@@ -221,7 +221,7 @@
         return YES; // Begin login process
     }
     
-    [[[UIAlertView alloc] initWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!" delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:@"提示" message:@"请将登录信息填写完整!" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
     return NO; // Interrupt login process
 }
 
@@ -259,7 +259,7 @@
     
     // Display an alert if a field wasn't completed
     if (!informationComplete) {
-        [[[UIAlertView alloc] initWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!" delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"提示" message:@"请将注册信息填写完整!" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
     }
     
     return informationComplete;
@@ -284,13 +284,15 @@
 - (void)showLogin {
     if (![PFUser currentUser]) { // No user logged in
         // Create the log in view controller
-        PFLogInViewController *logInViewController = [[PFLogInViewController alloc] init];
+        MyLogInViewController *logInViewController = [[MyLogInViewController alloc] init];
         [logInViewController setDelegate:self]; // Set ourselves as the delegate
+        [logInViewController setFields:PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsDismissButton];
         
         // Create the sign up view controller
-        PFSignUpViewController *signUpViewController = [[PFSignUpViewController alloc] init];
+        MySignUpViewController *signUpViewController = [[MySignUpViewController alloc] init];
         [signUpViewController setDelegate:self]; // Set ourselves as the delegate
-        
+        [signUpViewController setFields:PFSignUpFieldsDefault];
+
         // Assign our sign up controller to be displayed from the login controller
         [logInViewController setSignUpController:signUpViewController]; 
         
