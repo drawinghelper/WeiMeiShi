@@ -20,6 +20,7 @@
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 52.0f
 #define BOTTOM_SECTION_HEIGHT 34.0f
+#define HORIZONTAL_PADDING 10.0f
 
 @interface NewCommonViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdMoGoDelegate> {
     AdMoGoView *adView;
@@ -44,7 +45,6 @@
     BOOL _reloading;
     
     NSDictionary *tempPropertyDic;
-    NSMutableArray *originalNewDuanZiList;
     
     NSMutableDictionary *collectedIdsDic;
     

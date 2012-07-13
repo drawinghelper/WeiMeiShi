@@ -98,8 +98,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Parse setApplicationId:@"wqZfQJvWNjK0zQY7U4G388xJIi4c2C8bOgJXx9Q6"
-                  clientKey:@"n8FYn4lelC9FNyshKu1D8hmngdJSYJzKn0H1ZanK"];
+    [Parse setApplicationId:@"G5adgYkULV27wF0RNq3raVsyKlKry0XCxUMO3LqX"
+                  clientKey:@"Q22Kx2neuWs3X5cfEOOpwoySbOLwVLcfTTpKeCA6"];
     
     // Set defualt ACLs
     PFACL *defaultACL = [PFACL ACL];
@@ -112,7 +112,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                          UIRemoteNotificationTypeSound |
                                          UIRemoteNotificationTypeAlert)];
     
-    [MobClick startWithAppkey:@"4fa3232652701556cc00001e" reportPolicy:REALTIME channelId:nil];
+    [MobClick startWithAppkey:@"4fffced85270157a3c00004e" reportPolicy:REALTIME channelId:nil];
     [MobClick checkUpdate];
     [MobClick updateOnlineConfig];
     

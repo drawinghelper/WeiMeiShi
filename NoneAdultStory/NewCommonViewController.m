@@ -130,7 +130,6 @@
 -(void)performRefresh {
     loadOld = NO;
     searchDuanZiList = [[NSMutableArray alloc] init];
-    originalNewDuanZiList = [[NSMutableArray alloc] init];
     [self performSelector:@selector(requestResultFromServer) withObject:nil];
     
 }
@@ -312,8 +311,8 @@
     NSString *recentUrlPrefix = [NSString stringWithFormat:@"http://c.t.qq.com/asyn/selectedAutoUpdate.php?cid=%@&top=1&turn=1&version=0&r=1339057285481&p=2&apiType=7&apiHost=http%3A%2F%2Fapi.t.qq.com&_r=1339057285481&n=20", @"40"];
     NSLog(@".........%@", recentUrlPrefix);
     
-    if (loadOld && [originalNewDuanZiList count] > 0 ) {
-        NSDictionary *lastDuanZi = [originalNewDuanZiList objectAtIndex:([originalNewDuanZiList count] - 1)];
+    if (loadOld && [searchDuanZiList count] > 0 ) {
+        NSDictionary *lastDuanZi = [searchDuanZiList objectAtIndex:([searchDuanZiList count] - 1)];
         NSDecimalNumber *currentMinTimestampNumber = (NSDecimalNumber *)[lastDuanZi objectForKey:@"timestamp"];
         NSString *lastId = [lastDuanZi objectForKey:@"id"];
         int currentMinTimestamp = [currentMinTimestampNumber intValue];
@@ -410,7 +409,7 @@
     NSDictionary *dataDic = [responseInfo objectForKey:@"info"];
     NSMutableArray *addedList = [dataDic objectForKey:@"talk"];
     tempPropertyDic = [dataDic objectForKey:@"selectedMap"];
-    //NSLog(@"result: %@", addedList);
+    NSLog(@"result: %@", addedList);
     
     [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
 }
@@ -441,8 +440,9 @@
     [dic setObject:favoriteCount forKey:@"favorite_count"];
     [dic setObject:buryCount forKey:@"bury_count"];
     [dic setObject:commentCount forKey:@"comments_count"];
-    //[dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"] forKey:@"width"];
-    //[dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] forKey:@"height"];
+    [dic setObject:@"http://t3.qpic.cn/mblogpic/4cae0b51441f5f4050be/2000" forKey:@"large_url"];    //图片内容的url
+    [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"] forKey:@"width"];//图片内容的width
+    [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] forKey:@"height"];//图片内容的height
 }
 
 //- (void)viewWillAppear:(BOOL)animated {
@@ -486,12 +486,14 @@
             dic = [data objectAtIndex:i];
             [self adaptDic:dic];
             [self checkCollected:dic];
+/*
             [originalNewDuanZiList addObject:dic];
 
             NSString *weiboContent = [dic objectForKey:@"content"];
             if (weiboContent.length < minWordCount) {
                 continue;
             }
+ */
             [searchDuanZiList addObject:dic];
         }
     } else {
@@ -499,12 +501,13 @@
             dic = [data objectAtIndex:i];
             [self adaptDic:dic];
             [self checkCollected:dic];
+/*
             [originalNewDuanZiList insertObject:dic atIndex:0];
-
             NSString *weiboContent = [dic objectForKey:@"content"];
             if (weiboContent.length < minWordCount) {
                 continue;
             }
+ */
             [searchDuanZiList insertObject:dic atIndex:0];
         }
     }
@@ -532,8 +535,16 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    int row = [indexPath row];
+    NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
+    
     UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT;
+    
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+    
+    return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT + imageDisplayRect.size.height;
+
+//    return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -687,13 +698,13 @@
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeSina];
+            [UMSNSService presentSNSInController:self appkey:@"4fffced85270157a3c00004e" status:statusContent image:nil platform:UMShareToTypeSina];
             
             [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
             NSLog(@"custom event share_sina_haoxiao!");            
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeTenc];
+            [UMSNSService presentSNSInController:self appkey:@"4fffced85270157a3c00004e" status:statusContent image:nil platform:UMShareToTypeTenc];
             
             [UMSNSService setDataSendDelegate:self];
             return;
@@ -719,6 +730,34 @@
 - (void)dataSendDidFinish:(UIViewController *)viewController andReturnStatus:(UMReturnStatusType)returnStatus andPlatformType:(UMShareToType)platfrom {
     [viewController dismissModalViewControllerAnimated:YES];
 }
+
+- (CGRect)getImageDisplayRect:(NSDictionary *)duanZi {
+    CGRect rect;
+    
+    int imageDisplayLeft = 0;
+    int imageDisplayTop = TOP_SECTION_HEIGHT;
+    int imageDisplayWidth = 320;
+    int imageDisplayHeight = 0;
+    
+    int width = [[duanZi objectForKey:@"width"] intValue];
+    int height = [[duanZi objectForKey:@"height"] intValue];
+    if (width > (320 - 2*HORIZONTAL_PADDING)) {
+        imageDisplayLeft = HORIZONTAL_PADDING;
+        imageDisplayWidth = 320 - 2*HORIZONTAL_PADDING;
+        imageDisplayHeight = (height * imageDisplayWidth) / width; 
+    } else {
+        imageDisplayLeft = (320 - width)/2;
+        imageDisplayWidth = width;
+        imageDisplayHeight = height;
+    }
+    
+    rect.origin.x = imageDisplayLeft; 
+    rect.origin.y = imageDisplayTop;
+    rect.size.width = imageDisplayWidth; 
+    rect.size.height = imageDisplayHeight;
+    return rect;
+}
+
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -809,6 +848,25 @@
     [cell.contentView addSubview:label];
     [cell.contentView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"duanzi_bg_middle.png"]]];
     
+    //微博图
+    /*
+    UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
+    [coverImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"large_url"]] 
+                   placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
+    [cell.contentView addSubview:coverImageView];
+    */
+    
+    UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
+    NSArray *imageArray = [duanZi objectForKey:@"image"];
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+    if ( imageArray != nil && [imageArray count] != 0) {
+        NSString *imageUrl = [[NSString alloc] initWithFormat:@"%@/2000", [imageArray objectAtIndex:0]];
+        [coverImageView setImageWithURL:[NSURL URLWithString:imageUrl] 
+                       placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
+        
+        [cell.contentView addSubview:coverImageView];
+    }
+    
     //【底部】
     UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectZero];
     [cell.contentView addSubview:bottomBgView];
@@ -862,7 +920,7 @@
     }
     
     
-    //content内容自适应
+    //content文字内容自适应
     label = (UILabel *)[cell viewWithTag:1];
     CGRect cellFrame = [cell frame];
     cellFrame.origin = CGPointMake(15, TOP_SECTION_HEIGHT);
@@ -872,24 +930,28 @@
     CGRect rect = CGRectInset(cellFrame, 2, 2);
     label.frame = rect;
     [label sizeToFit];
-    if (label.frame.size.height > 46) {
+    //if (label.frame.size.height > 46) {
         cellFrame.size.height = 50 + label.frame.size.height - 46;
-    }
-    else {
-        cellFrame.size.height = 50;
-    }
+    //}
+//    else {
+//        cellFrame.size.height = 50;
+//    }
     
-    [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
+    //content图片内容自适应
+    imageDisplayRect.origin.y = imageDisplayRect.origin.y + cellFrame.size.height;
+    [coverImageView setFrame:imageDisplayRect];
+    
+    [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + imageDisplayRect.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
 
     
     dingLabel = (UILabel *)[cell viewWithTag:2];
-    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     caiLabel = (UILabel *)[cell viewWithTag:3];
-    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     pingLabel = (UILabel *)[cell viewWithTag:4];
-    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     
-    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-260, BOTTOM_SECTION_HEIGHT)];
+    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 320-260, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;

@@ -86,7 +86,7 @@
     
     _mPromoterDatas = [[NSMutableArray alloc] init];
     
-    _mTableView =  [[UMUFPTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-44-50) style:UITableViewStylePlain appkey:@"4fa3232652701556cc00001e" slotId:nil currentViewController:self];
+    _mTableView =  [[UMUFPTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-44-50) style:UITableViewStylePlain appkey:@"4fffced85270157a3c00004e" slotId:nil currentViewController:self];
     _mTableView.delegate = self;
     _mTableView.dataSource = self;
     _mTableView.dataLoadDelegate = (id<UMUFPTableViewDataLoadDelegate>)self;

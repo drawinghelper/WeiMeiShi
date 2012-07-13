@@ -434,13 +434,13 @@
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeSina];
+            [UMSNSService presentSNSInController:self appkey:@"4fffced85270157a3c00004e" status:statusContent image:nil platform:UMShareToTypeSina];
             
             [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
             NSLog(@"custom event share_sina_haoxiao!");            
-            [UMSNSService presentSNSInController:self appkey:@"4fa3232652701556cc00001e" status:statusContent image:nil platform:UMShareToTypeTenc];
+            [UMSNSService presentSNSInController:self appkey:@"4fffced85270157a3c00004e" status:statusContent image:nil platform:UMShareToTypeTenc];
             
             [UMSNSService setDataSendDelegate:self];
             return;
@@ -520,10 +520,10 @@
     //打上是否收藏过的标记
     NSString *idString = [duanZi objectForKey:@"weiboId"];
     if ([collectedIdsDic objectForKey:idString] != nil) {
-        NSLog(@"idString YES: %@", idString);
+        //NSLog(@"idString YES: %@", idString);
         [duanZi setObject:@"YES" forKey:@"collected_tag"];
     } else {
-        NSLog(@"idString NO: %@", idString);
+        //NSLog(@"idString NO: %@", idString);
         [duanZi setObject:@"NO" forKey:@"collected_tag"];
     }
     
