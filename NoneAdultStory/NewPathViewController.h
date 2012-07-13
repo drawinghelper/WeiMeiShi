@@ -18,6 +18,8 @@
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 52.0f
 #define BOTTOM_SECTION_HEIGHT 34.0f
+#define HORIZONTAL_PADDING 10.0f
+
 
 @interface NewPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate, AdMoGoDelegate> {
     AdMoGoView *adView;

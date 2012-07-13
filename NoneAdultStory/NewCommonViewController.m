@@ -440,7 +440,15 @@
     [dic setObject:favoriteCount forKey:@"favorite_count"];
     [dic setObject:buryCount forKey:@"bury_count"];
     [dic setObject:commentCount forKey:@"comments_count"];
-    [dic setObject:@"http://t3.qpic.cn/mblogpic/4cae0b51441f5f4050be/2000" forKey:@"large_url"];    //图片内容的url
+    
+    NSArray *imageArray = [dic objectForKey:@"image"];
+    if ( imageArray != nil && [imageArray count] != 0) {
+        NSString *imageUrl = [[NSString alloc] initWithFormat:@"%@/2000", [imageArray objectAtIndex:0]];
+        [dic setObject:imageUrl forKey:@"large_url"];    //图片内容的url
+    } else {
+        [dic setObject:@"" forKey:@"large_url"];
+    }
+    
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"] forKey:@"width"];//图片内容的width
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] forKey:@"height"];//图片内容的height
 }
@@ -602,6 +610,12 @@
     [newFiltered setObject:[currentDuanZi objectForKey:@"bury_count"] forKey:@"bury_count"];
     [newFiltered setObject:[currentDuanZi objectForKey:@"comments_count"] forKey:@"comments_count"];
     [newFiltered setObject:[currentDuanZi objectForKey:@"timestamp"] forKey:@"timestamp"];
+
+    [newFiltered setObject:[currentDuanZi objectForKey:@"large_url"] forKey:@"large_url"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"width"] forKey:@"width"];
+    [newFiltered setObject:[currentDuanZi objectForKey:@"height"] forKey:@"height"];
+    [newFiltered setObject:[[NSNumber alloc] initWithInt:0] forKey:@"gif_mark"];
+    
     [newFiltered saveEventually];
 }
     
@@ -637,14 +651,9 @@
                               [currentDuanZi objectForKey:@"timestamp"],
                               [currentDuanZi objectForKey:@"content"],
                               
-                              /*[currentDuanZi objectForKey:@"imageurl"], 
-                               [currentDuanZi objectForKey:@"width"],
-                               [currentDuanZi objectForKey:@"height"],
-                               [currentDuanZi objectForKey:@"gif"],
-                               */
-                              [[NSString alloc] initWithString:@""],
-                              [[NSNumber alloc] initWithInt:0],
-                              [[NSNumber alloc] initWithInt:0],
+                              [currentDuanZi objectForKey:@"large_url"], 
+                              [currentDuanZi objectForKey:@"width"],
+                              [currentDuanZi objectForKey:@"height"],
                               [[NSNumber alloc] initWithInt:0],
                               
                               [currentDuanZi objectForKey:@"favorite_count"], 
@@ -654,7 +663,7 @@
                               //[currentDuanZi objectForKey:@"collect_time"],
                               nil
                               ];
-        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
     } else {
         NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"id"], nil];
         [db executeUpdate:@"delete from collected where weiboId = ?" withArgumentsInArray:dataArray];
@@ -849,19 +858,10 @@
     [cell.contentView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"duanzi_bg_middle.png"]]];
     
     //微博图
-    /*
     UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
-    [coverImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"large_url"]] 
-                   placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
-    [cell.contentView addSubview:coverImageView];
-    */
-    
-    UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
-    NSArray *imageArray = [duanZi objectForKey:@"image"];
-    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
-    if ( imageArray != nil && [imageArray count] != 0) {
-        NSString *imageUrl = [[NSString alloc] initWithFormat:@"%@/2000", [imageArray objectAtIndex:0]];
-        [coverImageView setImageWithURL:[NSURL URLWithString:imageUrl] 
+    NSString *largeUrl = [duanZi objectForKey:@"large_url"];
+    if ( largeUrl != nil && ![largeUrl isEqualToString:@""]) {
+        [coverImageView setImageWithURL:[NSURL URLWithString:largeUrl] 
                        placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
         
         [cell.contentView addSubview:coverImageView];
@@ -938,6 +938,7 @@
 //    }
     
     //content图片内容自适应
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
     imageDisplayRect.origin.y = imageDisplayRect.origin.y + cellFrame.size.height;
     [coverImageView setFrame:imageDisplayRect];
     

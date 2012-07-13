@@ -486,14 +486,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-//    int row = [indexPath row];
-//    if(row == self.objectsPerPage) {
-//        return 75;
-//    }
     if ([cell.textLabel.text isEqualToString:@"点击\n加载更多"]) {
         return 75;
+    } else {
+        int row = [indexPath row];
+        NSDictionary *duanZi = [self.objects objectAtIndex:row];
+        CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+        
+        return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT + imageDisplayRect.size.height;
     }
-    return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT;
 }
 
 - (PFTableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
@@ -510,6 +511,34 @@
     cell.textLabel.textColor = [UIColor colorWithRed:109.0f/255 green:109.0f/225 blue:109.0f/255 alpha:1]; 
     cell.textLabel.textAlignment = UITextAlignmentCenter;
     return cell;
+}
+
+
+- (CGRect)getImageDisplayRect:(NSDictionary *)duanZi {
+    CGRect rect;
+    
+    int imageDisplayLeft = 0;
+    int imageDisplayTop = TOP_SECTION_HEIGHT;
+    int imageDisplayWidth = 320;
+    int imageDisplayHeight = 0;
+    
+    int width = [[duanZi objectForKey:@"width"] intValue];
+    int height = [[duanZi objectForKey:@"height"] intValue];
+    if (width > (320 - 2*HORIZONTAL_PADDING)) {
+        imageDisplayLeft = HORIZONTAL_PADDING;
+        imageDisplayWidth = 320 - 2*HORIZONTAL_PADDING;
+        imageDisplayHeight = (height * imageDisplayWidth) / width; 
+    } else {
+        imageDisplayLeft = (320 - width)/2;
+        imageDisplayWidth = width;
+        imageDisplayHeight = height;
+    }
+    
+    rect.origin.x = imageDisplayLeft; 
+    rect.origin.y = imageDisplayTop;
+    rect.size.width = imageDisplayWidth; 
+    rect.size.height = imageDisplayHeight;
+    return rect;
 }
 
 // Override to customize the look of a cell representing an object. The default is to display
@@ -612,6 +641,17 @@
     [cell.contentView addSubview:label];
     [cell.contentView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"duanzi_bg_middle.png"]]];
     
+    //微博图
+    UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
+    NSString *imageUrl = [duanZi objectForKey:@"large_url"];
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+    if ( imageUrl != nil && ![imageUrl isEqualToString:@""]) {
+        [coverImageView setImageWithURL:[NSURL URLWithString:imageUrl] 
+                       placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
+        
+        [cell.contentView addSubview:coverImageView];
+    }
+    
     //【底部】
     UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectZero];
     [cell.contentView addSubview:bottomBgView];
@@ -681,17 +721,21 @@
         cellFrame.size.height = 50;
     }
     
-    [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
+    //content图片内容自适应
+    imageDisplayRect.origin.y = imageDisplayRect.origin.y + cellFrame.size.height;
+    [coverImageView setFrame:imageDisplayRect];
+    
+    [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + imageDisplayRect.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
     
     
     dingLabel = (UILabel *)[cell viewWithTag:2];
-    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     caiLabel = (UILabel *)[cell viewWithTag:3];
-    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     pingLabel = (UILabel *)[cell viewWithTag:4];
-    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     
-    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-260, BOTTOM_SECTION_HEIGHT)];
+    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 320-260, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;
