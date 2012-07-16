@@ -699,22 +699,29 @@
         if (cuttedLength < [weiboContent length]) {
             cuttedContent = [weiboContent substringToIndex:cuttedLength];
         }
-        statusContent = [NSString 
-                         stringWithFormat:@"%@#%@#",
-                         cuttedContent,
-                         @"内涵笑话"
-                         ];
-        
+        statusContent = [NSString stringWithString:cuttedContent];
+        NSString *largeUrl = [currentDuanZi objectForKey:@"large_url"];
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        UIImage *shareImage = [manager imageWithURL:[NSURL URLWithString:largeUrl]];
+
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
-            [UMSNSService presentSNSInController:self appkey:@"4fffced85270157a3c00004e" status:statusContent image:nil platform:UMShareToTypeSina];
+            [UMSNSService presentSNSInController:self 
+                                          appkey:@"4fffced85270157a3c00004e" 
+                                          status:statusContent 
+                                           image:shareImage 
+                                        platform:UMShareToTypeSina];
             
             [UMSNSService setDataSendDelegate:self];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
             NSLog(@"custom event share_sina_haoxiao!");            
-            [UMSNSService presentSNSInController:self appkey:@"4fffced85270157a3c00004e" status:statusContent image:nil platform:UMShareToTypeTenc];
+            [UMSNSService presentSNSInController:self 
+                                          appkey:@"4fffced85270157a3c00004e" 
+                                          status:statusContent 
+                                           image:shareImage 
+                                        platform:UMShareToTypeTenc];
             
             [UMSNSService setDataSendDelegate:self];
             return;
@@ -725,7 +732,7 @@
              */
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = weiboContent;
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"内容已成功复制到剪贴板"
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文字内容已成功复制到剪贴板"
                                                                  message:nil
                                                                 delegate:self
                                                        cancelButtonTitle:@"确定"
