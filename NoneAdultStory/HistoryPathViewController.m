@@ -535,7 +535,6 @@
     //微博图
     UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
     NSString *imageUrl = [duanZi objectForKey:@"large_url"];
-    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
     if ( imageUrl != nil && ![imageUrl isEqualToString:@""]) {
         [coverImageView setImageWithURL:[NSURL URLWithString:imageUrl] 
                        placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
@@ -595,21 +594,23 @@
         [btnStar setImage:btnStarImagePressed forState:UIControlStateHighlighted];
     }
     
+    //content图片内容自适应
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+    imageDisplayRect.origin.y = imageDisplayRect.origin.y + 5;
+    [coverImageView setFrame:imageDisplayRect];
+    
     //content内容自适应
     label = (UILabel *)[cell viewWithTag:1];
     CGRect cellFrame = [cell frame];
-    cellFrame.origin = CGPointMake(15, TOP_SECTION_HEIGHT);
+    cellFrame.origin = CGPointMake(15, TOP_SECTION_HEIGHT + imageDisplayRect.size.height + 8);
     cellFrame.size.width = 320 - 30;
     
     label.text = [duanZi objectForKey:@"content"];
     CGRect rect = CGRectInset(cellFrame, 2, 2);
     label.frame = rect;
     [label sizeToFit];
-    cellFrame.size.height = 50 + label.frame.size.height - 46;
+    cellFrame.size.height = 13 + label.frame.size.height;
         
-    //content图片内容自适应
-    imageDisplayRect.origin.y = imageDisplayRect.origin.y + cellFrame.size.height;
-    [coverImageView setFrame:imageDisplayRect];
     
     [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + imageDisplayRect.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
     
