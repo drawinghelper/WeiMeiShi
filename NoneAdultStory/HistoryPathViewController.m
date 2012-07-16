@@ -32,7 +32,7 @@
         
         // Custom the table
         // The className to query on
-        self.className = @"Todo";
+        self.className = @"historytop";
         
         // The key of the PFObject to display in the label of the default cell style
         //self.keyToDisplay = @"text";
@@ -301,9 +301,9 @@
                               [currentDuanZi objectForKey:@"timestamp"],
                               [currentDuanZi objectForKey:@"content"],
                               
-                              [[NSString alloc] initWithString:@""],
-                              [[NSNumber alloc] initWithInt:0],
-                              [[NSNumber alloc] initWithInt:0],
+                              [currentDuanZi objectForKey:@"large_url"], 
+                              [currentDuanZi objectForKey:@"width"],
+                              [currentDuanZi objectForKey:@"height"],
                               [[NSNumber alloc] initWithInt:0],
                               
                               [currentDuanZi objectForKey:@"favorite_count"], 
@@ -313,7 +313,7 @@
                               //[currentDuanZi objectForKey:@"collect_time"],
                               nil
                               ];
-        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, imageurl, width, height, gif_mark, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+        [db executeUpdate:@"replace into collected(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif_mark, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
     } else {
         NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"id"], nil];
         [db executeUpdate:@"delete from collected where weiboId = ?" withArgumentsInArray:dataArray];
@@ -407,9 +407,40 @@
     return query;
 }
 
+- (CGRect)getImageDisplayRect:(NSDictionary *)duanZi {
+    CGRect rect;
+    
+    int imageDisplayLeft = 0;
+    int imageDisplayTop = TOP_SECTION_HEIGHT;
+    int imageDisplayWidth = 320;
+    int imageDisplayHeight = 0;
+    
+    int width = [[duanZi objectForKey:@"width"] intValue];
+    int height = [[duanZi objectForKey:@"height"] intValue];
+    if (width > (320 - 2*HORIZONTAL_PADDING)) {
+        imageDisplayLeft = HORIZONTAL_PADDING;
+        imageDisplayWidth = 320 - 2*HORIZONTAL_PADDING;
+        imageDisplayHeight = (height * imageDisplayWidth) / width; 
+    } else {
+        imageDisplayLeft = (320 - width)/2;
+        imageDisplayWidth = width;
+        imageDisplayHeight = height;
+    }
+    
+    rect.origin.x = imageDisplayLeft; 
+    rect.origin.y = imageDisplayTop;
+    rect.size.width = imageDisplayWidth; 
+    rect.size.height = imageDisplayHeight;
+    return rect;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT;
+    int row = [indexPath row];
+    NSDictionary *duanZi = [self.objects objectAtIndex:row];
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+    
+    return cell.frame.size.height + TOP_SECTION_HEIGHT + BOTTOM_SECTION_HEIGHT + imageDisplayRect.size.height;
 }
 
  // Override to customize the look of a cell representing an object. The default is to display
@@ -501,6 +532,17 @@
     [cell.contentView addSubview:label];
     [cell.contentView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"duanzi_bg_middle.png"]]];
     
+    //微博图
+    UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
+    NSString *imageUrl = [duanZi objectForKey:@"large_url"];
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+    if ( imageUrl != nil && ![imageUrl isEqualToString:@""]) {
+        [coverImageView setImageWithURL:[NSURL URLWithString:imageUrl] 
+                       placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
+        
+        [cell.contentView addSubview:coverImageView];
+    }
+    
     //【底部】
     UIView *bottomBgView = [[UIView alloc] initWithFrame:CGRectZero];
     [cell.contentView addSubview:bottomBgView];
@@ -563,24 +605,22 @@
     CGRect rect = CGRectInset(cellFrame, 2, 2);
     label.frame = rect;
     [label sizeToFit];
-    if (label.frame.size.height > 46) {
-        cellFrame.size.height = 50 + label.frame.size.height - 46;
-    }
-    else {
-        cellFrame.size.height = 50;
-    }
+    cellFrame.size.height = 50 + label.frame.size.height - 46;
+        
+    //content图片内容自适应
+    imageDisplayRect.origin.y = imageDisplayRect.origin.y + cellFrame.size.height;
+    [coverImageView setFrame:imageDisplayRect];
     
-    [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
-    
+    [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + imageDisplayRect.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
     
     dingLabel = (UILabel *)[cell viewWithTag:2];
-    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     caiLabel = (UILabel *)[cell viewWithTag:3];
-    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     pingLabel = (UILabel *)[cell viewWithTag:4];
-    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 75, BOTTOM_SECTION_HEIGHT)];
+    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
     
-    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3, 320-260, BOTTOM_SECTION_HEIGHT)];
+    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 320-260, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;

@@ -602,6 +602,7 @@
     }
 
     PFObject *newFiltered = [PFObject objectWithClassName:@"newfiltered"];
+    //PFObject *newFiltered = [PFObject objectWithClassName:@"historytop"];
     [newFiltered setObject:[currentDuanZi objectForKey:@"id"] forKey:@"weiboId"];
     [newFiltered setObject:[currentDuanZi objectForKey:@"profile_image_url"] forKey:@"profile_image_url"];
     [newFiltered setObject:[currentDuanZi objectForKey:@"screen_name"] forKey:@"screen_name"];
@@ -920,27 +921,24 @@
     }
     
     
+    //content图片内容自适应
+    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
+    imageDisplayRect.origin.y = imageDisplayRect.origin.y + 5;
+    [coverImageView setFrame:imageDisplayRect];
+    
+    
     //content文字内容自适应
     label = (UILabel *)[cell viewWithTag:1];
     CGRect cellFrame = [cell frame];
-    cellFrame.origin = CGPointMake(15, TOP_SECTION_HEIGHT);
+    cellFrame.origin = CGPointMake(15, TOP_SECTION_HEIGHT + imageDisplayRect.size.height + 8);
     cellFrame.size.width = 320 - 30;
 
     label.text = [duanZi objectForKey:@"content"];
     CGRect rect = CGRectInset(cellFrame, 2, 2);
     label.frame = rect;
     [label sizeToFit];
-    //if (label.frame.size.height > 46) {
-        cellFrame.size.height = 50 + label.frame.size.height - 46;
-    //}
-//    else {
-//        cellFrame.size.height = 50;
-//    }
-    
-    //content图片内容自适应
-    CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
-    imageDisplayRect.origin.y = imageDisplayRect.origin.y + cellFrame.size.height;
-    [coverImageView setFrame:imageDisplayRect];
+    cellFrame.size.height = 13 + label.frame.size.height;
+
     
     [bottomBgView setFrame:CGRectMake(0, cellFrame.size.height + imageDisplayRect.size.height + TOP_SECTION_HEIGHT, 320, BOTTOM_SECTION_HEIGHT)];
 
