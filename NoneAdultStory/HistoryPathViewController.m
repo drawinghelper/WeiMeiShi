@@ -51,7 +51,7 @@
 #pragma mark -
 #pragma mark AdMogo Methods
 - (NSString *)adMoGoApplicationKey{
-    return @"e93cf5b2fb784f98b19b1c40500f521a"; //此字符串为您的 App 在芒果上的唯一
+    return @"8263cdaa8f724e2293b2f9f3aff849ee"; //此字符串为您的 App 在芒果上的唯一
 }
 
 -(UIViewController *)viewControllerForPresentingModalView{
@@ -356,7 +356,7 @@
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
             [UMSNSService presentSNSInController:self 
-                                          appkey:@"4fffced85270157a3c00004e" 
+                                          appkey:[[NoneAdultAppDelegate sharedAppDelegate] getUmengAppKey] 
                                           status:statusContent 
                                            image:shareImage 
                                         platform:UMShareToTypeSina];
@@ -366,7 +366,7 @@
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
             NSLog(@"custom event share_sina_haoxiao!");            
             [UMSNSService presentSNSInController:self 
-                                          appkey:@"4fffced85270157a3c00004e" 
+                                          appkey:[[NoneAdultAppDelegate sharedAppDelegate] getUmengAppKey] 
                                           status:statusContent 
                                            image:shareImage 
                                         platform:UMShareToTypeTenc];

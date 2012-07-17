@@ -159,7 +159,7 @@
 
 	if(row == 0){
         if (starCommentVisible) {
-            NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%d", APPIRATER_APP_ID];  
+            NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [[NoneAdultAppDelegate sharedAppDelegate] getAppStoreId]];  
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
         } else {
             [self umengFeedback];
@@ -309,7 +309,7 @@
 
 - (void)umengFeedback {
     //    [MobClick event:@"feedback_click" label:@"列表页"];
-    [UMFeedback showFeedback:self withAppkey:@"4fffced85270157a3c00004e"];
+    [UMFeedback showFeedback:self withAppkey:[[NoneAdultAppDelegate sharedAppDelegate] getUmengAppKey]];
 }
 
 - (void)viewDidUnload

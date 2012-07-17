@@ -14,8 +14,6 @@
 #import <Parse/Parse.h>
 #import "FMDatabase.h"
 
-#define kChannelId @"App Store"
-
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>{
 }
 
@@ -25,4 +23,7 @@
 + (CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha;
 -(NSString *)getDbPath;
 + (NoneAdultAppDelegate *)sharedAppDelegate;
+- (NSString *)getUmengAppKey;
+- (NSString *)getAppStoreId;
+- (NSString *)getAppChannelTag;
 @end

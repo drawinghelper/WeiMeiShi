@@ -132,10 +132,37 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     
 }
 
+- (NSString *)getUmengAppKey {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"UmengAppKey"];
+}
+
+- (NSString *)getNewTabCid {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"NewTabCid"];
+}
+
+- (NSString *)getAppStoreId {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"AppStoreId"];
+}
+
+- (NSString *)getAppChannelTag {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"AppChannelTag"];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Parse setApplicationId:@"G5adgYkULV27wF0RNq3raVsyKlKry0XCxUMO3LqX"
-                  clientKey:@"Q22Kx2neuWs3X5cfEOOpwoySbOLwVLcfTTpKeCA6"];
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    NSDictionary *parseConfig = [appConfig objectForKey:@"ParseConfig"]; 
+    [Parse setApplicationId:[parseConfig objectForKey:@"applicationId"]
+                  clientKey:[parseConfig objectForKey:@"clientKey"]];
     
     // Set defualt ACLs
     PFACL *defaultACL = [PFACL ACL];
@@ -148,7 +175,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                          UIRemoteNotificationTypeSound |
                                          UIRemoteNotificationTypeAlert)];
     
-    [MobClick startWithAppkey:@"4fffced85270157a3c00004e" reportPolicy:REALTIME channelId:nil];
+    [MobClick startWithAppkey:[[NoneAdultAppDelegate sharedAppDelegate] getUmengAppKey] reportPolicy:REALTIME channelId:[[NoneAdultAppDelegate sharedAppDelegate] getAppChannelTag]];
     [MobClick checkUpdate];
     [MobClick updateOnlineConfig];
     
@@ -157,8 +184,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    
-    UIViewController *newCommonViewController = [[NewCommonViewController alloc] initWithNibName:@"NewCommonViewController" bundle:nil withTitle:@"最新" withCid:@"35"];
+
+    UIViewController *newCommonViewController = [[NewCommonViewController alloc] 
+                                                 initWithNibName:@"NewCommonViewController" 
+                                                 bundle:nil 
+                                                 withTitle:@"最新" 
+                                                 withCid:[[NoneAdultAppDelegate sharedAppDelegate] getNewTabCid]];
     UINavigationController *newCommonNavViewController = [[UINavigationController alloc] initWithRootViewController:newCommonViewController];
     
     UIViewController *newPathViewController = [[NewPathViewController alloc] init];

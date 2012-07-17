@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UMUFPTableView.h"
-
+#import "NoneAdultAppDelegate.h"
 @interface UMTableViewDemo : UIViewController <UITableViewDelegate, UITableViewDataSource, UMUFPTableViewDataLoadDelegate> {
     
     NSMutableArray *_mPromoterDatas;

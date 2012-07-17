@@ -35,7 +35,7 @@
  */
 
 #import <Foundation/Foundation.h>
-
+#import "NoneAdultAppDelegate.h"
 extern NSString *const kAppiraterFirstUseDate;
 extern NSString *const kAppiraterUseCount;
 extern NSString *const kAppiraterSignificantEventCount;
@@ -47,7 +47,7 @@ extern NSString *const kAppiraterReminderRequestDate;
 /*
  Place your Apple generated software id here.
  */
-#define APPIRATER_APP_ID				532923663
+//#define APPIRATER_APP_ID				532923663
 
 /*
  Your app's name.

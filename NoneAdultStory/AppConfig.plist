@@ -25,5 +25,20 @@
 			<string>food_new.png</string>
 		</dict>
 	</array>
+	<key>NewTabCid</key>
+	<string>35</string>
+	<key>UmengAppKey</key>
+	<string>4fffced85270157a3c00004e</string>
+	<key>ParseConfig</key>
+	<dict>
+		<key>applicationId</key>
+		<string>G5adgYkULV27wF0RNq3raVsyKlKry0XCxUMO3LqX</string>
+		<key>clientKey</key>
+		<string>Q22Kx2neuWs3X5cfEOOpwoySbOLwVLcfTTpKeCA6</string>
+	</dict>
+	<key>AppStoreId</key>
+	<string>545287581</string>
+	<key>AppChannelTag</key>
+	<string>App Store</string>
 </dict>
 </plist>
