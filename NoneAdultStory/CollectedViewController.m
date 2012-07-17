@@ -18,11 +18,20 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(title, @"Second");
+        self.title = NSLocalizedString(title, @"First");
         self.tabBarItem.image = [UIImage imageNamed:@"collect"];
         
-        UILabel *label = (UILabel *)self.navigationItem.titleView;
-        [label setText:NSLocalizedString(title, @"Second")];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont boldSystemFontOfSize:20.0];
+        label.shadowColor = [UIColor colorWithRed:219.0f/255 green:241.0f/225 blue:241.0f/255 alpha:1];     
+        label.textAlignment = UITextAlignmentCenter;
+        label.textColor = [UIColor colorWithRed:37.0f/255 green:149.0f/225 blue:149.0f/255 alpha:1];        
+        [label setShadowOffset:CGSizeMake(0, 1.0)];
+        
+        self.navigationItem.titleView = label;
+        label.text = NSLocalizedString(title, @"");
+        [label sizeToFit];
     }
     return self;
 }
