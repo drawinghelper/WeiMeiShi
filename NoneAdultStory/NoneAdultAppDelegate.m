@@ -184,6 +184,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     if (showFilteredNew == nil || showFilteredNew == [NSNull null]  || [showFilteredNew isEqualToString:@""]) {
         showFilteredNew = @"YES";
     }
+    
+    NSString *showChannel = [MobClick getConfigParams:@"showChannel"];
+    if (showChannel == nil || showChannel == [NSNull null]  || [showChannel isEqualToString:@""]) {
+        showChannel = @"NO";
+    }
+    
     //为过审和推广初期内容高质量，只显示精选；之后可以显示未精选过的最新笑话
     PFUser *user = [PFUser currentUser];
     if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"]) {
@@ -191,27 +197,43 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  newCommonNavViewController, 
                                                  newPathNavViewController,
                                                  historyTopNavViewController,
-                                                 channelNavViewController,/////////////////
+                                                 channelNavViewController,
                                                  collectNavViewController,
                                                  settingNavViewController,
                                                  nil];
     } else {
         if ([showFilteredNew isEqualToString:@"YES"]) {
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                                     newPathNavViewController,
-                                                     historyTopNavViewController,
-                                                     channelNavViewController,/////////////////
-                                                     collectNavViewController,
-                                                     settingNavViewController,
-                                                     nil];
+                                                         newPathNavViewController,
+                                                         historyTopNavViewController,
+                                                         channelNavViewController,
+                                                         collectNavViewController,
+                                                         settingNavViewController,
+                                                         nil];
+            if ([showChannel isEqualToString:@"NO"]) {
+                self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                                                         newPathNavViewController,
+                                                         historyTopNavViewController,
+                                                         collectNavViewController,
+                                                         settingNavViewController,
+                                                         nil];
+            }
         } else {
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                      newCommonNavViewController, 
                                                      historyTopNavViewController,
-                                                     channelNavViewController,/////////////////
+                                                     channelNavViewController,
                                                      collectNavViewController,
                                                      settingNavViewController,
                                                      nil];
+            if ([showChannel isEqualToString:@"NO"]) {
+                self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                                                         newCommonNavViewController, 
+                                                         historyTopNavViewController,
+                                                         collectNavViewController,
+                                                         settingNavViewController,
+                                                         nil];
+            }
         }
     }
     
