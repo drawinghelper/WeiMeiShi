@@ -303,6 +303,7 @@
 - (void)showLianMeng {
     UMTableViewDemo *lianMengViewController = [[UMTableViewDemo alloc]init];   
     lianMengViewController.title = @"精彩应用推荐";
+    lianMengViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:lianMengViewController animated:YES];
 }
 

@@ -62,6 +62,41 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     return dbPath;
 }
 
+- (void)createDingTable {
+    FMDatabase *db= [FMDatabase databaseWithPath:[self getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    }
+    
+    //[db executeUpdate:@"DROP TABLE collected"];
+    
+    //创建一个名为User的表，有两个字段分别为string类型的Name，integer类型的 Age
+    NSString *createSQL = @"CREATE TABLE IF NOT EXISTS ding (";
+	createSQL = [createSQL stringByAppendingString:@" ID INTEGER PRIMARY KEY AUTOINCREMENT,"];
+    
+    createSQL = [createSQL stringByAppendingString:@" weiboId INTEGER UNIQUE,"];//微博的id
+	createSQL = [createSQL stringByAppendingString:@" profile_image_url TEXT,"];//博主头像图片地址
+    createSQL = [createSQL stringByAppendingString:@" screen_name TEXT,"];//微博名
+    createSQL = [createSQL stringByAppendingString:@" timestamp INTEGER,"];//微博发表时间
+    
+	createSQL = [createSQL stringByAppendingString:@" content TEXT,"];//文字内容
+    createSQL = [createSQL stringByAppendingString:@" large_url TEXT,"];//图片内容
+    createSQL = [createSQL stringByAppendingString:@" width INTEGER,"];//图片宽度
+    createSQL = [createSQL stringByAppendingString:@" height INTEGER,"];//图片高度
+    createSQL = [createSQL stringByAppendingString:@" gif_mark INTEGER,"];//图片是否为gif，0为不是gif，1是gif
+    
+    createSQL = [createSQL stringByAppendingString:@" favorite_count INTEGER,"];
+    createSQL = [createSQL stringByAppendingString:@" bury_count INTEGER,"];//
+    createSQL = [createSQL stringByAppendingString:@" comments_count INTEGER,"];//
+    
+    createSQL = [createSQL stringByAppendingString:@" collect_time INTEGER"];
+    createSQL = [createSQL stringByAppendingString:@");"];
+    
+    [db executeUpdate:createSQL];
+    
+}
+
 - (void)createCollectTable {
     FMDatabase *db= [FMDatabase databaseWithPath:[self getDbPath]] ;  
     if (![db open]) {  
@@ -117,6 +152,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     [MobClick checkUpdate];
     [MobClick updateOnlineConfig];
     
+    [self createDingTable];
     [self createCollectTable];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

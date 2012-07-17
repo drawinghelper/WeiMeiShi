@@ -330,7 +330,7 @@
         tag = YES;
         [currentDuanZi setObject:@"YES" forKey:@"collected_tag"];
     }
-    [self toggleHeart:tag withSender:sender];
+    [self toggleCollect:tag withSender:sender];
     [self collectDuanZi:tag];
     [self collectHUDMessage:tag];   
 }
@@ -344,7 +344,7 @@
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
--(void)toggleHeart:(BOOL)tag withSender:(id)sender {
+-(void)toggleCollect:(BOOL)tag withSender:(id)sender {
     UIButton *heartButton = (UIButton *)sender;
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
     UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];

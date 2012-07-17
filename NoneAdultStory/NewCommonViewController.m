@@ -489,6 +489,33 @@
     }
 }
 
+- (void)loadDingIds {
+    FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    } 
+    
+    dingIdsDic = [[NSMutableDictionary alloc] init];
+    FMResultSet *rs=[db executeQuery:@"SELECT * FROM ding ORDER BY collect_time DESC"];
+    while ([rs next]){
+        NSString *weiboId = [NSString stringWithFormat:@"%lld", [rs longLongIntForColumn:@"weiboId"]];
+        [dingIdsDic setObject:[[NSNumber alloc] initWithInt:1] forKey:weiboId];
+    }
+}
+
+- (void)checkDing:(NSMutableDictionary *)dic {
+    NSString *idString = [dic objectForKey:@"id"];
+    
+    if ([dingIdsDic objectForKey:idString] != nil) {
+        //NSLog(@"idString YES: %@", idString);
+        [dic setObject:@"YES" forKey:@"ding_tag"];
+    } else {
+        //NSLog(@"idString NO: %@", idString);
+        [dic setObject:@"NO" forKey:@"ding_tag"];
+    }
+}
+
 - (void)checkCollected:(NSMutableDictionary *)dic {
     NSString *idString = [dic objectForKey:@"id"];
     
@@ -504,6 +531,7 @@
 -(void)appendTableWith:(NSMutableArray *)data
 {
     [self loadCollectedIds];
+    [self loadDingIds];
     int minWordCount = 40;
     NSMutableDictionary *dic = nil;
     if (loadOld) {
@@ -511,6 +539,7 @@
             dic = [data objectAtIndex:i];
             [self adaptDic:dic];
             [self checkCollected:dic];
+            [self checkDing:dic];
 /*
             [originalNewDuanZiList addObject:dic];
 
@@ -526,6 +555,8 @@
             dic = [data objectAtIndex:i];
             [self adaptDic:dic];
             [self checkCollected:dic];
+            [self checkDing:dic];
+
 /*
             [originalNewDuanZiList insertObject:dic atIndex:0];
             NSString *weiboContent = [dic objectForKey:@"content"];
@@ -606,19 +637,38 @@
         tag = YES;
         [currentDuanZi setObject:@"YES" forKey:@"collected_tag"];
     }
-    [self toggleHeart:tag withSender:sender];
+    [self toggleCollect:tag withSender:sender];
     [self collectDuanZi:tag];
     [self collectHUDMessage:tag]; 
     //初期用于提纯内容的，和审核的
-    [self storeIntoParseDB:tag];
+    [self storeIntoParseDB:tag withClassName:@"historytop"];
 }
 
-- (void)storeIntoParseDB:(BOOL)tag {
+-(void)goDing:(id)sender {
+    int i = [sender tag] - 3000;
+    currentDuanZi = [searchDuanZiList objectAtIndex:i];
+    
+    BOOL tag = YES;
+    NSString *dingTag = [currentDuanZi objectForKey:@"ding_tag"];
+    if ([dingTag isEqual:@"YES"]) {
+        tag = NO;
+        [currentDuanZi setObject:@"NO" forKey:@"ding_tag"];
+    } else {
+        tag = YES;
+        [currentDuanZi setObject:@"YES" forKey:@"ding_tag"];
+    }
+    [self toggleDing:tag withSender:sender];
+    [self dingDuanZi:tag];
+    //初期用于提纯内容的，和审核的
+    [self storeIntoParseDB:tag withClassName:@"newfiltered"];
+}
+
+- (void)storeIntoParseDB:(BOOL)tag withClassName:(NSString *)className {
     if (!tag) {
         return;
     }
 
-    PFObject *newFiltered = [PFObject objectWithClassName:@"newfiltered"];
+    PFObject *newFiltered = [PFObject objectWithClassName:className];
     //PFObject *newFiltered = [PFObject objectWithClassName:@"historytop"];
     [newFiltered setObject:[currentDuanZi objectForKey:@"id"] forKey:@"weiboId"];
     [newFiltered setObject:[currentDuanZi objectForKey:@"profile_image_url"] forKey:@"profile_image_url"];
@@ -637,7 +687,7 @@
     [newFiltered saveEventually];
 }
     
--(void)toggleHeart:(BOOL)tag withSender:(id)sender {
+-(void)toggleCollect:(BOOL)tag withSender:(id)sender {
     UIButton *heartButton = (UIButton *)sender;
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
     UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
@@ -647,6 +697,56 @@
     } else {
         [heartButton setImage:btnStarImage forState:UIControlStateNormal];
         [heartButton setImage:btnStarImagePressed forState:UIControlStateHighlighted];
+    }
+}
+
+-(void)toggleDing:(BOOL)tag withSender:(id)sender {
+    UIButton *dingButton = (UIButton *)sender;
+    UIImage *btnDingImage = [UIImage imageNamed:@"ding.png"];
+    UIImage *btnDingImagePressed = [UIImage imageNamed:@"ding_pressed.png"];
+    if (tag) {
+        [dingButton setImage:btnDingImagePressed forState:UIControlStateNormal];
+        [dingButton setImage:btnDingImage forState:UIControlStateHighlighted];
+    } else {
+        [dingButton setImage:btnDingImage forState:UIControlStateNormal];
+        [dingButton setImage:btnDingImagePressed forState:UIControlStateHighlighted];
+    }
+}
+/*
+ YES - 顶成功
+ NO - 取消顶
+ */
+- (void)dingDuanZi:(BOOL)tag {
+    FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    }
+    if (tag) {
+        NSDate *nowDate = [[NSDate alloc] init];
+        NSArray *dataArray = [NSArray arrayWithObjects:
+                              [currentDuanZi objectForKey:@"id"], 
+                              [currentDuanZi objectForKey:@"profile_image_url"], 
+                              [currentDuanZi objectForKey:@"screen_name"],
+                              [currentDuanZi objectForKey:@"timestamp"],
+                              [currentDuanZi objectForKey:@"content"],
+                              
+                              [currentDuanZi objectForKey:@"large_url"], 
+                              [currentDuanZi objectForKey:@"width"],
+                              [currentDuanZi objectForKey:@"height"],
+                              [[NSNumber alloc] initWithInt:0],
+                              
+                              [currentDuanZi objectForKey:@"favorite_count"], 
+                              [currentDuanZi objectForKey:@"bury_count"],
+                              [currentDuanZi objectForKey:@"comments_count"],
+                              [[NSNumber alloc] initWithLongLong:[nowDate timeIntervalSince1970]],
+                              //[currentDuanZi objectForKey:@"collect_time"],
+                              nil
+                              ];
+        [db executeUpdate:@"replace into ding(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif_mark, favorite_count, bury_count, comments_count, collect_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+    } else {
+        NSArray *dataArray = [NSArray arrayWithObjects:[currentDuanZi objectForKey:@"id"], nil];
+        [db executeUpdate:@"delete from ding where weiboId = ?" withArgumentsInArray:dataArray];
     }
 }
 
@@ -928,7 +1028,23 @@
     [cell.contentView addSubview:pingLabel];
     pingLabel.tag = 4;
     
-    //收藏按钮
+    //顶按钮（审核精选）
+    UIButton *btnDing = [UIButton buttonWithType:UIButtonTypeCustom]; 
+    [btnDing setTitle:@"" forState:UIControlStateNormal];
+    [btnDing setTag:(row + 3000)];
+    [btnDing addTarget:self action:@selector(goDing:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.contentView addSubview:btnDing];
+    UIImage *btnDingImage = [UIImage imageNamed:@"ding.png"];
+    UIImage *btnDingImagePressed = [UIImage imageNamed:@"ding_pressed.png"];
+    if ([[duanZi objectForKey:@"ding_tag"] isEqual:@"YES"]) {
+        [btnDing setImage:btnDingImagePressed forState:UIControlStateNormal];
+        [btnDing setImage:btnDingImage forState:UIControlStateHighlighted];
+    } else {
+        [btnDing setImage:btnDingImage forState:UIControlStateNormal];
+        [btnDing setImage:btnDingImagePressed forState:UIControlStateHighlighted];
+    }
+    
+    //收藏按钮（审核最热）
     UIButton *btnStar = [UIButton buttonWithType:UIButtonTypeCustom]; 
     [btnStar setTitle:@"" forState:UIControlStateNormal];
     [btnStar setTag:(row + 2000)];
@@ -968,13 +1084,14 @@
 
     
     dingLabel = (UILabel *)[cell viewWithTag:2];
-    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
+    [dingLabel setFrame:CGRectMake(17, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 60, BOTTOM_SECTION_HEIGHT)];
     caiLabel = (UILabel *)[cell viewWithTag:3];
-    [caiLabel setFrame:CGRectMake(92, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
+    [caiLabel setFrame:CGRectMake(77, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 60, BOTTOM_SECTION_HEIGHT)];
     pingLabel = (UILabel *)[cell viewWithTag:4];
-    [pingLabel setFrame:CGRectMake(165, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 75, BOTTOM_SECTION_HEIGHT)];
-    
-    [btnStar setFrame:CGRectMake(260, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 320-260, BOTTOM_SECTION_HEIGHT)];
+    [pingLabel setFrame:CGRectMake(135, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 60, BOTTOM_SECTION_HEIGHT)];
+
+    [btnDing setFrame:CGRectMake(200, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 20, BOTTOM_SECTION_HEIGHT)];
+    [btnStar setFrame:CGRectMake(270, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 20, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;

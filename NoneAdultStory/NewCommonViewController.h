@@ -47,6 +47,7 @@
     NSDictionary *tempPropertyDic;
     
     NSMutableDictionary *collectedIdsDic;
+    NSMutableDictionary *dingIdsDic;
     
     NSDictionary *pullmessageInfo;
     NSString *currentCid;

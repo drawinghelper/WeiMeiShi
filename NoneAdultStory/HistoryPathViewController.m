@@ -258,7 +258,7 @@
         tag = YES;
         [currentDuanZi setObject:@"YES" forKey:@"collected_tag"];
     }
-    [self toggleHeart:tag withSender:sender];
+    [self toggleCollect:tag withSender:sender];
     [self collectDuanZi:tag];
     [self collectHUDMessage:tag];   
 }
@@ -272,7 +272,7 @@
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
--(void)toggleHeart:(BOOL)tag withSender:(id)sender {
+-(void)toggleCollect:(BOOL)tag withSender:(id)sender {
     UIButton *heartButton = (UIButton *)sender;
     UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
     UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
@@ -452,8 +452,7 @@
  // Override to customize the look of a cell representing an object. The default is to display
  // a UITableViewCellStyleDefault style cell with the label being the first key in the object. 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)duanZiPFObject {
-    int row = [indexPath row];   
-    NSMutableDictionary *duanZi = [newObjectArray objectAtIndex:row];
+    
     static NSString *CellIdentifier = @"OffenceCustomCellIdentifier";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -467,6 +466,15 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
     }
+
+    int row = [indexPath row];  
+    //做了一层容错保护-开始
+    if (row >= [newObjectArray count]) {
+        return cell;
+    }
+    //做了一层容错保护-结束
+    NSMutableDictionary *duanZi = [newObjectArray objectAtIndex:row];
+
     //【顶部】
     UIView *topBgView = [[UIView alloc] initWithFrame:CGRectZero];
     [cell.contentView addSubview:topBgView];
