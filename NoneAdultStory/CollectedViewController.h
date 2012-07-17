@@ -11,5 +11,6 @@
 @interface CollectedViewController : NewCommonViewController{
     BOOL firstLoaded;
 }
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withTitle:(NSString *)title;
 
 @end

@@ -14,15 +14,15 @@
 
 @implementation CollectedViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withTitle:(NSString *)title
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(@"已收藏", @"Second");
+        self.title = NSLocalizedString(title, @"Second");
         self.tabBarItem.image = [UIImage imageNamed:@"collect"];
         
         UILabel *label = (UILabel *)self.navigationItem.titleView;
-        [label setText:NSLocalizedString(@"已收藏", @"Second")];
+        [label setText:NSLocalizedString(title, @"Second")];
     }
     return self;
 }

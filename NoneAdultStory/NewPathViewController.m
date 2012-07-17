@@ -15,7 +15,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.title = NSLocalizedString(@"最新精选", @"Second");
+        self.title = NSLocalizedString(@"精选", @"Second");
         self.tabBarItem.image = [UIImage imageNamed:@"new"];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -27,7 +27,7 @@
         [label setShadowOffset:CGSizeMake(0, 1.0)];
         
         self.navigationItem.titleView = label;
-        label.text = NSLocalizedString(@"最新精选", @"");
+        label.text = NSLocalizedString(@"精选", @"");
         [label sizeToFit];
         
         // Custom the table

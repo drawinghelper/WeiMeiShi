@@ -49,7 +49,7 @@
     NSMutableDictionary *collectedIdsDic;
     
     NSDictionary *pullmessageInfo;
-
+    NSString *currentCid;
 }
 @property(nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) AdMoGoView *adView;
@@ -60,4 +60,5 @@
 - (void)goCollect:(id)sender;
 - (void)performRefresh;
 - (CGRect)getImageDisplayRect:(NSDictionary *)duanZi;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withTitle:(NSString *)title withCid:(NSString *)cid;
 @end

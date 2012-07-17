@@ -101,27 +101,15 @@
     
     //custom back button
     UIImage *buttonImage = [UIImage imageNamed:@"custombackbutton.png"];
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    
     [button setImage:buttonImage forState:UIControlStateNormal];
-    
-    /*
-    [button setTitle:@"  设置" forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-    [button setTitleColor:[UIColor colorWithRed:37.0f/255 green:149.0f/225 blue:149.0f/255 alpha:1] forState:UIControlStateNormal];
-    */
     button.frame = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
-    
     [button addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    
     UIBarButtonItem *customBarItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    
     self.navigationItem.leftBarButtonItem = customBarItem;
 }
 
 -(void)back {
-    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

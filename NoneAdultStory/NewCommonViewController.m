@@ -15,11 +15,12 @@
 @implementation NewCommonViewController
 @synthesize tableView;
 @synthesize adView;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withTitle:(NSString *)title withCid:(NSString *)cid
 {
+    currentCid = cid;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(@"最新笑话", @"First");
+        self.title = NSLocalizedString(title, @"First");
         self.tabBarItem.image = [UIImage imageNamed:@"new"];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -31,7 +32,7 @@
         [label setShadowOffset:CGSizeMake(0, 1.0)];
         
         self.navigationItem.titleView = label;
-        label.text = NSLocalizedString(@"最新笑话", @"");
+        label.text = NSLocalizedString(title, @"");
         [label sizeToFit];
     }
     return self;
@@ -125,6 +126,22 @@
     
     [self performRefresh];
     self.tableView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1];
+    
+    //分类页的“返回”按钮定制化
+    if (![self.title isEqualToString:@"最新"] 
+        && ![self.title isEqualToString:@"收藏"]) {
+        UIImage *buttonImage = [UIImage imageNamed:@"custombackbutton.png"];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:buttonImage forState:UIControlStateNormal];
+        button.frame = CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height);
+        [button addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *customBarItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+        self.navigationItem.leftBarButtonItem = customBarItem;
+    }
+}
+
+-(void)back {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)performRefresh {
@@ -308,7 +325,7 @@
  */
 
 - (void)loadUrl {
-    NSString *recentUrlPrefix = [NSString stringWithFormat:@"http://c.t.qq.com/asyn/selectedAutoUpdate.php?cid=%@&top=1&turn=1&version=0&r=1339057285481&p=2&apiType=7&apiHost=http%3A%2F%2Fapi.t.qq.com&_r=1339057285481&n=20", @"40"];
+    NSString *recentUrlPrefix = [NSString stringWithFormat:@"http://c.t.qq.com/asyn/selectedAutoUpdate.php?cid=%@&top=1&turn=1&version=0&r=1339057285481&p=2&apiType=7&apiHost=http%3A%2F%2Fapi.t.qq.com&_r=1339057285481&n=20", currentCid];
     NSLog(@".........%@", recentUrlPrefix);
     
     if (loadOld && [searchDuanZiList count] > 0 ) {

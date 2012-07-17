@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ChannelList</key>
+	<array>
+		<dict>
+			<key>cid</key>
+			<string>925</string>
+			<key>title</key>
+			<string>红酒</string>
+			<key>subtitle</key>
+			<string>千杯不醉</string>
+			<key>icon</key>
+			<string>wine_new.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>35</string>
+			<key>title</key>
+			<string>美食</string>
+			<key>subtitle</key>
+			<string>每个人心里都住着一个吃货</string>
+			<key>icon</key>
+			<string>food_new.png</string>
+		</dict>
+	</array>
+</dict>
+</plist>

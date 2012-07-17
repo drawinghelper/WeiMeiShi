@@ -11,6 +11,7 @@
 #import "NewCommonViewController.h"
 #import "HistoryPathViewController.h"
 
+#import "ChannelViewController.h"
 #import "CollectedViewController.h"
 #import "NoneAdultSettingViewController.h"
 
@@ -121,7 +122,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    UIViewController *newCommonViewController = [[NewCommonViewController alloc] initWithNibName:@"NewCommonViewController" bundle:nil];
+    UIViewController *newCommonViewController = [[NewCommonViewController alloc] initWithNibName:@"NewCommonViewController" bundle:nil withTitle:@"最新" withCid:@"35"];
     UINavigationController *newCommonNavViewController = [[UINavigationController alloc] initWithRootViewController:newCommonViewController];
     
     UIViewController *newPathViewController = [[NewPathViewController alloc] init];
@@ -130,9 +131,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     HistoryPathViewController *historyTopController = [[HistoryPathViewController alloc] init];
     UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
     
-    UIViewController *secondViewController = [[CollectedViewController alloc] initWithNibName:@"CollectedViewController" bundle:nil];
-    UINavigationController *secondNavViewController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
-    [secondNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    ChannelViewController *channelController = [[ChannelViewController alloc] init];
+    UINavigationController *channelNavViewController = [[UINavigationController alloc] initWithRootViewController:channelController];
+    
+    UIViewController *collectViewController = [[CollectedViewController alloc] initWithNibName:@"CollectedViewController" bundle:nil withTitle:@"收藏"];
+    UINavigationController *collectNavViewController = [[UINavigationController alloc] initWithRootViewController:collectViewController];
+    [collectNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
 
     UIViewController *settingViewController = [[NoneAdultSettingViewController alloc] initWithNibName:@"NoneAdultSettingViewController" bundle:nil];
     UINavigationController *settingNavViewController = [[UINavigationController alloc] initWithRootViewController:settingViewController];
@@ -144,14 +148,15 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     if (showFilteredNew == nil || showFilteredNew == [NSNull null]  || [showFilteredNew isEqualToString:@""]) {
         showFilteredNew = @"YES";
     }
-    //为过审和推广初期内容高质量，只显示最新精选；之后可以显示未精选过的最新笑话
+    //为过审和推广初期内容高质量，只显示精选；之后可以显示未精选过的最新笑话
     PFUser *user = [PFUser currentUser];
     if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"]) {
         self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                  newCommonNavViewController, 
                                                  newPathNavViewController,
                                                  historyTopNavViewController,
-                                                 secondNavViewController,
+                                                 channelNavViewController,/////////////////
+                                                 collectNavViewController,
                                                  settingNavViewController,
                                                  nil];
     } else {
@@ -159,14 +164,16 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                      newPathNavViewController,
                                                      historyTopNavViewController,
-                                                     secondNavViewController,
+                                                     channelNavViewController,/////////////////
+                                                     collectNavViewController,
                                                      settingNavViewController,
                                                      nil];
         } else {
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                      newCommonNavViewController, 
                                                      historyTopNavViewController,
-                                                     secondNavViewController,
+                                                     channelNavViewController,/////////////////
+                                                     collectNavViewController,
                                                      settingNavViewController,
                                                      nil];
         }
