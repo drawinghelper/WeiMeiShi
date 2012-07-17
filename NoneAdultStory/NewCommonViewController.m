@@ -641,7 +641,11 @@
     [self collectDuanZi:tag];
     [self collectHUDMessage:tag]; 
     //初期用于提纯内容的，和审核的
-    [self storeIntoParseDB:tag withClassName:@"historytop"];
+    PFUser *user = [PFUser currentUser];
+    if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"]
+        && [self.title isEqualToString:@"最新"]) {
+        [self storeIntoParseDB:tag withClassName:@"historytop"];
+    }
 }
 
 -(void)goDing:(id)sender {
@@ -1028,39 +1032,6 @@
     [cell.contentView addSubview:pingLabel];
     pingLabel.tag = 4;
     
-    //顶按钮（审核精选）
-    UIButton *btnDing = [UIButton buttonWithType:UIButtonTypeCustom]; 
-    [btnDing setTitle:@"" forState:UIControlStateNormal];
-    [btnDing setTag:(row + 3000)];
-    [btnDing addTarget:self action:@selector(goDing:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.contentView addSubview:btnDing];
-    UIImage *btnDingImage = [UIImage imageNamed:@"ding.png"];
-    UIImage *btnDingImagePressed = [UIImage imageNamed:@"ding_pressed.png"];
-    if ([[duanZi objectForKey:@"ding_tag"] isEqual:@"YES"]) {
-        [btnDing setImage:btnDingImagePressed forState:UIControlStateNormal];
-        [btnDing setImage:btnDingImage forState:UIControlStateHighlighted];
-    } else {
-        [btnDing setImage:btnDingImage forState:UIControlStateNormal];
-        [btnDing setImage:btnDingImagePressed forState:UIControlStateHighlighted];
-    }
-    
-    //收藏按钮（审核最热）
-    UIButton *btnStar = [UIButton buttonWithType:UIButtonTypeCustom]; 
-    [btnStar setTitle:@"" forState:UIControlStateNormal];
-    [btnStar setTag:(row + 2000)];
-    [btnStar addTarget:self action:@selector(goCollect:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.contentView addSubview:btnStar];
-    UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
-    UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
-    if ([[duanZi objectForKey:@"collected_tag"] isEqual:@"YES"]) {
-        [btnStar setImage:btnStarImagePressed forState:UIControlStateNormal];
-        [btnStar setImage:btnStarImage forState:UIControlStateHighlighted];
-    } else {
-        [btnStar setImage:btnStarImage forState:UIControlStateNormal];
-        [btnStar setImage:btnStarImagePressed forState:UIControlStateHighlighted];
-    }
-    
-    
     //content图片内容自适应
     CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
     imageDisplayRect.origin.y = imageDisplayRect.origin.y + 5;
@@ -1090,8 +1061,43 @@
     pingLabel = (UILabel *)[cell viewWithTag:4];
     [pingLabel setFrame:CGRectMake(135, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 60, BOTTOM_SECTION_HEIGHT)];
 
-    [btnDing setFrame:CGRectMake(200, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 20, BOTTOM_SECTION_HEIGHT)];
-    [btnStar setFrame:CGRectMake(270, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 20, BOTTOM_SECTION_HEIGHT)];
+    //顶按钮（审核精选）
+    PFUser *user = [PFUser currentUser];
+    if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"]
+        && [self.title isEqualToString:@"最新"]) {
+        UIButton *btnDing = [UIButton buttonWithType:UIButtonTypeCustom]; 
+        [btnDing setTitle:@"" forState:UIControlStateNormal];
+        [btnDing setTag:(row + 3000)];
+        [btnDing addTarget:self action:@selector(goDing:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.contentView addSubview:btnDing];
+        UIImage *btnDingImage = [UIImage imageNamed:@"ding.png"];
+        UIImage *btnDingImagePressed = [UIImage imageNamed:@"ding_pressed.png"];
+        if ([[duanZi objectForKey:@"ding_tag"] isEqual:@"YES"]) {
+            [btnDing setImage:btnDingImagePressed forState:UIControlStateNormal];
+            [btnDing setImage:btnDingImage forState:UIControlStateHighlighted];
+        } else {
+            [btnDing setImage:btnDingImage forState:UIControlStateNormal];
+            [btnDing setImage:btnDingImagePressed forState:UIControlStateHighlighted];
+        }
+        [btnDing setFrame:CGRectMake(210, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 20, BOTTOM_SECTION_HEIGHT)];
+    }
+    
+    //收藏按钮（审核最热）
+    UIButton *btnStar = [UIButton buttonWithType:UIButtonTypeCustom]; 
+    [btnStar setTitle:@"" forState:UIControlStateNormal];
+    [btnStar setTag:(row + 2000)];
+    [btnStar addTarget:self action:@selector(goCollect:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.contentView addSubview:btnStar];
+    UIImage *btnStarImage = [UIImage imageNamed:@"star.png"];
+    UIImage *btnStarImagePressed = [UIImage imageNamed:@"star_pressed.png"];
+    if ([[duanZi objectForKey:@"collected_tag"] isEqual:@"YES"]) {
+        [btnStar setImage:btnStarImagePressed forState:UIControlStateNormal];
+        [btnStar setImage:btnStarImage forState:UIControlStateHighlighted];
+    } else {
+        [btnStar setImage:btnStarImage forState:UIControlStateNormal];
+        [btnStar setImage:btnStarImagePressed forState:UIControlStateHighlighted];
+    }
+    [btnStar setFrame:CGRectMake(280, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 20, BOTTOM_SECTION_HEIGHT)];
     
     [cell setFrame:cellFrame];
     cell.accessoryType = UITableViewCellAccessoryNone;
