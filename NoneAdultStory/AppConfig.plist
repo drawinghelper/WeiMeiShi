@@ -36,6 +36,8 @@
 		<key>clientKey</key>
 		<string>Q22Kx2neuWs3X5cfEOOpwoySbOLwVLcfTTpKeCA6</string>
 	</dict>
+	<key>AlertKeyword</key>
+	<string>菜谱</string>
 	<key>AppStoreId</key>
 	<string>545287581</string>
 	<key>AppChannelTag</key>

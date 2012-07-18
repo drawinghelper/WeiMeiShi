@@ -156,6 +156,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     return [appConfig objectForKey:@"AppChannelTag"];
 }
 
+- (NSString *)getAlertKeyword {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"AlertKeyword"];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
@@ -322,7 +328,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         }
         
         //内容
-        noti.alertBody = @"今天又有新笑话啦，来看看吧！";
+        noti.alertBody = [NSString stringWithFormat:@"今天又有新%@啦，来看看吧！",
+                          [[NoneAdultAppDelegate sharedAppDelegate] getAlertKeyword]];
         NSString *localNotiAlertBody = [MobClick getConfigParams:@"localNotiAlertBody"];
         if (localNotiAlertBody != nil 
             && localNotiAlertBody != [NSNull null] 
