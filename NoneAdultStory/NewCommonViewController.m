@@ -440,12 +440,18 @@
 	HUD = nil;
 }
 
+- (NSString *)autoCorrectNull:(NSString *)input {
+    if (input == nil || input == [NSNull null]) {
+        return @"";
+    }
+    return input;
+}
 //从享评接口格式适配到腾讯微频道接口格式
 - (void)adaptDic:(NSMutableDictionary *)dic {
-    NSString *idString = [dic objectForKey:@"id"];
-    NSString *screenName = [dic objectForKey:@"nick"];
-    NSString *profileImageUrl = [dic objectForKey:@"pic"];
-    NSString *weiboContent = [dic objectForKey:@"content"];
+    NSString *idString = [self autoCorrectNull:[dic objectForKey:@"id"]];
+    NSString *screenName = [self autoCorrectNull:[dic objectForKey:@"nick"]];
+    NSString *profileImageUrl = [self autoCorrectNull:[dic objectForKey:@"pic"]];
+    NSString *weiboContent = [self autoCorrectNull:[dic objectForKey:@"content"]];
 
     NSDecimalNumber *favoriteCount = (NSDecimalNumber *)[dic objectForKey:@"count"];
     NSDecimalNumber *buryCount = [[NSDecimalNumber alloc] initWithInt:([favoriteCount intValue]/5)];

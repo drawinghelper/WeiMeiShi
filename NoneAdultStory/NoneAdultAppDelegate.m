@@ -20,6 +20,31 @@
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
 
+- (void) animateSplashScreen
+{
+    
+    //fade time
+    CFTimeInterval animation_duration = 1.0;
+    
+    //SplashScreen 
+    UIImageView * splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 320, 480)];
+    splashView.image = [UIImage imageNamed:@"Default.png"];
+    [self.window addSubview:splashView];
+    [self.window bringSubviewToFront:splashView];
+    
+    //Animation (fade away with zoom effect)
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:animation_duration];
+    [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.window cache:YES];
+    [UIView setAnimationDelegate:splashView]; 
+    [UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
+    splashView.alpha = 0.0;
+    splashView.frame = CGRectMake(-60, -60, 440, 600);
+    
+    [UIView commitAnimations];
+    
+}
+
 +(CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha
 {
     CGFloat r = (CGFloat) red/255.0;
@@ -273,10 +298,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
             }
         }
     }
-    
+        
     self.window.rootViewController = self.tabBarController;
-    //[NSThread sleepForTimeInterval:1.0];
+    [NSThread sleepForTimeInterval:1.0];
     [self.window makeKeyAndVisible];
+    [self animateSplashScreen];
+
     [Appirater appLaunched:YES];
     
     application.applicationIconBadgeNumber = 0;
@@ -287,7 +314,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 - (void)application:(UIApplication *)application 
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
     application.applicationIconBadgeNumber = 0;
-
+    //从push过来默认来最热tab
+    [self.tabBarController setSelectedIndex:1];
     [PFPush handlePush:userInfo];
 }
 

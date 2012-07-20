@@ -6,35 +6,55 @@
 	<array>
 		<dict>
 			<key>cid</key>
-			<string>925</string>
+			<string>845</string>
 			<key>title</key>
-			<string>红酒</string>
+			<string>影视明星</string>
 			<key>subtitle</key>
-			<string>每天领你品味不一样的生活</string>
+			<string>白百合、MaggieQ等</string>
 			<key>icon</key>
-			<string>wine_new.png</string>
+			<string>yingshi.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>35</string>
+			<string>881</string>
 			<key>title</key>
-			<string>菜品</string>
+			<string>主持人</string>
 			<key>subtitle</key>
-			<string>140个字浓缩美味的烹饪过程</string>
+			<string>何炅、乐嘉、黄子佼等</string>
 			<key>icon</key>
-			<string>food_new.png</string>
+			<string>zhuchi.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>846</string>
+			<key>title</key>
+			<string>音乐明星</string>
+			<key>subtitle</key>
+			<string>林忆莲、许茹芸、阿朵等</string>
+			<key>icon</key>
+			<string>yinyue.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>847</string>
+			<key>title</key>
+			<string>娱乐名人</string>
+			<key>subtitle</key>
+			<string>炮轰、炒作啥的是他们的砖长</string>
+			<key>icon</key>
+			<string>mingren.png</string>
 		</dict>
 	</array>
 	<key>NewTabCid</key>
-	<string>35</string>
+	<string>13</string>
 	<key>UmengAppKey</key>
 	<string>4fffced85270157a3c00004e</string>
 	<key>ParseConfig</key>
 	<dict>
 		<key>applicationId</key>
-		<string>G5adgYkULV27wF0RNq3raVsyKlKry0XCxUMO3LqX</string>
+		<string>lkLzJu6xPKG1DJUlWu5aPtpxcMPqt28WpLk3oEZp</string>
 		<key>clientKey</key>
-		<string>Q22Kx2neuWs3X5cfEOOpwoySbOLwVLcfTTpKeCA6</string>
+		<string>PfxQcMr7DDrhDgOk8XN67Ou86ZzFrk0zEKvKMLmT</string>
 	</dict>
 	<key>AlertKeyword</key>
 	<string>菜谱</string>
