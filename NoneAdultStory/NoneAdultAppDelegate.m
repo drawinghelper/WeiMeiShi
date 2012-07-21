@@ -157,6 +157,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     
 }
 
+- (NSString *)getMogoAppKey {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"MoGoAppKey"];
+}
+
 - (NSString *)getUmengAppKey {
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
                                [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
@@ -311,8 +317,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     
     return YES;
 }
-- (void)application:(UIApplication *)application 
-didReceiveRemoteNotification:(NSDictionary *)userInfo {
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     application.applicationIconBadgeNumber = 0;
     //从push过来默认来最热tab
     [self.tabBarController setSelectedIndex:1];

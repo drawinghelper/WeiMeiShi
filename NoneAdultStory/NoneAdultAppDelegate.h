@@ -23,6 +23,7 @@
 + (CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha;
 -(NSString *)getDbPath;
 + (NoneAdultAppDelegate *)sharedAppDelegate;
+- (NSString *)getMogoAppKey;
 - (NSString *)getUmengAppKey;
 - (NSString *)getAppStoreId;
 - (NSString *)getAppChannelTag;

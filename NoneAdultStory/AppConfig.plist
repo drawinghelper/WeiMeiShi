@@ -48,7 +48,7 @@
 	<key>NewTabCid</key>
 	<string>13</string>
 	<key>UmengAppKey</key>
-	<string>4fffced85270157a3c00004e</string>
+	<string>500a5e60527015136500001f</string>
 	<key>ParseConfig</key>
 	<dict>
 		<key>applicationId</key>
@@ -57,10 +57,12 @@
 		<string>PfxQcMr7DDrhDgOk8XN67Ou86ZzFrk0zEKvKMLmT</string>
 	</dict>
 	<key>AlertKeyword</key>
-	<string>菜谱</string>
+	<string>明星微博</string>
 	<key>AppStoreId</key>
 	<string>545287581</string>
 	<key>AppChannelTag</key>
 	<string>App Store</string>
+	<key>MoGoAppKey</key>
+	<string>65417eb16c944a51a12ae85141aadda4</string>
 </dict>
 </plist>

@@ -39,7 +39,8 @@
 }
 
 - (NSString *)adMoGoApplicationKey{
-    return @"8263cdaa8f724e2293b2f9f3aff849ee"; //此字符串为您的 App 在芒果上的唯一
+    return [[NoneAdultAppDelegate sharedAppDelegate] getMogoAppKey];
+    //return @"8263cdaa8f724e2293b2f9f3aff849ee"; //此字符串为您的 App 在芒果上的唯一
 }
 
 -(UIViewController *)viewControllerForPresentingModalView{
