@@ -6,6 +6,36 @@
 	<array>
 		<dict>
 			<key>cid</key>
+			<string>890</string>
+			<key>title</key>
+			<string>美容</string>
+			<key>subtitle</key>
+			<string>没有丑女人，只有懒女人</string>
+			<key>icon</key>
+			<string>meirong.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>891</string>
+			<key>title</key>
+			<string>瘦身</string>
+			<key>subtitle</key>
+			<string>要么瘦，要么死！</string>
+			<key>icon</key>
+			<string>shoushen.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>897</string>
+			<key>title</key>
+			<string>美甲</string>
+			<key>subtitle</key>
+			<string>漂亮指甲，点缀生活</string>
+			<key>icon</key>
+			<string>meijia.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
 			<string>896</string>
 			<key>title</key>
 			<string>服饰</string>
@@ -36,23 +66,23 @@
 		</dict>
 	</array>
 	<key>NewTabCid</key>
-	<string>36</string>
+	<string>37</string>
 	<key>UmengAppKey</key>
-	<string>500ab5ed527015136000003a</string>
+	<string>500c049d5270154272000043</string>
 	<key>ParseConfig</key>
 	<dict>
 		<key>applicationId</key>
-		<string>ZKvRcRuBHKfwWzC7ovjizpd2x4eleutInQWCsMbv</string>
+		<string>hBQigugAvQZoDf2QisBwe65aCQ0yAZwbTGR6GWIj</string>
 		<key>clientKey</key>
-		<string>H0xZqwD0c2oVrLeGxQbuh6V9ljr3xSWqJTw5JpR3</string>
+		<string>QFTqOU4DThYwI0fQbObpDXkSSQ1mTETnh0m0ihOn</string>
 	</dict>
 	<key>AlertKeyword</key>
-	<string>潮服</string>
+	<string>美容锦囊</string>
 	<key>AppStoreId</key>
-	<string>547020043</string>
+	<string>547098068</string>
 	<key>AppChannelTag</key>
 	<string>App Store</string>
 	<key>MoGoAppKey</key>
-	<string>434bb079cfb7492da2822c5d4694e29c</string>
+	<string>07bc0ad5df754278b8578a287a0af1f4</string>
 </dict>
 </plist>
