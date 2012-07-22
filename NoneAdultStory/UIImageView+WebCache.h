@@ -9,6 +9,7 @@
 #import "SDWebImageCompat.h"
 #import "SDWebImageManagerDelegate.h"
 #import "SDWebImageManager.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface UIImageView (WebCache) <SDWebImageManagerDelegate>
 

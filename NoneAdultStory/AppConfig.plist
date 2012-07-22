@@ -6,63 +6,53 @@
 	<array>
 		<dict>
 			<key>cid</key>
-			<string>845</string>
+			<string>896</string>
 			<key>title</key>
-			<string>影视明星</string>
+			<string>服饰</string>
 			<key>subtitle</key>
-			<string>白百合、MaggieQ等</string>
+			<string>混搭达人，潮流看我</string>
 			<key>icon</key>
-			<string>yingshi.png</string>
+			<string>fushi.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>881</string>
+			<string>895</string>
 			<key>title</key>
-			<string>主持人</string>
+			<string>鞋包配饰</string>
 			<key>subtitle</key>
-			<string>何炅、乐嘉、黄子佼等</string>
+			<string>每日精选，让你一秒变潮</string>
 			<key>icon</key>
-			<string>zhuchi.png</string>
+			<string>xiezi.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>846</string>
+			<string>907</string>
 			<key>title</key>
-			<string>音乐明星</string>
+			<string>婚纱</string>
 			<key>subtitle</key>
-			<string>林忆莲、许茹芸、阿朵等</string>
+			<string>唯美的婚纱，浪漫的爱情</string>
 			<key>icon</key>
-			<string>yinyue.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>847</string>
-			<key>title</key>
-			<string>娱乐名人</string>
-			<key>subtitle</key>
-			<string>炮轰、炒作啥的是他们的砖长</string>
-			<key>icon</key>
-			<string>mingren.png</string>
+			<string>hunsha.png</string>
 		</dict>
 	</array>
 	<key>NewTabCid</key>
-	<string>13</string>
+	<string>36</string>
 	<key>UmengAppKey</key>
-	<string>500a5e60527015136500001f</string>
+	<string>500ab5ed527015136000003a</string>
 	<key>ParseConfig</key>
 	<dict>
 		<key>applicationId</key>
-		<string>lkLzJu6xPKG1DJUlWu5aPtpxcMPqt28WpLk3oEZp</string>
+		<string>ZKvRcRuBHKfwWzC7ovjizpd2x4eleutInQWCsMbv</string>
 		<key>clientKey</key>
-		<string>PfxQcMr7DDrhDgOk8XN67Ou86ZzFrk0zEKvKMLmT</string>
+		<string>H0xZqwD0c2oVrLeGxQbuh6V9ljr3xSWqJTw5JpR3</string>
 	</dict>
 	<key>AlertKeyword</key>
-	<string>明星微博</string>
+	<string>潮服</string>
 	<key>AppStoreId</key>
-	<string>545287581</string>
+	<string>547020043</string>
 	<key>AppChannelTag</key>
 	<string>App Store</string>
 	<key>MoGoAppKey</key>
-	<string>65417eb16c944a51a12ae85141aadda4</string>
+	<string>434bb079cfb7492da2822c5d4694e29c</string>
 </dict>
 </plist>
