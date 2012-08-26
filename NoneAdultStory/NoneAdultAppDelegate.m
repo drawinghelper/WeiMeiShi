@@ -10,7 +10,7 @@
 #import "NewPathViewController.h"
 #import "NewCommonViewController.h"
 #import "HistoryPathViewController.h"
-
+#import "SearchViewController.h"
 #import "ChannelViewController.h"
 #import "CollectedViewController.h"
 #import "NoneAdultSettingViewController.h"
@@ -235,6 +235,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     HistoryPathViewController *historyTopController = [[HistoryPathViewController alloc] init];
     UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
     
+    UIViewController *searchController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:nil];
+    
     ChannelViewController *channelController = [[ChannelViewController alloc] init];
     UINavigationController *channelNavViewController = [[UINavigationController alloc] initWithRootViewController:channelController];
     
@@ -265,6 +267,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  newCommonNavViewController, 
                                                  newPathNavViewController,
                                                  historyTopNavViewController,
+                                                 searchController,
                                                  channelNavViewController,
                                                  collectNavViewController,
                                                  settingNavViewController,
@@ -274,7 +277,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
-                                                         channelNavViewController,
+                                                         searchController,
+                                                         //channelNavViewController,
                                                          collectNavViewController,
                                                          settingNavViewController,
                                                          nil];
@@ -282,6 +286,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                 self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
+                                                         searchController,
                                                          collectNavViewController,
                                                          settingNavViewController,
                                                          nil];
@@ -290,7 +295,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                      newCommonNavViewController, 
                                                      historyTopNavViewController,
-                                                     channelNavViewController,
+                                                     searchController,
+                                                     //channelNavViewController,
                                                      collectNavViewController,
                                                      settingNavViewController,
                                                      nil];
@@ -298,6 +304,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                 self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newCommonNavViewController, 
                                                          historyTopNavViewController,
+                                                         searchController,
                                                          collectNavViewController,
                                                          settingNavViewController,
                                                          nil];

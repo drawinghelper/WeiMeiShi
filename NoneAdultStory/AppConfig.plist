@@ -6,83 +6,41 @@
 	<array>
 		<dict>
 			<key>cid</key>
-			<string>890</string>
+			<string>925</string>
 			<key>title</key>
-			<string>美容</string>
+			<string>红酒</string>
 			<key>subtitle</key>
-			<string>没有丑女人，只有懒女人</string>
+			<string>每天领你品味不一样的生活</string>
 			<key>icon</key>
-			<string>meirong.png</string>
+			<string>wine_new.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>891</string>
+			<string>35</string>
 			<key>title</key>
-			<string>瘦身</string>
+			<string>菜品</string>
 			<key>subtitle</key>
-			<string>要么瘦，要么死！</string>
+			<string>140个字浓缩美味的烹饪过程</string>
 			<key>icon</key>
-			<string>shoushen.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>897</string>
-			<key>title</key>
-			<string>美甲</string>
-			<key>subtitle</key>
-			<string>漂亮指甲，点缀生活</string>
-			<key>icon</key>
-			<string>meijia.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>896</string>
-			<key>title</key>
-			<string>服饰</string>
-			<key>subtitle</key>
-			<string>混搭达人，潮流看我</string>
-			<key>icon</key>
-			<string>fushi.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>895</string>
-			<key>title</key>
-			<string>鞋包配饰</string>
-			<key>subtitle</key>
-			<string>每日精选，让你一秒变潮</string>
-			<key>icon</key>
-			<string>xiezi.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>907</string>
-			<key>title</key>
-			<string>婚纱</string>
-			<key>subtitle</key>
-			<string>唯美的婚纱，浪漫的爱情</string>
-			<key>icon</key>
-			<string>hunsha.png</string>
+			<string>food_new.png</string>
 		</dict>
 	</array>
 	<key>NewTabCid</key>
-	<string>37</string>
+	<string>35</string>
 	<key>UmengAppKey</key>
-	<string>500c049d5270154272000043</string>
+	<string>4fffced85270157a3c00004e</string>
 	<key>ParseConfig</key>
 	<dict>
 		<key>applicationId</key>
-		<string>hBQigugAvQZoDf2QisBwe65aCQ0yAZwbTGR6GWIj</string>
+		<string>G5adgYkULV27wF0RNq3raVsyKlKry0XCxUMO3LqX</string>
 		<key>clientKey</key>
-		<string>QFTqOU4DThYwI0fQbObpDXkSSQ1mTETnh0m0ihOn</string>
+		<string>Q22Kx2neuWs3X5cfEOOpwoySbOLwVLcfTTpKeCA6</string>
 	</dict>
 	<key>AlertKeyword</key>
-	<string>美容锦囊</string>
+	<string>菜谱</string>
 	<key>AppStoreId</key>
-	<string>547098068</string>
+	<string>545287581</string>
 	<key>AppChannelTag</key>
 	<string>App Store</string>
-	<key>MoGoAppKey</key>
-	<string>07bc0ad5df754278b8578a287a0af1f4</string>
 </dict>
 </plist>
