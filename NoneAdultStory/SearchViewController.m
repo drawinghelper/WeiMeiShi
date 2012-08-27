@@ -19,7 +19,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = NSLocalizedString(@"检索", @"Second");
+        self.title = NSLocalizedString(@"菜谱搜索", @"Second");
         self.tabBarItem.image = [UIImage imageNamed:@"tab_search"];
     }
     return self;
@@ -29,7 +29,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    NSString *urlString = [[NSString alloc] initWithString:@"http://m.meishi.cc"];
+    NSString *urlString = [[NSString alloc] initWithString:@"http://m.xiachufang.com/"];
     
     NSURL *url =[NSURL URLWithString:urlString];
     NSURLRequest *request =[NSURLRequest requestWithURL:url];
