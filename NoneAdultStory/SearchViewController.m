@@ -32,11 +32,13 @@
     NSString *urlString = [[NSString alloc] initWithString:@"http://m.xiachufang.com/"];
     
     NSURL *url =[NSURL URLWithString:urlString];
-    NSURLRequest *request =[NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:request];
+    request =[NSURLRequest requestWithURL:url];
     [self.webView setDelegate:self];   
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self.webView loadRequest:request];
+}
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     NSLog(@"webViewDidStartLoad...");
     HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];

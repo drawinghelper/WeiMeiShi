@@ -207,8 +207,8 @@
                 UIAlertView *pullmessageAlertView = [[UIAlertView alloc] initWithTitle:[pullmessageInfo objectForKey:@"title"]
                                                                   message:[pullmessageInfo objectForKey:@"message"]
                                                                  delegate:self
-                                                        cancelButtonTitle:[pullmessageInfo objectForKey:@"oktitle"]
-                                                        otherButtonTitles:[pullmessageInfo objectForKey:@"canceltitle"], nil];
+                                                        cancelButtonTitle:[pullmessageInfo objectForKey:@"canceltitle"]
+                                                        otherButtonTitles:[pullmessageInfo objectForKey:@"oktitle"], nil];
                 [pullmessageAlertView show];
                 
                 [showedMessageTimestampArray addObject:pullmessageTimestamp];
@@ -223,18 +223,18 @@
     switch (buttonIndex) {
         case 0:
         {          
-            NSString *okUrl = [pullmessageInfo objectForKey:@"okurl"];
-            if (![okUrl isEqualToString:@""]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:okUrl]];
+            // they want to rate it
+            NSString *cancelUrl = [pullmessageInfo objectForKey:@"cancelurl"];
+            if (![cancelUrl isEqualToString:@""]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:cancelUrl]];
             }
             break;
         }
         case 1:
         {
-            // they want to rate it
-            NSString *cancelUrl = [pullmessageInfo objectForKey:@"cancelurl"];
-            if (![cancelUrl isEqualToString:@""]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:cancelUrl]];
+            NSString *okUrl = [pullmessageInfo objectForKey:@"okurl"];
+            if (![okUrl isEqualToString:@""]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:okUrl]];
             }
             break;
         }
@@ -952,11 +952,11 @@
     [cell.contentView addSubview:timestampLabel];
     
     //微博头像
-    UIImageView *brandLogoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shi.jpeg"]];
+    UIImageView *brandLogoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Icon.png"]];
     [brandLogoImageView setFrame:CGRectMake(17, 13, TOP_SECTION_HEIGHT-20, TOP_SECTION_HEIGHT-20)];        
     [cell.contentView addSubview:brandLogoImageView];
     [brandLogoImageView setImageWithURL:[NSURL URLWithString:[duanZi objectForKey:@"profile_image_url"]] 
-                       placeholderImage:[UIImage imageNamed:@"shi.jpeg"]];
+                       placeholderImage:[UIImage imageNamed:@"Icon.png"]];
     CALayer *layer = [brandLogoImageView layer];  
     [layer setMasksToBounds:YES];  
     [layer setCornerRadius:1.5];  

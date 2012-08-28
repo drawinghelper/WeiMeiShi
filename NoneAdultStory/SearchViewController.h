@@ -12,7 +12,7 @@
 @interface SearchViewController : UIViewController<UIWebViewDelegate, MBProgressHUDDelegate> {
     IBOutlet UIWebView *webView;
     MBProgressHUD *HUD;
-
+    NSURLRequest *request;
 }
 @property (strong, nonatomic) UIWebView *webView;
 

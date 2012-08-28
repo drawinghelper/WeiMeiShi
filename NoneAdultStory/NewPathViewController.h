@@ -21,7 +21,7 @@
 #define HORIZONTAL_PADDING 16.0f
 
 
-@interface NewPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate, AdMoGoDelegate> {
+@interface NewPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate, UIAlertViewDelegate, AdMoGoDelegate> {
     AdMoGoView *adView;
 
     MBProgressHUD *HUD;
