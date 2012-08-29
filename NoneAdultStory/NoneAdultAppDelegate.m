@@ -209,6 +209,86 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     return inReview;
 }
 
+- (BOOL)isAdmin {
+    PFUser *user = [PFUser currentUser];
+    if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"])
+        return YES;
+    return NO;
+}
+
+//创建待发送的热度计分表
+- (void)createScoreTable {
+    FMDatabase *db= [FMDatabase databaseWithPath:[self getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    }
+    
+    //[db executeUpdate:@"DROP TABLE score"];
+    
+    //创建一个名为User的表，有两个字段分别为string类型的Name，integer类型的 Age
+    NSString *createSQL = @"CREATE TABLE IF NOT EXISTS score (";
+	createSQL = [createSQL stringByAppendingString:@" ID INTEGER PRIMARY KEY AUTOINCREMENT,"];
+    createSQL = [createSQL stringByAppendingString:@" share_url TEXT UNIQUE,"];//微博的id
+    createSQL = [createSQL stringByAppendingString:@" score_to_send INTEGER"];
+    createSQL = [createSQL stringByAppendingString:@");"];
+    
+    [db executeUpdate:createSQL];
+    
+}
+
+//为对应记录加分
+- (void)scoreForShareUrl:(NSString *)shareurl channel:(UIChannel)channel action:(UIAction)action {
+    int actionFactor, channelFactor;
+    switch (action) {
+        case UIActionShare:
+            actionFactor = 5;
+            break;
+        case UIActionCollect:
+            actionFactor = 3;
+            break;
+        case UIActionView:
+            actionFactor = 1;
+            break;
+        default:
+            break;
+    }
+    switch (channel) {
+        case UIChannelNew:
+            channelFactor = 3;
+            break;
+        case UIChannelMagzine:
+            channelFactor = 2;
+            break;
+        case UIChannelHistory:
+            channelFactor = 1;
+        default:
+            break;
+    }
+    int score = actionFactor * channelFactor;
+    
+    FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    } 
+    
+    NSString *sql = [[NSString alloc] initWithFormat:@"SELECT * FROM score WHERE share_url = '%@'", shareurl];
+    FMResultSet *rs=[db executeQuery:sql];
+    NSArray *dataArray = [NSArray arrayWithObjects:
+                          [[NSNumber alloc] initWithInt:score],
+                          shareurl,
+                          nil
+                          ];
+    if ([rs next]){    
+        //score表中如果有shareurl的记录，就直接加分
+        [db executeUpdate:@"update score set score_to_send = score_to_send + ? where share_url = ?" withArgumentsInArray:dataArray];
+    } else {    
+        //score表中如果没有shareurl的记录，就为此shareurl建立分数档案
+        [db executeUpdate:@"replace into score(score_to_send, share_url) values (?, ?)" withArgumentsInArray:dataArray];
+    }
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
@@ -232,6 +312,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     [MobClick checkUpdate];
     [MobClick updateOnlineConfig];
     
+    [self createScoreTable];
     [self createDingTable];
     [self createCollectTable];
 
@@ -277,8 +358,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     }
     
     //为过审和推广初期内容高质量，只显示精选；之后可以显示未精选过的最新笑话
-    PFUser *user = [PFUser currentUser];
-    if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"]) {
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin]) {
         self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                  newCommonNavViewController, 
                                                  newPathNavViewController,

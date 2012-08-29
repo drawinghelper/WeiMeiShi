@@ -648,8 +648,7 @@
     [self collectDuanZi:tag];
     [self collectHUDMessage:tag]; 
     //初期用于提纯内容的，和审核的
-    PFUser *user = [PFUser currentUser];
-    if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"]
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin] 
         && [self.title isEqualToString:@"最新"]) {
         [self storeIntoParseDB:tag withClassName:@"historytop"];
     }
@@ -1069,8 +1068,7 @@
     [pingLabel setFrame:CGRectMake(135, cellFrame.size.height + TOP_SECTION_HEIGHT - 3 + imageDisplayRect.size.height, 60, BOTTOM_SECTION_HEIGHT)];
 
     //顶按钮（审核精选）
-    PFUser *user = [PFUser currentUser];
-    if (user && [user.username isEqualToString:@"drawinghelper@gmail.com"]
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin]
         && [self.title isEqualToString:@"最新"]) {
         UIButton *btnDing = [UIButton buttonWithType:UIButtonTypeCustom]; 
         [btnDing setTitle:@"" forState:UIControlStateNormal];
