@@ -44,17 +44,6 @@
                                                   forBarMetrics:UIBarMetricsDefault];   
     
     // Do any additional setup after loading the view from its nib.
-    currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
-    NSString *versionForReview = [MobClick getConfigParams:@"versionForReview"];
-
-    starCommentVisible = YES;
-    if ([currentAppVersion isEqualToString:versionForReview]) {
-        starCommentVisible = NO;
-    }
-    
-    if (versionForReview == nil || versionForReview == [NSNull null]  || [versionForReview isEqualToString:@""]) {
-        starCommentVisible = NO;
-    }
 }
 
 #pragma mark -
@@ -71,7 +60,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return starCommentVisible ? 4 : 3;
+    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 3 : 4;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -90,7 +79,9 @@
     //headerLabel.text = [[NSString alloc]initWithFormat:@"%@ v%@", @"高清热播剧", currentVersionStr];
     NSString *displayNameKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
 
-    headerLabel.text = [[NSString alloc]initWithFormat:@"%@ v%@", displayNameKey, currentAppVersion];
+    headerLabel.text = [[NSString alloc]initWithFormat:@"%@ v%@", displayNameKey, 
+                        [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey]
+                        ];
 	
     return headerLabel;
 }
@@ -117,13 +108,13 @@
 
     switch (row) {
         case 0:
-            cell.text = starCommentVisible ? @"评五星鼓励我" : @"用着不爽提意见";
+            cell.text = [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? @"用着不爽提意见" : @"评五星鼓励我";
             break;
         case 1:
-            cell.text = starCommentVisible ? @"用着不爽提意见" : @"精彩应用推荐";
+            cell.text = [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? @"精彩应用推荐" : @"用着不爽提意见";
             break;
         case 2:
-            if (starCommentVisible) {
+            if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
                 cell.text = @"精彩应用推荐";
             } else {
                 if (user) {
@@ -158,20 +149,20 @@
     PFUser *user = [PFUser currentUser];
 
 	if(row == 0){
-        if (starCommentVisible) {
+        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
             NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [[NoneAdultAppDelegate sharedAppDelegate] getAppStoreId]];  
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
         } else {
             [self umengFeedback];
         }
     } else if (row == 1) {
-        if (starCommentVisible) {
+        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
             [self umengFeedback];
         } else {
             [self showLianMeng];
         }
     } else if (row == 2){
-        if (starCommentVisible) {
+        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
             [self showLianMeng];
         } else {
             if (user) {

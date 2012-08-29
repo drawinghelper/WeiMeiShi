@@ -27,4 +27,5 @@
 - (NSString *)getUmengAppKey;
 - (NSString *)getAppStoreId;
 - (NSString *)getAppChannelTag;
+- (BOOL)isInReview;
 @end

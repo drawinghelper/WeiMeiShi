@@ -193,6 +193,22 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     return [appConfig objectForKey:@"AlertKeyword"];
 }
 
+//是否处于审核模式
+- (BOOL)isInReview {
+    NSString *currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];
+    NSString *versionForReview = [MobClick getConfigParams:@"versionForReview"];
+    
+    BOOL inReview = NO;
+    if ([currentAppVersion isEqualToString:versionForReview]) {
+        inReview = YES;
+    }
+    
+    if (versionForReview == nil || versionForReview == [NSNull null]  || [versionForReview isEqualToString:@""]) {
+        inReview = YES;
+    }
+    return inReview;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:

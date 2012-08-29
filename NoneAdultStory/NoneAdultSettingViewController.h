@@ -19,7 +19,7 @@
     
     NSString *versionForReview;
     NSString *currentAppVersion;
-    BOOL starCommentVisible;
+    BOOL inReview;
 }
 @property(nonatomic, retain) UITableView *tableView;
 
