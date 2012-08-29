@@ -42,4 +42,5 @@ typedef enum {
 - (NSString *)getAppChannelTag;
 - (BOOL)isInReview;
 - (BOOL)isAdmin;
+- (void)scoreForShareUrl:(NSDictionary *)currentDuanZi action:(UIAction)action;
 @end
