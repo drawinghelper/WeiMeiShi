@@ -475,6 +475,9 @@
     
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"] forKey:@"width"];//图片内容的width
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] forKey:@"height"];//图片内容的height
+    
+    NSDecimalNumber *idStr = (NSDecimalNumber *)[dic objectForKey:@"id"];
+    [dic setObject:[NSString stringWithFormat:@"http://t.qq.com/p/t/%lld",[idStr longLongValue]] forKey:@"shareurl"];
 }
 
 //- (void)viewWillAppear:(BOOL)animated {
@@ -650,7 +653,8 @@
     //初期用于提纯内容的，和审核的
     if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin] 
         && [self.title isEqualToString:@"最新"]) {
-        [self storeIntoParseDB:tag withClassName:@"historytop"];
+        [[NoneAdultAppDelegate sharedAppDelegate] scoreForShareUrl:currentDuanZi action:UIActionCollect];
+        //[self storeIntoParseDB:tag withClassName:@"historytop"];
     }
 }
 
@@ -819,6 +823,10 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
+        if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin] 
+            && [self.title isEqualToString:@"最新"]) {
+            [[NoneAdultAppDelegate sharedAppDelegate] scoreForShareUrl:currentDuanZi action:UIActionShare];
+        }
         NSString *statusContent = nil;
         NSString *weiboContent = [currentDuanZi objectForKey:@"content"];
         NSString *cuttedContent = [[NSString alloc] initWithString:weiboContent];

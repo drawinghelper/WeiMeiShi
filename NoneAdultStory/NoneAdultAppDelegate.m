@@ -320,14 +320,13 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                           [currentDuanZi objectForKey:@"favorite_count"], 
                           [currentDuanZi objectForKey:@"bury_count"],
                           [currentDuanZi objectForKey:@"comments_count"],
-                          [[NSNumber alloc] initWithLongLong:[nowDate timeIntervalSince1970]],
                           [currentDuanZi objectForKey:@"shareurl"],
                           [[NSNumber alloc] initWithInt:score],
                           nil
                           ];
         
         //score表中如果没有shareurl的记录，就为此shareurl建立分数档案
-        [db executeUpdate:@"replace into filtered_score(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif_mark, favorite_count, bury_count, comments_count, collect_time, share_url, score_to_send) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
+        [db executeUpdate:@"replace into filtered_score(weiboId, profile_image_url, screen_name, timestamp, content, large_url, width, height, gif_mark, favorite_count, bury_count, comments_count,  share_url, score_to_send) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:dataArray];
     }
 }
 
@@ -551,6 +550,82 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    NSLog(@"applicationDidBecomeActive...");
+    //1. 按照score表中的分数上传parse
+    //1.1 找到需要更新的parseobject
+    //1.2 使用incrementKey:byAmount:为新的score
+    FMDatabase *db= [FMDatabase databaseWithPath:[[NoneAdultAppDelegate sharedAppDelegate] getDbPath]] ;  
+    if (![db open]) {  
+        NSLog(@"Could not open db."); 
+        return ;  
+    } 
+    
+    NSString *remoteTableName = nil;
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
+        remoteTableName = @"admin_filtered";
+    } else {
+        remoteTableName = @"user_filtered";
+    }
+    FMResultSet *rs=[db executeQuery:@"SELECT * FROM filtered_score"];
+    while ([rs next]){
+        NSString *shareUrl = [rs stringForColumn:@"share_url"];
+        int scoreToSend = [rs intForColumn:@"score_to_send"];
+        NSLog(@"shareUrl: %@, score to send: %d", shareUrl, scoreToSend);
+
+        NSNumber *weiboId = [[NSNumber alloc] initWithLongLong:[rs longLongIntForColumn:@"weiboId"]];
+        NSString *profileImageUrl = [rs stringForColumn:@"profile_image_url"];
+        NSString *screenName = [rs stringForColumn:@"screen_name"];
+        NSNumber *timestamp = [[NSNumber alloc] initWithInt:[rs intForColumn:@"timestamp"]];
+        NSString *content = [rs stringForColumn:@"content"];
+        NSString *largeUrl = [rs stringForColumn:@"large_url"];
+        
+        NSNumber *width = [[NSNumber alloc] initWithInt:[rs intForColumn:@"width"]];
+        NSNumber *height = [[NSNumber alloc] initWithInt:[rs intForColumn:@"height"]];
+        NSNumber *gifMark = [[NSNumber alloc] initWithInt:[rs intForColumn:@"gif_mark"]];
+        NSNumber *favoriteCount = [[NSNumber alloc] initWithInt:[rs intForColumn:@"favorite_count"]];
+        NSNumber *buryCount = [[NSNumber alloc] initWithInt:[rs intForColumn:@"bury_count"]];        
+        NSNumber *commentsCount = [[NSNumber alloc] initWithInt:[rs intForColumn:@"comments_count"]];
+                
+        //服务器上表中已有此记录，直接在此记录上加分；否则，插入此记录
+        PFQuery *query = [PFQuery queryWithClassName:remoteTableName];
+        [query whereKey:@"shareurl" equalTo:shareUrl];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                NSLog(@"Successfully retrieved %d scores.", objects.count);
+                if (objects.count > 0) {
+                    PFObject *object = [objects objectAtIndex:0];
+                    [object incrementKey:@"score" byAmount:[NSNumber numberWithInt:scoreToSend]];
+                    [object saveInBackground];
+                } else {
+                    PFObject *newFiltered = [PFObject objectWithClassName:remoteTableName];
+                    [newFiltered setObject:weiboId forKey:@"weiboId"];
+                    [newFiltered setObject:profileImageUrl forKey:@"profile_image_url"];
+                    [newFiltered setObject:screenName forKey:@"screen_name"];
+                    [newFiltered setObject:timestamp forKey:@"timestamp"];
+                    [newFiltered setObject:content forKey:@"content"];
+                    [newFiltered setObject:largeUrl forKey:@"large_url"];
+                    
+                    [newFiltered setObject:width forKey:@"width"];
+                    [newFiltered setObject:height forKey:@"height"];
+                    [newFiltered setObject:gifMark forKey:@"gif_mark"];
+                    
+                    [newFiltered setObject:favoriteCount forKey:@"favorite_count"];
+                    [newFiltered setObject:buryCount forKey:@"bury_count"];
+                    [newFiltered setObject:commentsCount forKey:@"comments_count"];
+                    [newFiltered setObject:shareUrl forKey:@"shareurl"];
+                    [newFiltered setObject:[[NSNumber alloc] initWithInt:scoreToSend] forKey:@"score"];                
+                    
+                    [newFiltered saveEventually];
+                }
+            } else {
+                // Log details of the failure
+                NSLog(@"%@",[error description]);
+            }
+        }];    
+    }
+    //2. 清空本地score表中的已有记录
+    [db executeUpdate:@"delete from filtered_score"];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
