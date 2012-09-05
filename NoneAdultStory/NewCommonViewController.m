@@ -91,7 +91,7 @@
 	newFrame.size.height = adSize.height;
 	newFrame.size.width = adSize.width;
 	newFrame.origin.x = (self.view.bounds.size.width - adSize.width)/2;
-    newFrame.origin.y = self.view.bounds.size.height - adSize.height;
+    newFrame.origin.y = self.navigationController.view.bounds.size.height;
 	adView.frame = newFrame;
     
 	[UIView commitAnimations];
@@ -131,7 +131,7 @@
         self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
                                                     ExpressMode:NO];
         [adView setFrame:CGRectZero];
-        [self.view addSubview:adView];
+        [self.navigationController.view addSubview:adView];
     }
         
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
