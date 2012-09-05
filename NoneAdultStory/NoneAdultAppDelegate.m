@@ -399,9 +399,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  newCommonNavViewController, 
                                                  newPathNavViewController,
                                                  historyTopNavViewController,
-                                                 searchController,
                                                  channelNavViewController,
                                                  collectNavViewController,
+                                                 searchController,
                                                  settingNavViewController,
                                                  nil];
     } else {
@@ -409,18 +409,18 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
-                                                         searchController,
                                                          channelNavViewController,
                                                          collectNavViewController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             if ([showChannel isEqualToString:@"NO"]) {
                 self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
-                                                         searchController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             }
@@ -428,18 +428,18 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                      newCommonNavViewController, 
                                                      historyTopNavViewController,
-                                                     searchController,
                                                      channelNavViewController,
                                                      collectNavViewController,
+                                                     searchController,
                                                      settingNavViewController,
                                                      nil];
             if ([showChannel isEqualToString:@"NO"]) {
                 self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newCommonNavViewController, 
                                                          historyTopNavViewController,
-                                                         searchController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             }

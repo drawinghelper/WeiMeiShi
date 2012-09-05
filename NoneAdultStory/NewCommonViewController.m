@@ -7,14 +7,50 @@
 //
 
 #import "NewCommonViewController.h"
+#import "UITabBarController+hidable.h"
 
 @interface NewCommonViewController ()
-
+{
+    CGFloat startContentOffset;
+    CGFloat lastContentOffset;
+    BOOL hidden;
+}
 @end
 
 @implementation NewCommonViewController
 @synthesize tableView;
 @synthesize adView;
+
+#pragma mark - The Magic!
+
+-(void)expand
+{
+    if(hidden)
+        return;
+    
+    hidden = YES;
+    
+    [self.tabBarController setTabBarHidden:YES 
+                                  animated:YES];
+    
+    [self.navigationController setNavigationBarHidden:YES 
+                                             animated:YES];
+}
+
+-(void)contract
+{
+    if(!hidden)
+        return;
+    
+    hidden = NO;
+    
+    [self.tabBarController setTabBarHidden:NO 
+                                  animated:YES];
+    
+    [self.navigationController setNavigationBarHidden:NO 
+                                             animated:YES];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withTitle:(NSString *)title withCid:(NSString *)cid
 {
     currentCid = cid;
@@ -268,8 +304,29 @@
 #pragma mark -
 #pragma mark UIScrollViewDelegate Methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    startContentOffset = lastContentOffset = scrollView.contentOffset.y;
+    //NSLog(@"scrollViewWillBeginDragging: %f", scrollView.contentOffset.y);
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView 
+{
+    CGFloat currentOffset = scrollView.contentOffset.y;
+    CGFloat differenceFromStart = startContentOffset - currentOffset;
+    CGFloat differenceFromLast = lastContentOffset - currentOffset;
+    lastContentOffset = currentOffset;
     
+    if((differenceFromStart) < 0)
+    {
+        // scroll up
+        if(scrollView.isTracking && (abs(differenceFromLast)>1))
+            [self expand];
+    }
+    else {
+        if(scrollView.isTracking && (abs(differenceFromLast)>1))
+            [self contract];
+    }   
     [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
     
     if (canLoadOld) {
@@ -285,6 +342,12 @@
             }
         }
     }
+}
+
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
+{
+    [self contract];
+    return YES;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
