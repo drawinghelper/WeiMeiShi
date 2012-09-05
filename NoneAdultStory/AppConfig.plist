@@ -42,5 +42,7 @@
 	<string>545287581</string>
 	<key>AppChannelTag</key>
 	<string>App Store</string>
+	<key>MoGoAppKey</key>
+	<string>8263cdaa8f724e2293b2f9f3aff849ee</string>
 </dict>
 </plist>
