@@ -149,7 +149,7 @@
 	newFrame.size.height = adSize.height;
 	newFrame.size.width = adSize.width;
 	newFrame.origin.x = (self.view.bounds.size.width - adSize.width)/2;
-    newFrame.origin.y = self.navigationController.view.bounds.size.height;
+    newFrame.origin.y = 480 - adSize.height;
 	adView.frame = newFrame;
     
 	[UIView commitAnimations];
@@ -185,11 +185,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     NSString *showAd = [MobClick getConfigParams:@"showAd"];
     if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
-        showAd = @"off";
+        showAd = @"NO";
     }
     //总：AudioToolbox、CoreLocation、CoreTelephony、MessageUI、SystemConfiguration、QuartzCore、EventKit、MapKit、libxml2
     
-    if ([showAd isEqualToString:@"on"]) {
+    if ([showAd isEqualToString:@"YES"]) {
         //增加广告条显示
         self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
                                                     ExpressMode:NO];
