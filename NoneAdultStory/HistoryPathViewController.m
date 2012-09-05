@@ -32,7 +32,11 @@
         
         // Custom the table
         // The className to query on
-        self.className = @"historytop";
+        if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
+            self.className = @"admin_filtered";
+        } else {
+            self.className = @"user_filtered";
+        }
         
         // The key of the PFObject to display in the label of the default cell style
         //self.keyToDisplay = @"text";
@@ -409,7 +413,7 @@
         query.cachePolicy = kPFCachePolicyCacheThenNetwork;
     }
  
-    [query orderByDescending:@"timestamp"];
+    [query orderByDescending:@"score"];
  
     return query;
 }
