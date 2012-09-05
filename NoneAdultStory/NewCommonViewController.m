@@ -651,10 +651,14 @@
     [self collectDuanZi:tag];
     [self collectHUDMessage:tag]; 
     //初期用于提纯内容的，和审核的
-    if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin] 
-        && [self.title isEqualToString:@"最新"]) {
-        [[NoneAdultAppDelegate sharedAppDelegate] scoreForShareUrl:currentDuanZi action:UIActionCollect];
-        //[self storeIntoParseDB:tag withClassName:@"historytop"];
+    if ([self.title isEqualToString:@"最新"]) {
+        if (
+            ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin] && [[NoneAdultAppDelegate sharedAppDelegate] isInReview])
+            ||
+            (![[NoneAdultAppDelegate sharedAppDelegate] isAdmin] && ![[NoneAdultAppDelegate sharedAppDelegate] isInReview])
+            ) {
+            [[NoneAdultAppDelegate sharedAppDelegate] scoreForShareUrl:currentDuanZi action:UIActionCollect];
+        }
     }
 }
 
@@ -823,9 +827,14 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
-        if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin] 
-            && [self.title isEqualToString:@"最新"]) {
-            [[NoneAdultAppDelegate sharedAppDelegate] scoreForShareUrl:currentDuanZi action:UIActionShare];
+        if ([self.title isEqualToString:@"最新"]) {
+            if (
+                ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin] && [[NoneAdultAppDelegate sharedAppDelegate] isInReview])
+                ||
+                (![[NoneAdultAppDelegate sharedAppDelegate] isAdmin] && ![[NoneAdultAppDelegate sharedAppDelegate] isInReview])
+                ) {
+                [[NoneAdultAppDelegate sharedAppDelegate] scoreForShareUrl:currentDuanZi action:UIActionShare];
+            }
         }
         NSString *statusContent = nil;
         NSString *weiboContent = [currentDuanZi objectForKey:@"content"];

@@ -595,8 +595,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                 NSLog(@"Successfully retrieved %d scores.", objects.count);
                 if (objects.count > 0) {
                     PFObject *object = [objects objectAtIndex:0];
+                    
                     [object incrementKey:@"score" byAmount:[NSNumber numberWithInt:scoreToSend]];
-                    [object saveInBackground];
+                    [object saveEventually];
                 } else {
                     PFObject *newFiltered = [PFObject objectWithClassName:remoteTableName];
                     [newFiltered setObject:weiboId forKey:@"weiboId"];
@@ -615,6 +616,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                     [newFiltered setObject:commentsCount forKey:@"comments_count"];
                     [newFiltered setObject:shareUrl forKey:@"shareurl"];
                     [newFiltered setObject:[[NSNumber alloc] initWithInt:scoreToSend] forKey:@"score"];                
+                    
+                    PFACL *groupACL = [PFACL ACL];
+                    [groupACL setPublicWriteAccess:YES];
+                    [groupACL setPublicReadAccess:YES];
+                    newFiltered.ACL = groupACL;
                     
                     [newFiltered saveEventually];
                 }
