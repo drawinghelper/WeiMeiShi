@@ -34,6 +34,25 @@
     NSURL *url =[NSURL URLWithString:urlString];
     request =[NSURLRequest requestWithURL:url];
     [self.webView setDelegate:self];   
+    
+    [self addBanner];
+}
+
+- (void)addBanner {
+    UIButton *btnClear = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    btnClear.frame = CGRectMake(0, 480 - 20 - 44 - kBannerHeight, 320, kBannerHeight);
+    [btnClear setBackgroundImage:[UIImage imageNamed:@"banner_xiachufang.png"]
+                        forState:UIControlStateNormal];
+    
+    [btnClear addTarget:self action:@selector(downloadAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:btnClear];
+}
+
+- (void)downloadAction {
+    NSLog(@"clearAction...");
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://itunes.apple.com/us/app/id460979760?mt=8"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
