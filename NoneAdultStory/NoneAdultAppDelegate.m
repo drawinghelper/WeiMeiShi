@@ -388,11 +388,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     
     self.tabBarController = [[UITabBarController alloc] init];
     
-    NSString *showFilteredNew = [MobClick getConfigParams:@"showFilteredNew"];
-    if (showFilteredNew == nil || showFilteredNew == [NSNull null]  || [showFilteredNew isEqualToString:@""]) {
-        showFilteredNew = @"YES";
-    }
-    
     NSString *showChannel = [MobClick getConfigParams:@"showChannel"];
     if (showChannel == nil || showChannel == [NSNull null]  || [showChannel isEqualToString:@""]) {
         showChannel = @"NO";
@@ -410,12 +405,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  settingNavViewController,
                                                  nil];
     } else {
-        if ([showFilteredNew isEqualToString:@"YES"]) {
+        if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
             self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
                                                          searchController,
-                                                         //channelNavViewController,
+                                                         channelNavViewController,
                                                          collectNavViewController,
                                                          settingNavViewController,
                                                          nil];
@@ -424,6 +419,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
                                                          searchController,
+                                                         //channelNavViewController,
                                                          collectNavViewController,
                                                          settingNavViewController,
                                                          nil];
@@ -433,7 +429,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                      newCommonNavViewController, 
                                                      historyTopNavViewController,
                                                      searchController,
-                                                     //channelNavViewController,
+                                                     channelNavViewController,
                                                      collectNavViewController,
                                                      settingNavViewController,
                                                      nil];
@@ -442,6 +438,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          newCommonNavViewController, 
                                                          historyTopNavViewController,
                                                          searchController,
+                                                         //channelNavViewController,
                                                          collectNavViewController,
                                                          settingNavViewController,
                                                          nil];
