@@ -40,6 +40,8 @@ typedef enum {
 - (NSString *)getUmengAppKey;
 - (NSString *)getAppStoreId;
 - (NSString *)getAppChannelTag;
+- (UIColor *)getTitleTextColor;
+- (UIColor *)getTitleShadowColor;
 - (BOOL)isInReview;
 - (BOOL)isAdmin;
 - (void)scoreForShareUrl:(NSDictionary *)currentDuanZi action:(UIAction)action;

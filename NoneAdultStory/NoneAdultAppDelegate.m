@@ -193,6 +193,34 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     return [appConfig objectForKey:@"AlertKeyword"];
 }
 
+- (UIColor *)getTitleTextColor {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    NSDictionary *titleTextColor =  [appConfig objectForKey:@"TitleTextColor"];
+    NSNumber *redNumber = (NSNumber *)[titleTextColor objectForKey:@"red"];
+    NSNumber *greenNumber = (NSNumber *)[titleTextColor objectForKey:@"green"];
+    NSNumber *blueNumber = (NSNumber *)[titleTextColor objectForKey:@"blue"];
+    UIColor *result = [UIColor colorWithRed:[redNumber floatValue]/255.0f 
+                                      green:[greenNumber floatValue]/225.0f 
+                                       blue:[blueNumber floatValue]/255.0f 
+                                      alpha:1]; 
+    return result;
+}
+
+- (UIColor *)getTitleShadowColor {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    NSDictionary *titleShadowColor =  [appConfig objectForKey:@"TitleShadowColor"];
+    NSNumber *redNumber = (NSNumber *)[titleShadowColor objectForKey:@"red"];
+    NSNumber *greenNumber = (NSNumber *)[titleShadowColor objectForKey:@"green"];
+    NSNumber *blueNumber = (NSNumber *)[titleShadowColor objectForKey:@"blue"];
+    UIColor *result = [UIColor colorWithRed:[redNumber floatValue]/255.0f 
+                                      green:[greenNumber floatValue]/225.0f 
+                                       blue:[blueNumber floatValue]/255.0f 
+                                      alpha:1]; 
+    return result;
+}
+
 //是否处于审核模式
 - (BOOL)isInReview {
     NSString *currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey];

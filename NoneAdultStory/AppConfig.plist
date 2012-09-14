@@ -6,29 +6,59 @@
 	<array>
 		<dict>
 			<key>cid</key>
-			<string>925</string>
+			<string>844</string>
 			<key>title</key>
-			<string>红酒</string>
+			<string>网络女神</string>
 			<key>subtitle</key>
-			<string>每天领你品味不一样的生活</string>
+			<string>网上最火的屌丝女神</string>
 			<key>icon</key>
-			<string>wine_new.png</string>
+			<string>channel_netnvshen.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>35</string>
+			<string>843</string>
 			<key>title</key>
-			<string>菜品</string>
+			<string>真人秀</string>
 			<key>subtitle</key>
-			<string>140个字浓缩美味的烹饪过程</string>
+			<string>神仙下凡</string>
 			<key>icon</key>
-			<string>food_new.png</string>
+			<string>channel_zhenren.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1594</string>
+			<key>title</key>
+			<string>校花</string>
+			<key>subtitle</key>
+			<string>激励我们好好学习的人</string>
+			<key>icon</key>
+			<string>channel_xiaohua.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1169</string>
+			<key>title</key>
+			<string>帅哥</string>
+			<key>subtitle</key>
+			<string>有型英俊的天之骄子</string>
+			<key>icon</key>
+			<string>channel_shuaige.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1565</string>
+			<key>title</key>
+			<string>诚意征友</string>
+			<key>subtitle</key>
+			<string>我在这里等待爱情</string>
+			<key>icon</key>
+			<string>channel_zhengyou.png</string>
 		</dict>
 	</array>
 	<key>NewTabCid</key>
-	<string>35</string>
+	<string>43</string>
 	<key>UmengAppKey</key>
-	<string>4fffced85270157a3c00004e</string>
+	<string>505273775270152d6c00005e</string>
 	<key>ParseConfig</key>
 	<dict>
 		<key>applicationId</key>
@@ -37,12 +67,30 @@
 		<string>Y0VdVm9vyUb1ISNvTVFpLyk8hpvZs91ondkbnNaQ</string>
 	</dict>
 	<key>AlertKeyword</key>
-	<string>菜谱</string>
+	<string>女神</string>
 	<key>AppStoreId</key>
 	<string>545287581</string>
 	<key>AppChannelTag</key>
 	<string>App Store</string>
 	<key>MoGoAppKey</key>
-	<string>8263cdaa8f724e2293b2f9f3aff849ee</string>
+	<string>79d44c947644416cb5f46cbcbbab1f33</string>
+	<key>TitleTextColor</key>
+	<dict>
+		<key>red</key>
+		<integer>76</integer>
+		<key>green</key>
+		<integer>67</integer>
+		<key>blue</key>
+		<integer>67</integer>
+	</dict>
+	<key>TitleShadowColor</key>
+	<dict>
+		<key>red</key>
+		<integer>255</integer>
+		<key>green</key>
+		<integer>255</integer>
+		<key>blue</key>
+		<integer>255</integer>
+	</dict>
 </dict>
 </plist>
