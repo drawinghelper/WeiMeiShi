@@ -8,6 +8,7 @@
 
 #import "HistoryPathViewController.h"
 #import "UITabBarController+hidable.h"
+#import "UIViewController+CMTabBarController.h"
 
 @implementation HistoryPathViewController
 {
@@ -224,6 +225,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
+    self.customTbBarController.tabBar.hidden = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -234,6 +238,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    self.customTbBarController.tabBar.hidden = YES;
+    [self contract];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

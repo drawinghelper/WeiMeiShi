@@ -7,6 +7,7 @@
 //
 
 #import "ChannelViewController.h"
+#import "UIViewController+CMTabBarController.h"
 
 @interface ChannelViewController ()
 
@@ -35,6 +36,21 @@
         [label sizeToFit];
     }
     return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
+    self.customTbBarController.tabBar.hidden = NO;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    self.customTbBarController.tabBar.hidden = YES;
 }
 
 - (void)viewDidLoad

@@ -14,11 +14,12 @@
 #import "ChannelViewController.h"
 #import "CollectedViewController.h"
 #import "NoneAdultSettingViewController.h"
+#import "CMTabBarController.h"
 
 @implementation NoneAdultAppDelegate
 
 @synthesize window = _window;
-@synthesize tabBarController = _tabBarController;
+//@synthesize tabBarController = _tabBarController;
 
 - (void) animateSplashScreen
 {
@@ -414,7 +415,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     UINavigationController *settingNavViewController = [[UINavigationController alloc] initWithRootViewController:settingViewController];
     [settingNavViewController.navigationBar setTintColor:[UIColor darkGrayColor]];
     
-    self.tabBarController = [[UITabBarController alloc] init];
+    CMTabBarController *tabBarController = [CMTabBarController new];
+    //self.tabBarController = [[UITabBarController alloc] init];
     
     NSString *showChannel = [MobClick getConfigParams:@"showChannel"];
     if (showChannel == nil || showChannel == [NSNull null]  || [showChannel isEqualToString:@""]) {
@@ -423,7 +425,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     
     //为过审和推广初期内容高质量，只显示精选；之后可以显示未精选过的最新笑话
     if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin]) {
-        self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+        tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                  newCommonNavViewController, 
                                                  newPathNavViewController,
                                                  historyTopNavViewController,
@@ -434,7 +436,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  nil];
     } else {
         if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-            self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+            tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
                                                          channelNavViewController,
@@ -443,7 +445,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          settingNavViewController,
                                                          nil];
             if ([showChannel isEqualToString:@"NO"]) {
-                self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newPathNavViewController,
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
@@ -453,7 +455,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          nil];
             }
         } else {
-            self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+            tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                      newCommonNavViewController, 
                                                      historyTopNavViewController,
                                                      channelNavViewController,
@@ -462,7 +464,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                      settingNavViewController,
                                                      nil];
             if ([showChannel isEqualToString:@"NO"]) {
-                self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                tabBarController.viewControllers = [NSArray arrayWithObjects:
                                                          newCommonNavViewController, 
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
@@ -474,7 +476,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
         }
     }
         
-    self.window.rootViewController = self.tabBarController;
+    self.window.rootViewController = tabBarController;
     [NSThread sleepForTimeInterval:1.0];
     [self.window makeKeyAndVisible];
     [self animateSplashScreen];
@@ -489,7 +491,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     application.applicationIconBadgeNumber = 0;
     //从push过来默认来最热tab
-    [self.tabBarController setSelectedIndex:1];
+    //[self.tabBarController setSelectedIndex:1];
     [PFPush handlePush:userInfo];
 }
 

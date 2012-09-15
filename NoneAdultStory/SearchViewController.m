@@ -7,6 +7,7 @@
 //
 
 #import "SearchViewController.h"
+#import "UIViewController+CMTabBarController.h"
 
 @interface SearchViewController ()
 
@@ -58,7 +59,18 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.webView loadRequest:request];
+    
+    self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
+    self.customTbBarController.tabBar.hidden = NO;
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    self.customTbBarController.tabBar.hidden = YES;
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     NSLog(@"webViewDidStartLoad...");
     HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];

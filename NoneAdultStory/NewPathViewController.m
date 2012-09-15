@@ -8,6 +8,7 @@
 
 #import "NewPathViewController.h"
 #import "UITabBarController+hidable.h"
+#import "UIViewController+CMTabBarController.h"
 
 @implementation NewPathViewController
 {
@@ -316,6 +317,9 @@
 {
     [super viewWillAppear:animated];
     [self loadCollectedIds];
+    
+    self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
+    self.customTbBarController.tabBar.hidden = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -326,6 +330,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    self.customTbBarController.tabBar.hidden = YES;
+    [self contract];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
