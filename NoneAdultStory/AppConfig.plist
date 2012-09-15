@@ -8,9 +8,9 @@
 			<key>cid</key>
 			<string>844</string>
 			<key>title</key>
-			<string>网络女神</string>
+			<string>屌丝女神</string>
 			<key>subtitle</key>
-			<string>网上最火的屌丝女神</string>
+			<string>告诉你的不仅有事业线</string>
 			<key>icon</key>
 			<string>channel_netnvshen.png</string>
 		</dict>
@@ -20,7 +20,7 @@
 			<key>title</key>
 			<string>真人秀</string>
 			<key>subtitle</key>
-			<string>神仙下凡</string>
+			<string>天上仙女下凡尘</string>
 			<key>icon</key>
 			<string>channel_zhenren.png</string>
 		</dict>
@@ -30,7 +30,7 @@
 			<key>title</key>
 			<string>校花</string>
 			<key>subtitle</key>
-			<string>激励我们好好学习的人</string>
+			<string>那些年我们一起追的女孩</string>
 			<key>icon</key>
 			<string>channel_xiaohua.png</string>
 		</dict>
@@ -40,7 +40,7 @@
 			<key>title</key>
 			<string>帅哥</string>
 			<key>subtitle</key>
-			<string>有型英俊的天之骄子</string>
+			<string>有型帅气的男人公敌</string>
 			<key>icon</key>
 			<string>channel_shuaige.png</string>
 		</dict>
@@ -50,7 +50,7 @@
 			<key>title</key>
 			<string>诚意征友</string>
 			<key>subtitle</key>
-			<string>我在这里等待爱情</string>
+			<string>快来跟我一起告别单身</string>
 			<key>icon</key>
 			<string>channel_zhengyou.png</string>
 		</dict>
