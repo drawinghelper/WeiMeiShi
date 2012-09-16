@@ -6,74 +6,25 @@
 	<array>
 		<dict>
 			<key>cid</key>
-			<string>844</string>
+			<string>925</string>
 			<key>title</key>
-			<string>屌丝女神</string>
+			<string>红酒</string>
 			<key>subtitle</key>
-			<string>告诉你的不仅有事业线</string>
+			<string>每天领你品味不一样的生活</string>
 			<key>icon</key>
-			<string>channel_netnvshen.png</string>
+			<string>wine_new.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>843</string>
+			<string>35</string>
 			<key>title</key>
-			<string>真人秀</string>
+			<string>菜品</string>
 			<key>subtitle</key>
-			<string>天上仙女下凡尘</string>
+			<string>140个字浓缩美味的烹饪过程</string>
 			<key>icon</key>
-			<string>channel_zhenren.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>1594</string>
-			<key>title</key>
-			<string>校花</string>
-			<key>subtitle</key>
-			<string>那些年我们一起追的女孩</string>
-			<key>icon</key>
-			<string>channel_xiaohua.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>1169</string>
-			<key>title</key>
-			<string>帅哥</string>
-			<key>subtitle</key>
-			<string>有型帅气的男人公敌</string>
-			<key>icon</key>
-			<string>channel_shuaige.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>1565</string>
-			<key>title</key>
-			<string>诚意征友</string>
-			<key>subtitle</key>
-			<string>快来跟我一起告别单身</string>
-			<key>icon</key>
-			<string>channel_zhengyou.png</string>
+			<string>food_new.png</string>
 		</dict>
 	</array>
-	<key>NewTabCid</key>
-	<string>43</string>
-	<key>UmengAppKey</key>
-	<string>505273775270152d6c00005e</string>
-	<key>ParseConfig</key>
-	<dict>
-		<key>applicationId</key>
-		<string>2OVQJFuAfIpd5C5Eod9roChNxwALoeiwDeQ7CVdP</string>
-		<key>clientKey</key>
-		<string>OLZbx6B50I6jgPmyrBKswFtyYaB0OGkuKgcmTnV8</string>
-	</dict>
-	<key>AlertKeyword</key>
-	<string>女神和萌妹纸</string>
-	<key>AppStoreId</key>
-	<string>562562760</string>
-	<key>AppChannelTag</key>
-	<string>App Store</string>
-	<key>MoGoAppKey</key>
-	<string>79d44c947644416cb5f46cbcbbab1f33</string>
 	<key>TitleTextColor</key>
 	<dict>
 		<key>red</key>
@@ -92,5 +43,24 @@
 		<key>blue</key>
 		<integer>255</integer>
 	</dict>
+	<key>NewTabCid</key>
+	<string>35</string>
+	<key>UmengAppKey</key>
+	<string>4fffced85270157a3c00004e</string>
+	<key>ParseConfig</key>
+	<dict>
+		<key>applicationId</key>
+		<string>zdEAPvE4kYUg0q7XhtWAa2iCvoV9FNQpxwFcHngB</string>
+		<key>clientKey</key>
+		<string>Y0VdVm9vyUb1ISNvTVFpLyk8hpvZs91ondkbnNaQ</string>
+	</dict>
+	<key>AlertKeyword</key>
+	<string>菜谱</string>
+	<key>AppStoreId</key>
+	<string>545287581</string>
+	<key>AppChannelTag</key>
+	<string>App Store</string>
+	<key>MoGoAppKey</key>
+	<string>8263cdaa8f724e2293b2f9f3aff849ee</string>
 </dict>
 </plist>

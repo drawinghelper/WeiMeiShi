@@ -431,7 +431,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  historyTopNavViewController,
                                                  channelNavViewController,
                                                  collectNavViewController,
-                                                 //searchController,
+                                                 searchController,
                                                  settingNavViewController,
                                                  nil];
     } else {
@@ -441,7 +441,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          channelNavViewController,
                                                          collectNavViewController,
-                                                         //searchController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             if ([showChannel isEqualToString:@"NO"]) {
@@ -450,7 +450,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
-                                                         //searchController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             }
@@ -460,7 +460,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                      historyTopNavViewController,
                                                      channelNavViewController,
                                                      collectNavViewController,
-                                                     //searchController,
+                                                     searchController,
                                                      settingNavViewController,
                                                      nil];
             if ([showChannel isEqualToString:@"NO"]) {
@@ -469,7 +469,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
-                                                         //searchController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             }
