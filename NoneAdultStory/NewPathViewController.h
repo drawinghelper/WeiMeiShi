@@ -30,6 +30,8 @@
     NSMutableDictionary *collectedIdsDic;
     NSMutableArray *newObjectArray;
     NSDictionary *pullmessageInfo;
+    
+    UIImage *currentImage;
 }
 @property (nonatomic, retain) AdMoGoView *adView;
 

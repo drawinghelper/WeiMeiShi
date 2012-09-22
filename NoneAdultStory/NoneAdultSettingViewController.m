@@ -76,7 +76,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 3 : 4;
+    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 2 : 4;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -121,24 +121,24 @@
     // Configure the cell...
     NSUInteger row = [indexPath row];
     PFUser *user = [PFUser currentUser];
-
+    
     switch (row) {
         case 0:
             cell.text = [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? @"用着不爽提意见" : @"评五星鼓励我";
             break;
         case 1:
-            cell.text = [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? @"精彩应用推荐" : @"用着不爽提意见";
-            break;
-        case 2:
-            if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                cell.text = @"精彩应用推荐";
-            } else {
+            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
                 if (user) {
                     cell.text = [NSString stringWithFormat:@"%@ 已登录", user.username];
                 } else {
                     cell.text = @"登录";
                 }
+            } else {
+                cell.text = @"用着不爽提意见";
             }
+            break;
+        case 2:
+            cell.text = @"精彩应用推荐";
             break;
         case 3:
             if (user) {
@@ -175,18 +175,14 @@
         if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
             [self umengFeedback];
         } else {
-            [self showLianMeng];
-        }
-    } else if (row == 2){
-        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-            [self showLianMeng];
-        } else {
             if (user) {
                 [self showLogOut];
             } else {
                 [self showLogin];
             }
         }
+    } else if (row == 2){
+        [self showLianMeng];
     } else {
         if (user) {
             [self showLogOut];

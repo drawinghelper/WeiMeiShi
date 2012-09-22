@@ -26,6 +26,8 @@
     
     NSMutableDictionary *collectedIdsDic;
     NSMutableArray *newObjectArray;
+    
+    UIImage *currentImage;
 }
 @property (nonatomic, retain) AdMoGoView *adView;
 

@@ -712,7 +712,7 @@
                                                              delegate:self
                                                     cancelButtonTitle:@"取消" 
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles: @"新浪微博",@"腾讯微博",@"复制文本", nil];//@"邮件分享", nil];     
+                                                    otherButtonTitles: @"复制文本",@"保存图片",@"新浪微博",@"腾讯微博", nil];//@"邮件分享", nil];     
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -930,8 +930,28 @@
         NSString *largeUrl = [currentDuanZi objectForKey:@"large_url"];
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         UIImage *shareImage = [manager imageWithURL:[NSURL URLWithString:largeUrl]];
-
+        currentImage = shareImage;
+        
         if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            NSLog(@"custom event share_email!");
+            /*[MobClick event:@"share_email"];
+             [self emailPhoto]; 
+             */
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = weiboContent;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文字内容已复制"
+                                                                message:nil
+                                                               delegate:self
+                                                      cancelButtonTitle:@"确定"
+                                                      otherButtonTitles:nil];
+            [alertView show];
+            
+            return; 
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
+            NSLog(@"保存图片!");
+            [self savePhoto];
+            return;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
             [UMSNSService presentSNSInController:self 
@@ -942,7 +962,7 @@
             
             [UMSNSService setDataSendDelegate:self];
             return;
-        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3) {
             NSLog(@"custom event share_sina_haoxiao!");            
             [UMSNSService presentSNSInController:self 
                                           appkey:[[NoneAdultAppDelegate sharedAppDelegate] getUmengAppKey] 
@@ -952,24 +972,39 @@
             
             [UMSNSService setDataSendDelegate:self];
             return;
-        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
-            NSLog(@"custom event share_email!");
-            /*[MobClick event:@"share_email"];
-             [self emailPhoto]; 
-             */
-            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            pasteboard.string = weiboContent;
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文字内容已成功复制到剪贴板"
-                                                                 message:nil
-                                                                delegate:self
-                                                       cancelButtonTitle:@"确定"
-                                                       otherButtonTitles:nil];
-            [alertView show];
-            
-            return;  
         }
     }
 }
+
+- (void)savePhoto {
+    if (currentImage) {
+        [self showProgressHUDCompleteMessage:[NSString stringWithFormat:@"%@\u2026" , NSLocalizedString(@"正在保存至相册", @"Displayed with ellipsis as 'Saving...' when an item is in the process of being saved")]];
+    }
+}
+
+- (void)showProgressHUDCompleteMessage:(NSString *)message {
+    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:HUD];
+	
+	HUD.delegate = self;
+	HUD.labelText = message;
+	
+	[HUD showWhileExecuting:@selector(actuallySavePhoto:) onTarget:self withObject:currentImage animated:YES];
+    //self.navigationController.navigationBar.userInteractionEnabled = YES;
+}
+
+- (void)actuallySavePhoto:(UIImage *)photo {
+    if (photo) {
+        sleep(1);
+        UIImageWriteToSavedPhotosAlbum(photo, self, 
+                                       @selector(image:didFinishSavingWithError:contextInfo:), nil);
+    }
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    //[self showProgressHUDCompleteMessage: error ? NSLocalizedString(@"Failed", @"Informing the user a process has failed") : NSLocalizedString(@"Saved", @"Informing the user an item has been saved")];
+}
+
 #pragma mark - Action Sheet Delegate
 - (void)dataSendDidFinish:(UIViewController *)viewController andReturnStatus:(UMReturnStatusType)returnStatus andPlatformType:(UMShareToType)platfrom {
     [viewController dismissModalViewControllerAnimated:YES];

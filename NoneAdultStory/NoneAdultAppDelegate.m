@@ -25,7 +25,7 @@
 {
     
     //fade time
-    CFTimeInterval animation_duration = 1.0;
+    CFTimeInterval animation_duration = 2.0;
     
     //SplashScreen 
     UIImageView * splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 320, 480)];
@@ -431,7 +431,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  historyTopNavViewController,
                                                  channelNavViewController,
                                                  collectNavViewController,
-                                                 searchController,
+                                                 //searchController,
                                                  settingNavViewController,
                                                  nil];
     } else {
@@ -441,7 +441,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          channelNavViewController,
                                                          collectNavViewController,
-                                                         searchController,
+                                                         //searchController,
                                                          settingNavViewController,
                                                          nil];
             if ([showChannel isEqualToString:@"NO"]) {
@@ -450,7 +450,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
-                                                         searchController,
+                                                         //searchController,
                                                          settingNavViewController,
                                                          nil];
             }
@@ -460,7 +460,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                      historyTopNavViewController,
                                                      channelNavViewController,
                                                      collectNavViewController,
-                                                     searchController,
+                                                     //searchController,
                                                      settingNavViewController,
                                                      nil];
             if ([showChannel isEqualToString:@"NO"]) {
@@ -469,7 +469,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
-                                                         searchController,
+                                                         //searchController,
                                                          settingNavViewController,
                                                          nil];
             }
@@ -479,7 +479,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     self.window.rootViewController = tabBarController;
     [NSThread sleepForTimeInterval:1.0];
     [self.window makeKeyAndVisible];
-    //[self animateSplashScreen];
+    [self animateSplashScreen];
 
     [Appirater appLaunched:YES];
     
