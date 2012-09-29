@@ -36,24 +36,24 @@
 		</dict>
 	</array>
 	<key>NewTabCid</key>
-	<string>899</string>
+	<string>40</string>
 	<key>UmengAppKey</key>
-	<string>505dd1e05270150d1b000154</string>
+	<string>4fa3232652701556cc00001e</string>
 	<key>ParseConfig</key>
 	<dict>
 		<key>applicationId</key>
-		<string>oESEBB1iy7tOWTyVNYv9dwLYN1WLvCUrAqHCLPjZ</string>
+		<string>fIZLrQkMlUpAbOYT6FPFDPM8gjDhJaV1uq5QHD8L</string>
 		<key>clientKey</key>
-		<string>XvkmsHe6p4UlHqhScn113tlrkrJAnF7q37040Eoy</string>
+		<string>e9oBYmR4qGg3ly23on8ZeN1jSLePWjcAEqGvlFZE</string>
 	</dict>
 	<key>AlertKeyword</key>
-	<string>王小贱语录</string>
+	<string>超搞段子</string>
 	<key>AppStoreId</key>
-	<string>564488008</string>
+	<string>532923663</string>
 	<key>AppChannelTag</key>
 	<string>App Store</string>
 	<key>MoGoAppKey</key>
-	<string>f80cab2f2e5b4e7d85139bec51cd346b</string>
+	<string>e93cf5b2fb784f98b19b1c40500f521a</string>
 	<key>TitleTextColor</key>
 	<dict>
 		<key>red</key>
