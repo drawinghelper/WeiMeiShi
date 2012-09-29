@@ -28,7 +28,6 @@ typedef enum {
 } UIChannel;
 
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>{
-    BOOL mNeedShowImage;
 }
 
 @property (strong, nonatomic) UIWindow *window;

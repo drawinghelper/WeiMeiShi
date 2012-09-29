@@ -76,7 +76,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 2 : 3;
+    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 3 : 4;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -138,16 +138,43 @@
             }
             break;
         case 2:
-            if (user) {
-                cell.text = [NSString stringWithFormat:@"%@ 已登入", user.username];
+            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
+                cell.textLabel.text = @"显示笑话配图";
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+                cell.accessoryView = switchView;
+                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
+                         animated:NO];
+                [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
             } else {
-                cell.text = @"登录";
+                if (user) {
+                    cell.text = [NSString stringWithFormat:@"%@ 已登入", user.username];
+                } else {
+                    cell.text = @"登录";
+                }
+            }
+            break;
+        case 3:
+            if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
+                cell.textLabel.text = @"显示笑话配图";
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+                cell.accessoryView = switchView;
+                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
+                         animated:NO];
+                [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
             }
             break;
         default:
             break;
     }
     return cell;
+}
+
+- (void) switchChanged:(id)sender {
+    UISwitch* switchControl = sender;
+    NSLog( @"The switch is %@", switchControl.on ? @"ON" : @"OFF" );
+    [[NoneAdultAppDelegate sharedAppDelegate] setNeedShowImage:switchControl.on];
 }
 
 #pragma mark -
@@ -178,12 +205,16 @@
                 [self showLogin];
             }
         }
-    } else {
-        if (user) {
-            [self showLogOut];
+    } else if(row == 2){
+        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
+            if (user) {
+                [self showLogOut];
+            } else {
+                [self showLogin];
+            }    
         } else {
-            [self showLogin];
-        }    
+            //不响应
+        }
     }
 	[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 	NSLog(@"...didSelectRowAtIndexPath");

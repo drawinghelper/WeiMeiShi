@@ -129,6 +129,8 @@
  
     self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
     self.customTbBarController.tabBar.hidden = NO;
+    
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

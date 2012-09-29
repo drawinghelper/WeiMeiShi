@@ -22,10 +22,22 @@
 //@synthesize tabBarController = _tabBarController;
 
 - (BOOL)isNeedShowImage {
-    return mNeedShowImage;
+    BOOL retVal = NO;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *needShowImageNum = [defaults objectForKey:@"needShowImage"];
+    if (needShowImageNum == nil) {
+        [defaults setObject:[NSNumber numberWithBool:NO] forKey:@"needShowImage"];
+        [defaults synchronize];
+    } else {
+        retVal = [needShowImageNum boolValue];
+    }
+    return retVal;
 }
-- (void)setNeedShowImage:(BOOL)needShowImage {
-    mNeedShowImage = needShowImage;
+- (void)setNeedShowImage:(BOOL)needShowImage {    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSNumber numberWithBool:needShowImage] forKey:@"needShowImage"];
+    [defaults synchronize];
 }
 
 - (void) animateSplashScreen
@@ -373,7 +385,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     NSDictionary *parseConfig = [appConfig objectForKey:@"ParseConfig"]; 
     [Parse setApplicationId:[parseConfig objectForKey:@"applicationId"]
                   clientKey:[parseConfig objectForKey:@"clientKey"]];
-    mNeedShowImage = NO;
     
     // Set defualt ACLs
     PFACL *defaultACL = [PFACL ACL];
