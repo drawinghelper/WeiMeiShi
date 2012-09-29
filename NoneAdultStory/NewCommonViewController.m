@@ -530,7 +530,7 @@
     NSDictionary *dataDic = [responseInfo objectForKey:@"info"];
     NSMutableArray *addedList = [dataDic objectForKey:@"talk"];
     tempPropertyDic = [dataDic objectForKey:@"selectedMap"];
-    NSLog(@"result: %@", addedList);
+    //NSLog(@"result: %@", addedList);
     
     [self performSelectorOnMainThread:@selector(appendTableWith:) withObject:addedList waitUntilDone:NO];
 }
