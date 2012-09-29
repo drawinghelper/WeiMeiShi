@@ -92,7 +92,7 @@
 	newFrame.size.height = adSize.height;
 	newFrame.size.width = adSize.width;
 	newFrame.origin.x = (self.view.bounds.size.width - adSize.width)/2;
-    newFrame.origin.y = 480 - adSize.height;
+    newFrame.origin.y = 0;
 	adView.frame = newFrame;
     
 	[UIView commitAnimations];
