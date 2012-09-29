@@ -336,6 +336,8 @@
     
     self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
     self.customTbBarController.tabBar.hidden = NO;
+
+    [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -688,8 +690,12 @@
     int imageDisplayWidth = 320;
     int imageDisplayHeight = 0;
     
-    int width = [[duanZi objectForKey:@"width"] intValue];
-    int height = [[duanZi objectForKey:@"height"] intValue];
+    int width = 0;
+    int height = 0;
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]) {
+        width = [[duanZi objectForKey:@"width"] intValue];
+        height = [[duanZi objectForKey:@"height"] intValue];
+    }
     if (width > (320 - 2*HORIZONTAL_PADDING)) {
         imageDisplayLeft = HORIZONTAL_PADDING;
         imageDisplayWidth = 320 - 2*HORIZONTAL_PADDING;
@@ -809,12 +815,14 @@
     
     //微博图
     UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
-    NSString *imageUrl = [duanZi objectForKey:@"large_url"];
-    if ( imageUrl != nil && ![imageUrl isEqualToString:@""]) {
-        [coverImageView setImageWithURL:[NSURL URLWithString:imageUrl] 
-                       placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
-        
-        [cell.contentView addSubview:coverImageView];
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]) {
+        NSString *imageUrl = [duanZi objectForKey:@"large_url"];
+        if ( imageUrl != nil && ![imageUrl isEqualToString:@""]) {
+            [coverImageView setImageWithURL:[NSURL URLWithString:imageUrl] 
+                           placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
+            
+            [cell.contentView addSubview:coverImageView];
+        }
     }
     
     //【底部】
