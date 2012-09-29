@@ -76,7 +76,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 2 : 4;
+    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 2 : 3;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -138,9 +138,6 @@
             }
             break;
         case 2:
-            cell.text = @"精彩应用推荐";
-            break;
-        case 3:
             if (user) {
                 cell.text = [NSString stringWithFormat:@"%@ 已登入", user.username];
             } else {
@@ -181,8 +178,6 @@
                 [self showLogin];
             }
         }
-    } else if (row == 2){
-        [self showLianMeng];
     } else {
         if (user) {
             [self showLogOut];
@@ -302,12 +297,6 @@
         // Present the log in view controller
         [self presentViewController:logInViewController animated:YES completion:NULL];
     }
-}
-- (void)showLianMeng {
-    UMTableViewDemo *lianMengViewController = [[UMTableViewDemo alloc]init];   
-    lianMengViewController.title = @"精彩应用推荐";
-    lianMengViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:lianMengViewController animated:YES];
 }
 
 - (void)umengFeedback {

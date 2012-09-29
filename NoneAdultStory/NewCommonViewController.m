@@ -52,6 +52,13 @@
                                              animated:YES];
 }
 
+- (void)showLianMeng {
+    UMTableViewDemo *lianMengViewController = [[UMTableViewDemo alloc]init];
+    lianMengViewController.title = @"精彩应用推荐";
+    lianMengViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:lianMengViewController animated:YES];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withTitle:(NSString *)title withCid:(NSString *)cid
 {
     currentCid = cid;
@@ -157,6 +164,17 @@
     UIImage *btnImage = [UIImage imageNamed:@"refresh.png"];
     [btnRefresh setImage:btnImage forState:UIControlStateNormal];
     
+    UIButton *btnLianMeng = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnLianMeng.frame = CGRectMake(0, 0, 55, 30);
+    [btnLianMeng addTarget:self action:@selector(showLianMeng) forControlEvents:UIControlEventTouchUpInside];
+    [btnLianMeng setTitle:@"推荐(1)" forState:UIControlStateNormal];
+    [btnLianMeng setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [btnLianMeng setBackgroundImage:[UIImage imageNamed:@"lianmengbutton.png"] forState:UIControlStateNormal];
+    [btnLianMeng.titleLabel setFont:[UIFont boldSystemFontOfSize:12.0]];
+    [btnLianMeng.titleLabel setShadowOffset:CGSizeMake(0, 0.2f)];
+    [btnLianMeng.titleLabel setShadowColor:[UIColor lightGrayColor]];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnLianMeng];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnRefresh];
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] 

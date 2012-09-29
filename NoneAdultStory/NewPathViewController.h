@@ -14,6 +14,7 @@
 #import "UMSNSService.h"
 #import "NoneAdultAppDelegate.h"
 #import "AdMoGoView.h"
+#import "UMTableViewDemo.h"
 
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 52.0f
