@@ -21,6 +21,13 @@
 @synthesize window = _window;
 //@synthesize tabBarController = _tabBarController;
 
+- (BOOL)isNeedShowImage {
+    return mNeedShowImage;
+}
+- (void)setNeedShowImage:(BOOL)needShowImage {
+    mNeedShowImage = needShowImage;
+}
+
 - (void) animateSplashScreen
 {
     
@@ -366,6 +373,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     NSDictionary *parseConfig = [appConfig objectForKey:@"ParseConfig"]; 
     [Parse setApplicationId:[parseConfig objectForKey:@"applicationId"]
                   clientKey:[parseConfig objectForKey:@"clientKey"]];
+    mNeedShowImage = NO;
     
     // Set defualt ACLs
     PFACL *defaultACL = [PFACL ACL];

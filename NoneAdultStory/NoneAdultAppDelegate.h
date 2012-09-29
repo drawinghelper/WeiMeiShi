@@ -28,6 +28,7 @@ typedef enum {
 } UIChannel;
 
 @interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>{
+    BOOL mNeedShowImage;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -44,5 +45,7 @@ typedef enum {
 - (UIColor *)getTitleShadowColor;
 - (BOOL)isInReview;
 - (BOOL)isAdmin;
+- (BOOL)isNeedShowImage;
+- (void)setNeedShowImage:(BOOL)needShowImage;
 - (void)scoreForShareUrl:(NSDictionary *)currentDuanZi action:(UIAction)action;
 @end

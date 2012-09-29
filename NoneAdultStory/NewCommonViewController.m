@@ -576,7 +576,6 @@
     
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"width"] forKey:@"width"];//图片内容的width
     [dic setObject:[[tempPropertyDic objectForKey:idString] objectForKey:@"height"] forKey:@"height"];//图片内容的height
-    
     NSDecimalNumber *idStr = (NSDecimalNumber *)[dic objectForKey:@"id"];
     [dic setObject:[NSString stringWithFormat:@"http://t.qq.com/p/t/%lld",[idStr longLongValue]] forKey:@"shareurl"];
 }
@@ -1036,8 +1035,12 @@
     int imageDisplayWidth = 320;
     int imageDisplayHeight = 0;
     
-    int width = [[duanZi objectForKey:@"width"] intValue];
-    int height = [[duanZi objectForKey:@"height"] intValue];
+    int width = 0;
+    int height = 0;
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]) {
+        width = [[duanZi objectForKey:@"width"] intValue];
+        height = [[duanZi objectForKey:@"height"] intValue];
+    }
     if (width > (320 - 2*HORIZONTAL_PADDING)) {
         imageDisplayLeft = HORIZONTAL_PADDING;
         imageDisplayWidth = 320 - 2*HORIZONTAL_PADDING;
@@ -1147,12 +1150,14 @@
     
     //微博图
     UIImageView *coverImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"defaultCover.png"]];
-    NSString *largeUrl = [duanZi objectForKey:@"large_url"];
-    if ( largeUrl != nil && ![largeUrl isEqualToString:@""]) {
-        [coverImageView setImageWithURL:[NSURL URLWithString:largeUrl] 
-                       placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
-        
-        [cell.contentView addSubview:coverImageView];
+    if ([[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]) {
+        NSString *largeUrl = [duanZi objectForKey:@"large_url"];
+        if ( largeUrl != nil && ![largeUrl isEqualToString:@""]) {
+            [coverImageView setImageWithURL:[NSURL URLWithString:largeUrl]
+                           placeholderImage:[UIImage imageNamed:@"defaultCover.png"]];
+            
+            [cell.contentView addSubview:coverImageView];
+        }
     }
     
     //【底部】
@@ -1195,7 +1200,6 @@
     CGRect imageDisplayRect = [self getImageDisplayRect:duanZi];    
     imageDisplayRect.origin.y = imageDisplayRect.origin.y + 5;
     [coverImageView setFrame:imageDisplayRect];
-    
     
     //content文字内容自适应
     label = (UILabel *)[cell viewWithTag:1];
