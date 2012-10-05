@@ -22,12 +22,11 @@
 //@synthesize tabBarController = _tabBarController;
 
 - (BOOL)isNeedShowImage {
-    BOOL retVal = NO;
-    
+    BOOL retVal = [[NoneAdultAppDelegate sharedAppDelegate] getShowImageDefault];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSNumber *needShowImageNum = [defaults objectForKey:@"needShowImage"];
     if (needShowImageNum == nil) {
-        [defaults setObject:[NSNumber numberWithBool:NO] forKey:@"needShowImage"];
+        [defaults setObject:[NSNumber numberWithBool:retVal] forKey:@"needShowImage"];
         [defaults synchronize];
     } else {
         retVal = [needShowImageNum boolValue];
@@ -239,6 +238,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                        blue:[blueNumber floatValue]/255.0f 
                                       alpha:1]; 
     return result;
+}
+- (BOOL)getShowImageDefault {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    NSNumber *showImageDefault = (NSNumber *)[appConfig objectForKey:@"ShowImageDefault"];
+    return [showImageDefault boolValue];
 }
 
 //是否处于审核模式

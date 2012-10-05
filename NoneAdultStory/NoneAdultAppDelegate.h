@@ -42,9 +42,11 @@ typedef enum {
 - (NSString *)getAppChannelTag;
 - (UIColor *)getTitleTextColor;
 - (UIColor *)getTitleShadowColor;
+- (BOOL)getShowImageDefault;
 - (BOOL)isInReview;
 - (BOOL)isAdmin;
 - (BOOL)isNeedShowImage;
 - (void)setNeedShowImage:(BOOL)needShowImage;
+
 - (void)scoreForShareUrl:(NSDictionary *)currentDuanZi action:(UIAction)action;
 @end

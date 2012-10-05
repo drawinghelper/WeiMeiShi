@@ -139,7 +139,7 @@
             break;
         case 2:
             if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                cell.textLabel.text = @"显示笑话配图";
+                cell.textLabel.text = @"是否显示图片";
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
                 cell.accessoryView = switchView;
@@ -156,7 +156,7 @@
             break;
         case 3:
             if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                cell.textLabel.text = @"显示笑话配图";
+                cell.textLabel.text = @"是否显示图片";
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
                 cell.accessoryView = switchView;

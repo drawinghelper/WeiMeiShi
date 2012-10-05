@@ -6,54 +6,25 @@
 	<array>
 		<dict>
 			<key>cid</key>
-			<string>889</string>
+			<string>925</string>
 			<key>title</key>
-			<string>心语杂文</string>
+			<string>红酒</string>
 			<key>subtitle</key>
-			<string>如果方向错了，停下来就是前进</string>
+			<string>每天领你品味不一样的生活</string>
 			<key>icon</key>
-			<string>channel_qinggan.jpg</string>
+			<string>wine_new.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>900</string>
+			<string>35</string>
 			<key>title</key>
-			<string>励志箴言</string>
+			<string>菜品</string>
 			<key>subtitle</key>
-			<string>就算只有影子陪伴，也要对自己微笑</string>
+			<string>140个字浓缩美味的烹饪过程</string>
 			<key>icon</key>
-			<string>channel_zhenyan.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
-			<string>902</string>
-			<key>title</key>
-			<string>唯美英语</string>
-			<key>subtitle</key>
-			<string>Anger is only one letter short of danger</string>
-			<key>icon</key>
-			<string>channel_yingyu.jpg</string>
+			<string>food_new.png</string>
 		</dict>
 	</array>
-	<key>NewTabCid</key>
-	<string>40</string>
-	<key>UmengAppKey</key>
-	<string>4fa3232652701556cc00001e</string>
-	<key>ParseConfig</key>
-	<dict>
-		<key>applicationId</key>
-		<string>fIZLrQkMlUpAbOYT6FPFDPM8gjDhJaV1uq5QHD8L</string>
-		<key>clientKey</key>
-		<string>e9oBYmR4qGg3ly23on8ZeN1jSLePWjcAEqGvlFZE</string>
-	</dict>
-	<key>AlertKeyword</key>
-	<string>超搞段子</string>
-	<key>AppStoreId</key>
-	<string>532923663</string>
-	<key>AppChannelTag</key>
-	<string>App Store</string>
-	<key>MoGoAppKey</key>
-	<string>e93cf5b2fb784f98b19b1c40500f521a</string>
 	<key>TitleTextColor</key>
 	<dict>
 		<key>red</key>
@@ -72,5 +43,26 @@
 		<key>blue</key>
 		<integer>255</integer>
 	</dict>
+	<key>NewTabCid</key>
+	<string>35</string>
+	<key>UmengAppKey</key>
+	<string>4fffced85270157a3c00004e</string>
+	<key>ParseConfig</key>
+	<dict>
+		<key>applicationId</key>
+		<string>zdEAPvE4kYUg0q7XhtWAa2iCvoV9FNQpxwFcHngB</string>
+		<key>clientKey</key>
+		<string>Y0VdVm9vyUb1ISNvTVFpLyk8hpvZs91ondkbnNaQ</string>
+	</dict>
+	<key>AlertKeyword</key>
+	<string>菜谱</string>
+	<key>AppStoreId</key>
+	<string>545287581</string>
+	<key>AppChannelTag</key>
+	<string>App Store</string>
+	<key>MoGoAppKey</key>
+	<string>8263cdaa8f724e2293b2f9f3aff849ee</string>
+	<key>ShowImageDefault</key>
+	<true/>
 </dict>
 </plist>
