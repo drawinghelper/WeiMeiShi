@@ -426,8 +426,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     HistoryPathViewController *historyTopController = [[HistoryPathViewController alloc] init];
     UINavigationController *historyTopNavViewController = [[UINavigationController alloc] initWithRootViewController:historyTopController];
     
-    UIViewController *searchController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:nil];
-    
+    UIViewController *searchWebviewController = [[SearchViewController alloc] initWithNibName:@"SearchViewController" bundle:nil];
+    UINavigationController *searchController = [[UINavigationController alloc] initWithRootViewController:searchWebviewController];
+
     ChannelViewController *channelController = [[ChannelViewController alloc] init];
     UINavigationController *channelNavViewController = [[UINavigationController alloc] initWithRootViewController:channelController];
     
@@ -455,7 +456,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                  historyTopNavViewController,
                                                  channelNavViewController,
                                                  collectNavViewController,
-                                                 //searchController,
+                                                 searchController,
                                                  settingNavViewController,
                                                  nil];
     } else {
@@ -465,7 +466,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          channelNavViewController,
                                                          collectNavViewController,
-                                                         //searchController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             if ([showChannel isEqualToString:@"NO"]) {
@@ -474,7 +475,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
-                                                         //searchController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             }
@@ -484,7 +485,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                      historyTopNavViewController,
                                                      channelNavViewController,
                                                      collectNavViewController,
-                                                     //searchController,
+                                                     searchController,
                                                      settingNavViewController,
                                                      nil];
             if ([showChannel isEqualToString:@"NO"]) {
@@ -493,7 +494,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                                          historyTopNavViewController,
                                                          //channelNavViewController,
                                                          collectNavViewController,
-                                                         //searchController,
+                                                         searchController,
                                                          settingNavViewController,
                                                          nil];
             }

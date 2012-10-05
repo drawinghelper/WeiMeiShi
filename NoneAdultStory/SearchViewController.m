@@ -23,6 +23,18 @@
         // Custom initialization
         self.title = NSLocalizedString(@"菜谱搜索", @"Second");
         self.tabBarItem.image = [UIImage imageNamed:@"tab_search"];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont boldSystemFontOfSize:20.0];
+        label.shadowColor = [[NoneAdultAppDelegate sharedAppDelegate] getTitleShadowColor];
+        label.textAlignment = UITextAlignmentCenter;
+        label.textColor = [[NoneAdultAppDelegate sharedAppDelegate] getTitleTextColor];
+        [label setShadowOffset:CGSizeMake(0, 1.0)];
+        
+        self.navigationItem.titleView = label;
+        label.text = NSLocalizedString(@"菜谱搜索", @"");
+        [label sizeToFit];
     }
     return self;
 }
@@ -37,9 +49,32 @@
     request =[NSURLRequest requestWithURL:url];
     [self.webView setDelegate:self];   
     
-    [self addBanner];
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack.frame = CGRectMake(0, 0, 44, 44);
+    [btnBack addTarget:self action:@selector(goBackAction) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *btnBackImage = [UIImage imageNamed:@"webview_back.png"];
+    [btnBack setImage:btnBackImage forState:UIControlStateNormal];
+    
+    UIButton *btnHome = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnHome.frame = CGRectMake(0, 0, 44, 44);
+    [btnHome addTarget:self action:@selector(goHomeAction) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *btnHomeImage = [UIImage imageNamed:@"webview_home.png"];
+    [btnHome setImage:btnHomeImage forState:UIControlStateNormal];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnHome];
+
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"]
+                                                  forBarMetrics:UIBarMetricsDefault];
+    //[self addBanner];
 }
 
+- (void)goBackAction {
+    [self.webView goBack];
+}
+- (void)goHomeAction {
+    [self.webView loadRequest:request];
+}
 - (void)addBanner {
     UIButton *btnClear = [UIButton buttonWithType:UIButtonTypeCustom];
     

@@ -14,7 +14,6 @@
 #import <Parse/Parse.h>
 #import "FMDatabase.h"
 
-
 typedef enum {
     UIActionShare  = 0,
     UIActionCollect  = 1,

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
+#import "NoneAdultAppDelegate.h"
 #define kBannerHeight 45
 @interface SearchViewController : UIViewController<UIWebViewDelegate, MBProgressHUDDelegate> {
     IBOutlet UIWebView *webView;
