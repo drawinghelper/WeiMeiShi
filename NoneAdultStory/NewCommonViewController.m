@@ -1067,7 +1067,9 @@
     NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
     
     static NSString *CellIdentifier = @"OffenceCustomCellIdentifier";
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    //UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    EmailableCell *cell = (EmailableCell *) [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     
     //清除已有数据，防止文字重叠
     for(UIView *view in cell.contentView.subviews){
@@ -1076,8 +1078,11 @@
         }
     }
     
-    if (cell == nil) {
+    /*if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
+    }*/
+    if (cell == nil) {
+        cell = [[EmailableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     //【顶部】
     UIView *topBgView = [[UIView alloc] initWithFrame:CGRectZero];

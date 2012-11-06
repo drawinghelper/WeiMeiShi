@@ -17,6 +17,7 @@
 #import "NoneAdultDetailViewController.h"
 #import "NSString+HTML.h"
 #import "UMTableViewDemo.h"
+#import "EmailableCell.h"
 
 #define FONT_SIZE 14.0f
 #define TOP_SECTION_HEIGHT 52.0f
