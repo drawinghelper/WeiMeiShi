@@ -25,7 +25,7 @@
 
 #import "EmailableCell.h"
 
-static const CFTimeInterval kLongPressMinimumDurationSeconds = 0.0;
+static const CFTimeInterval kLongPressMinimumDurationSeconds = 0.3;
 
 @interface EmailableCell(Private)
 - (void) initialize;
@@ -58,7 +58,7 @@ static const CFTimeInterval kLongPressMinimumDurationSeconds = 0.0;
 - (void) initialize
 {
     self.emailAddress = nil;
-    self.sendEmailMenuItemTitle = @"Send Email";
+    self.sendEmailMenuItemTitle = @"保存图片";
     self.indexPath = nil;
     self.delegate = nil;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -180,8 +180,12 @@ static const CFTimeInterval kLongPressMinimumDurationSeconds = 0.0;
         return;
     }
 
+    CGPoint touchPoint = [longPressRecognizer locationInView:self];
+    NSLog(@"touchPoint: %f, %f", touchPoint.x, touchPoint.y);
+    
     UIMenuController *menu = [UIMenuController sharedMenuController];
-    [menu setTargetRect:self.bounds inView:self];
+    [menu setTargetRect:CGRectMake(touchPoint.x-160, touchPoint.y, self.bounds.size.width, self.bounds.size.height) inView:self];
+    NSLog(@"self.bounds: %f, %f", self.bounds.origin.x, self.bounds.origin.y);
 
     UIMenuItem *item = [[UIMenuItem alloc] initWithTitle:self.sendEmailMenuItemTitle
                                                   action:@selector(sendEmailMenuItemPressed:)];

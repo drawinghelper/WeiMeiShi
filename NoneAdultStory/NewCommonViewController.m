@@ -1060,6 +1060,38 @@
     return rect;
 }
 
+#pragma mark -
+#pragma mark EmailableCellDelegate Methods
+
+- (NSString *) emailableCell:(EmailableCell *)cell emailAddressForCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *duanzi = [searchDuanZiList objectAtIndex:indexPath.row];
+    return [duanzi objectForKey:@"content"];
+}
+
+- (void) emailableCell:(EmailableCell *)cell didPressSendEmailOnCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    /*
+    MFMailComposeViewController *controller = [[MFMailComposeViewController alloc] init];
+    if (controller == nil) {
+        return;
+    }
+    controller.mailComposeDelegate = self;
+    NSString *emailAddress = [self.emailAddresses objectAtIndex:indexPath.row];
+    [controller setToRecipients:[NSArray arrayWithObject:emailAddress]];
+    [self presentModalViewController:controller animated:YES];
+    [controller release];
+     */
+    NSDictionary *duanzi = [searchDuanZiList objectAtIndex:indexPath.row];
+    NSLog(@"indexPath.row: %d", indexPath.row);
+    NSString *largeUrl = [duanzi objectForKey:@"large_url"];
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    UIImage *shareImage = [manager imageWithURL:[NSURL URLWithString:largeUrl]];
+    currentImage = shareImage;
+    
+    [self savePhoto];
+    NSLog(@"保存图片");
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -1069,7 +1101,6 @@
     static NSString *CellIdentifier = @"OffenceCustomCellIdentifier";
     //UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     EmailableCell *cell = (EmailableCell *) [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
     
     //清除已有数据，防止文字重叠
     for(UIView *view in cell.contentView.subviews){
@@ -1084,6 +1115,9 @@
     if (cell == nil) {
         cell = [[EmailableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    
+    [cell setIndexPath:indexPath];
+    [cell setDelegate:self];
     //【顶部】
     UIView *topBgView = [[UIView alloc] initWithFrame:CGRectZero];
     [cell.contentView addSubview:topBgView];
