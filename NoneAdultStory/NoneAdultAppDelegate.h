@@ -30,6 +30,7 @@ typedef enum {
 }
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) UITabBarController *tabBarController;
 
 //@property (strong, nonatomic) UITabBarController *tabBarController;
 + (CGColorRef) getColorFromRed:(int)red Green:(int)green Blue:(int)blue Alpha:(int)alpha;

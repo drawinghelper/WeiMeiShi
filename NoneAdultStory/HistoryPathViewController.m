@@ -8,7 +8,6 @@
 
 #import "HistoryPathViewController.h"
 #import "UITabBarController+hidable.h"
-#import "UIViewController+CMTabBarController.h"
 
 @implementation HistoryPathViewController
 {
@@ -242,9 +241,6 @@
 {
     [super viewWillAppear:animated];
 
-    self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
-    self.customTbBarController.tabBar.hidden = NO;
-    
     [self.tableView reloadData];
 }
 
@@ -257,7 +253,6 @@
 {
     [super viewWillDisappear:animated];
     
-    self.customTbBarController.tabBar.hidden = YES;
     [self contract];
 }
 

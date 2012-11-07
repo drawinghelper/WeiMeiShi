@@ -8,7 +8,6 @@
 
 #import "NewCommonViewController.h"
 #import "UITabBarController+hidable.h"
-#import "UIViewController+CMTabBarController.h"
 
 @interface NewCommonViewController ()
 {
@@ -126,10 +125,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
- 
-    self.customTbBarController.tabBar.tabBarStyle = CMTabBarStyleTranslucent;
-    self.customTbBarController.tabBar.hidden = NO;
-    
+
     [self.tableView reloadData];
 }
 
@@ -137,7 +133,6 @@
 {
     [super viewWillDisappear:animated];
     
-    self.customTbBarController.tabBar.hidden = YES;
     [self contract];
 }
 
