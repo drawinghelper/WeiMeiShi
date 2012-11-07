@@ -25,7 +25,7 @@
 
 #import "EmailableCell.h"
 
-static const CFTimeInterval kLongPressMinimumDurationSeconds = 0.3;
+static const CFTimeInterval kLongPressMinimumDurationSeconds = 0.0;
 
 @interface EmailableCell(Private)
 - (void) initialize;
