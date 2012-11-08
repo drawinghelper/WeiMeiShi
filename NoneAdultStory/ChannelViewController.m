@@ -208,8 +208,8 @@
                                                      withCid:[currentChannelInfo objectForKey:@"cid"]];
      // ...
      // Pass the selected object to the new view controller.
-    detailViewController.hidesBottomBarWhenPushed = YES;
-     [self.navigationController pushViewController:detailViewController animated:YES];
+    //detailViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 @end

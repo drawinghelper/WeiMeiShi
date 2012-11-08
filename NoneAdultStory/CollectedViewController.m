@@ -107,6 +107,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    isInCommonView = NO;
     canLoadNew = NO;
     canLoadOld = NO;
 	// Do any additional setup after loading the view, typically from a nib.

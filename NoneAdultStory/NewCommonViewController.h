@@ -55,6 +55,7 @@
     NSString *currentCid;
     
     UIImage *currentImage;
+    BOOL isInCommonView;
 }
 @property(nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) AdMoGoView *adView;

@@ -132,13 +132,16 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self contract];
+    if (isInCommonView) {
+        [self contract];
+    }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    isInCommonView = YES;
     [self processPullMessage];
 
     NSString *showAd = [MobClick getConfigParams:@"showAd"];
@@ -353,11 +356,11 @@
         if((differenceFromStart) < 0)
         {
             // scroll up
-            if(scrollView.isTracking && (abs(differenceFromLast)>1))
+            if(scrollView.isTracking && (abs(differenceFromLast)>1) && isInCommonView)
                 [self expand];
         }
         else {
-            if(scrollView.isTracking && (abs(differenceFromLast)>1))
+            if(scrollView.isTracking && (abs(differenceFromLast)>1) && isInCommonView)
                 [self contract];
         }  
     }
@@ -381,7 +384,9 @@
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
 {
-    [self contract];
+    if (isInCommonView) {
+        [self contract];
+    }
     return YES;
 }
 
