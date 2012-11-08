@@ -382,8 +382,34 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     }
 }
 
+
+- (void)connection:( NSURLConnection *)connection
+ didReceiveResponse:(NSURLResponse *)response {
+    if ([( NSHTTPURLResponse*)response statusCode] == 200 ) {
+        NSLog(@"成功，返回200");
+    } else {
+        NSLog(@"失败，错误处理");
+    }
+}
+- ( void)connection:( NSURLConnection *)connection
+   didFailWithError:(NSError *)error {
+    NSLog(@"失败，错误处理");
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //APPCPA
+    NSString *appKey = @"8542541d479b49a69622ddb7b1d9e48d" ;
+    NSString *deviceName = [[[UIDevice currentDevice ] name]
+                            stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding ];
+    NSString *url = [NSString stringWithFormat:@"http://c.appcpa.co/e?appkey=%@&deviceName=%@", appKey, deviceName];
+    NSURLConnection *connection = [NSURLConnection
+                                   connectionWithRequest:[NSMutableURLRequest
+                                                          requestWithURL:[NSURL URLWithString:url]]
+                                   delegate:self];
+    
+    
+    //Other code
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
                                [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
     NSDictionary *parseConfig = [appConfig objectForKey:@"ParseConfig"]; 
