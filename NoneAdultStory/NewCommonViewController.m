@@ -1066,17 +1066,6 @@
 
 - (void) emailableCell:(EmailableCell *)cell didPressSendEmailOnCellAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    MFMailComposeViewController *controller = [[MFMailComposeViewController alloc] init];
-    if (controller == nil) {
-        return;
-    }
-    controller.mailComposeDelegate = self;
-    NSString *emailAddress = [self.emailAddresses objectAtIndex:indexPath.row];
-    [controller setToRecipients:[NSArray arrayWithObject:emailAddress]];
-    [self presentModalViewController:controller animated:YES];
-    [controller release];
-     */
     NSDictionary *duanzi = [searchDuanZiList objectAtIndex:indexPath.row];
     NSLog(@"indexPath.row: %d", indexPath.row);
     NSString *largeUrl = [duanzi objectForKey:@"large_url"];
@@ -1094,7 +1083,6 @@
     NSDictionary *duanZi = [searchDuanZiList objectAtIndex:row];
     
     static NSString *CellIdentifier = @"OffenceCustomCellIdentifier";
-    //UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     EmailableCell *cell = (EmailableCell *) [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     //清除已有数据，防止文字重叠
@@ -1103,10 +1091,7 @@
             [view removeFromSuperview];
         }
     }
-    
-    /*if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier];
-    }*/
+
     if (cell == nil) {
         cell = [[EmailableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
