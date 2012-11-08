@@ -131,20 +131,11 @@
     return self;
 }
 #pragma mark -
-#pragma mark AdMogo Methods
-- (NSString *)adMoGoApplicationKey{
-    return [[NoneAdultAppDelegate sharedAppDelegate] getMogoAppKey];
-    //return @"8263cdaa8f724e2293b2f9f3aff849ee"; //此字符串为您的 App 在芒果上的唯一
-}
-
--(UIViewController *)viewControllerForPresentingModalView{
-    return self;//返回的对象为 adView 的父视图控制器
-}
-
-- (void)adjustAdSize {	
+#pragma mark AdMoGoDelegate delegate
+- (void)adjustAdSize {
 	[UIView beginAnimations:@"AdResize" context:nil];
 	[UIView setAnimationDuration:0.7];
-	CGSize adSize = [adView actualAdSize];
+	CGSize adSize = CGSizeMake(320, 50);
 	CGRect newFrame = adView.frame;
 	newFrame.size.height = adSize.height;
 	newFrame.size.width = adSize.width;
@@ -153,26 +144,50 @@
 	adView.frame = newFrame;
     
 	[UIView commitAnimations];
-} 
+}
 
-- (void)adMoGoDidReceiveAd:(AdMoGoView *)adMoGoView {
-	//广告成功展示时调用
+/*
+ 返回广告rootViewController
+ */
+- (UIViewController *)viewControllerForPresentingModalView{
+    return self;
+}
+
+
+
+/**
+ * 广告开始请求回调
+ */
+- (void)adMoGoDidStartAd:(AdMoGoView *)adMoGoView{
+    NSLog(@"广告开始请求回调");
+}
+/**
+ * 广告接收成功回调
+ */
+- (void)adMoGoDidReceiveAd:(AdMoGoView *)adMoGoView{
+    NSLog(@"广告接收成功回调");
     [self adjustAdSize];
-}
 
-- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView 
-                     usingBackup:(BOOL)yesOrNo {
-    //请求广告失败
 }
-
-- (void)adMoGoWillPresentFullScreenModal {
-    //点击广告后打开内置浏览器时调用
+/**
+ * 广告接收失败回调
+ */
+- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView didFailWithError:(NSError *)error{
+    NSLog(@"广告接收失败回调");
 }
-
-- (void)adMoGoDidDismissFullScreenModal {
-    //关闭广告内置浏览器时调用 
+/**
+ * 点击广告回调
+ */
+- (void)adMoGoClickAd:(AdMoGoView *)adMoGoView{
+    NSLog(@"点击广告回调");
 }
-
+/**
+ *You can get notified when the user delete the ad
+ 广告关闭回调
+ */
+- (void)adMoGoDeleteAd:(AdMoGoView *)adMoGoView{
+    NSLog(@"广告关闭回调");
+}
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -191,8 +206,11 @@
     
     if ([showAd isEqualToString:@"YES"]) {
         //增加广告条显示
-        self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
-                                                    ExpressMode:NO];
+        self.adView = [[AdMoGoView alloc] initWithAppKey:[[NoneAdultAppDelegate sharedAppDelegate] getMogoAppKey]
+                                                  adType:AdViewTypeNormalBanner
+                                             expressMode:NO
+                                      adMoGoViewDelegate:self];
+        
         [adView setFrame:CGRectZero];
         [self.navigationController.view addSubview:adView];
     }

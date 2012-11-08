@@ -5,10 +5,13 @@
 
 
 #import "AdMoGoAdapterMobiSage.h"
-#import "AdMoGoView.h"
+//#import "AdMoGoView.h"
 #import "AdMoGoAdNetworkRegistry.h"
 #import "AdMoGoAdNetworkConfig.h"
 #import "AdMoGoAdNetworkAdapter+Helpers.h"
+#import "AdMoGoConfigDataCenter.h"
+#import "AdMoGoConfigData.h"
+#import "AdMoGoDeviceInfoHelper.h"
 
 @implementation AdMoGoAdapterMobiSage
 + (AdMoGoAdNetworkType)networkType {
@@ -20,9 +23,19 @@
 }
 
 - (void)getAd {
-	[adMoGoView adapter:self didGetAd:@"mobisage"];
+    
+    isStop = NO;
+    
+    [adMoGoCore adDidStartRequestAd];
+    AdMoGoConfigDataCenter *configDataCenter = [AdMoGoConfigDataCenter singleton];
+    
+    AdMoGoConfigData *configData = [configDataCenter.config_dict objectForKey:adMoGoCore.config_key];
+    
+	[adMoGoCore adapter:self didGetAd:@"mobisage"];
 
-    AdViewType type = adMoGoView.adType;
+//    AdViewType type = adMoGoView.adType;
+    AdViewType type =[configData.ad_type intValue];
+    
     CGSize size =CGSizeMake(0, 0);
     NSUInteger adIndex = 0;
     switch (type) {
@@ -50,12 +63,15 @@
     timer = [[NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(loadAdTimeOut:) userInfo:nil repeats:NO] retain];
     
     
-    MobiSageAdBanner *adView = [[MobiSageAdBanner alloc] initWithAdSize:adIndex PublisherID:networkConfig.pubId];
+    MobiSageAdBanner *adView = [[MobiSageAdBanner alloc] initWithAdSize:adIndex PublisherID:[self.ration objectForKey:@"key"]];
     [adView setInterval:Ad_NO_Refresh];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     [view addSubview:adView];
     self.adNetworkView = view;
     [view release];
+    
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(adStartShow:) 
@@ -68,11 +84,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(adPop:) 
                                                  name:MobiSageAdView_Pop_AD_Window
-                                               object:adView];
+                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(adHide:) 
                                                  name:MobiSageAdView_Hide_AD_Window
-                                               object:adView];
+                                               object:nil];
     
 
     [adView release];
@@ -80,6 +96,12 @@
 
 - (void)stopBeingDelegate {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)stopAd{
+    [self stopBeingDelegate];
+    isStop = YES;
+    [self stopTimer];
 }
 
 - (void)stopTimer {
@@ -94,34 +116,51 @@
 	[super dealloc];
 }
 
-- (void)adStartShow:(id)sender {
+- (void)adStartShow:(NSNotification *)notification {
+    
+    if (isStop) {
+        return;
+    }
+    
     if (timer) {
         [timer invalidate];
         [timer release];
         timer = nil;
     }
-    [adMoGoView adapter:self didReceiveAdView:self.adNetworkView];
+    [adMoGoCore adapter:self didReceiveAdView:self.adNetworkView];
 }
 
-- (void)adPauseShow:(id)sender {
+- (void)adPauseShow:(NSNotification *)notification {
     
 }
 
-- (void)adPop:(id)sender {
+- (void)adPop:(NSNotification *)notification {
+    if (isStop) {
+        return;
+    }
+    [adMoGoCore stopTimer];
     [self helperNotifyDelegateOfFullScreenModal];
 }
 
-- (void)adHide:(id)sender {
+- (void)adHide:(NSNotification *)notification {
+    if (isStop) {
+        return;
+    }
+    [adMoGoCore fireTimer];
     [self helperNotifyDelegateOfFullScreenModalDismissal];
 }
 
 - (void)loadAdTimeOut:(NSTimer*)theTimer {
+    
+    if (isStop) {
+        return;
+    }
+    
     if (timer) {
         [timer invalidate];
         [timer release];
         timer = nil;
     }
-    [self stopBeingDelegate];
-    [adMoGoView adapter:self didFailAd:nil];
+    [adMoGoCore adapter:self didFailAd:nil];
 }
 @end

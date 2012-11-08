@@ -6,6 +6,10 @@
 //  Copyright 2011 AdsMogo.com. All rights reserved.
 //
 
+/*
+    所有适配器父类私有方法 old code
+ */
+
 #import "AdMoGoAdNetworkAdapter.h"
 
 @interface AdMoGoAdNetworkAdapter (Helpers)

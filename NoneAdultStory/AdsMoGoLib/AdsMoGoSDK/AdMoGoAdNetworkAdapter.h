@@ -6,8 +6,12 @@
 //  Copyright 2011 AdsMogo.com. All rights reserved.
 //
 
+/*
+    所有适配器父类 old code
+ */
 #import "AdMoGoDelegateProtocol.h"
-#import "AdMoGoConfig.h"
+#import "AdMoGoCore.h"
+#import "AdMoGoWebBrowserControllerUserDelegate.h"
 
 typedef enum {
 	AdMoGoAdNetworkTypeAdMob             = 1,
@@ -48,6 +52,7 @@ typedef enum {
     AdMoGoAdNetworkTypeIZP          = 40,
     AdMoGoAdNetworkTypeBaiduMobAd   = 44,
     AdMoGoAdNetworkTypeExchange     = 45,
+    AdMoGoAdNetworkTypeLMMOB        = 46,
     AdMoGoAdNetworkTypePremiumAD    = 48,
     AdMoGoAdNetworkTypeAdFractal    = 50,
     AdMoGoAdNetworkTypeSuiZong      = 51,
@@ -57,29 +62,69 @@ typedef enum {
     AdMoGoAdNetworkTypeUM           = 55,
     AdMoGoAdNetworkTypeWQ           = 56,
     AdMoGoAdNetworkTypeAdermob      = 57,
+    AdMoGoAdNetworkTypeAllyesi      = 59,
+    AdMoGoAdNetworkTypeAduu         = 60,
+    AdMoGoAdNetworkTypeUMAppUnion   = 62,
+    AdMoGoAdNetworkTypeMiidi        = 63,
+    AdMoGoAdNetworkTypeMogoSTS      = 66,
     
-    AdMoGoAdNetworkTypeAdChinaFullAd = 1021,
-    AdMoGoAdNetworkTypeYouMiFullAd  = 1024,
+    AdMoGoAdNetworkTypeAdChinaFullAd   = 2100,
+    AdMoGoAdNetworkTypeYouMiFullAd     = 2400,
+    AdMoGoAdNetworkTypeAdFractalFullAd = 5000,
+    AdMoGoAdNetworkTypeAdwoFullAd      = 3300,
+    AdMoGoAdNetworkTypeWiAdFullAd      = 2200,
+    AdMoGoAdNetworkTypeWoobooFullAd    = 2300,
+    AdMoGoAdNetworkTypeDoMobFullAd     = 2900,
+    AdMoGoAdNetworkTypeMobiSageFullAd  = 3100,
+    AdMoGoAdNetworkTypeSuiZongFullAd   = 5100,
     
+    AdMoGoAdNetworkTypeInMobiSDK       = 180,
+    AdMoGoAdNetworkTypeAdwoSDK         = 330,
+    AdMoGoAdNetworkTypeAdFractalSDK    = 500,
+    AdMoGoAdNetworkTypeWQSDK           = 560,
+
+    
+    AdMoGoAdNetworkTypeAdFractalFullScreenSDK = 50000,
+
 } AdMoGoAdNetworkType;
 
 @class AdMoGoView;
-@class AdMoGoConfig;
+//@class AdMoGoConfig;
+@class AdMoGoCore;
 @class AdMoGoAdNetworkConfig;
 
 @interface AdMoGoAdNetworkAdapter : NSObject {
 	id<AdMoGoDelegate> adMoGoDelegate;
 	AdMoGoView *adMoGoView;
-	AdMoGoConfig *adMoGoConfig;
-	AdMoGoAdNetworkConfig *networkConfig;
+//	AdMoGoConfig *adMoGoConfig;
+    AdMoGoCore *adMoGoCore;
+//	AdMoGoAdNetworkConfig *networkConfig;
 	UIView *adNetworkView;
+    NSDictionary *ration;
+    id<AdMoGoWebBrowserControllerUserDelegate> adWebBrowswerDelegate;
+    /*
+        2012-9-11 特殊id
+     */
+    NSString *specialID;
 }
 
+/*
 - (id)initWithAdMoGoDelegate:(id<AdMoGoDelegate>)delegate
 						view:(AdMoGoView *)view
-					  config:(AdMoGoConfig *)config
+					   core:(AdMoGoCore *)core
 			   networkConfig:(AdMoGoAdNetworkConfig *)netConf;
+*/
 
+- (id)initWithAdMoGoDelegate:(id<AdMoGoDelegate>)delegate
+                        view:(AdMoGoView *)view
+                        core:(AdMoGoCore *)core
+               networkConfig:(NSDictionary *)netConf;
+
+/*
+- (id)initWithAdMoGoDelegateview:(AdMoGoView *)view
+					  config:(AdMoGoConfig *)config
+                   networkConfig:(AdMoGoAdNetworkConfig *)netConf;
+ */
 - (void)getAd;
 - (void)stopBeingDelegate;
 - (void)stopTimer;
@@ -87,14 +132,23 @@ typedef enum {
 - (BOOL)shouldSendExMetric;
 - (BOOL)shouldSendExRequest;
 
+- (void)stopAd;
+
 - (void)rotateToOrientation:(UIInterfaceOrientation)orientation;
-
+/*
 - (BOOL)isBannerAnimationOK:(AMBannerAnimationType)animType;
-
+*/
 @property (nonatomic,assign) id<AdMoGoDelegate> adMoGoDelegate;
+
 @property (nonatomic,assign) AdMoGoView *adMoGoView;
-@property (nonatomic,retain) AdMoGoConfig *adMoGoConfig;
+@property (nonatomic,assign) AdMoGoCore *adMoGoCore;
 @property (nonatomic,retain) AdMoGoAdNetworkConfig *networkConfig;
 @property (nonatomic,retain) UIView *adNetworkView;
+@property (atomic,retain) NSDictionary *ration;
 
+@property (nonatomic,assign) id<AdMoGoWebBrowserControllerUserDelegate> adWebBrowswerDelegate;
+/*
+ 2012-9-11 特殊id
+ */
+@property (nonatomic,retain) NSString *specialID;
 @end

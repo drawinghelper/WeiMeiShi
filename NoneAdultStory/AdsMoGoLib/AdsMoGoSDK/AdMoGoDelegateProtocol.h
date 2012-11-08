@@ -1,38 +1,55 @@
 //
-//  File: AdMoGoDelegateProtocol.h
-//  Project: AdsMOGO iOS SDK
-//  Version: 1.1.7
+//  AdMoGoDelegate.h
+//  mogosdk
 //
-//  Copyright 2011 AdsMogo.com. All rights reserved.
+//  Created by MOGO on 12-5-23.
+//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
-
 @class AdMoGoView;
 
-@protocol AdMoGoDelegate<NSObject>
+
+@protocol AdMoGoDelegate <NSObject>
 
 @required
-
-- (NSString *)adMoGoApplicationKey;
+/*
+    返回广告rootViewController old code
+ */
 - (UIViewController *)viewControllerForPresentingModalView;
+
+
 
 @optional
 
-#pragma mark notifications
+#pragma mark notifications old code
+
+/**
+ * 广告开始请求回调
+ */
+- (void)adMoGoDidStartAd:(AdMoGoView *)adMoGoView;
 /**
  * You can get notified when the user receive the ad
+ 广告接收成功回调
  */
 - (void)adMoGoDidReceiveAd:(AdMoGoView *)adMoGoView;
 /**
+ * You can get notified when the user failed receive the ad
+ 广告接收失败回调
+ */
+- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView didFailWithError:(NSError *)error;
+/**
+ * 点击广告回调
+ */
+- (void)adMoGoClickAd:(AdMoGoView *)adMoGoView;
+/**
  *You can get notified when the user delete the ad 
+ 广告关闭回调
  */
 - (void)adMoGoDeleteAd:(AdMoGoView *)adMoGoView;
-/**
- * You can get notified when the user failed receive the ad
- */
-- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView usingBackup:(BOOL)yesOrNo;
+
+
 
 /**
  
@@ -46,9 +63,14 @@
 
 /*Full Screen Notifications*/
 - (void)adMoGoFullScreenAdReceivedRequest;
-- (void)adMoGoFullScreenAdFailed;
+- (void)adMoGoFullScreenAdFailedWithError:(NSError *) error;
 - (void)adMoGoWillPresentFullScreenAdModal;
 - (void)adMoGoDidDismissFullScreenAdModal;
+
+
+#pragma mark MoGoWebBrowser Delegate
+
+
 
 #pragma mark behavior configurations
 /**
@@ -56,7 +78,6 @@
  * or remove the function before you submit your app to the app store.
  */
 - (BOOL)adMoGoTestMode DEPRECATED_ATTRIBUTE;
-
 
 #pragma mark demographic information optional delegate methods
 - (NSString *)phoneNumber; // user's phone number
@@ -68,5 +89,6 @@
 - (NSString *)keywords; // keywords the user has provided or that are contextually relevant, e.g. @"twitter client iPhone"
 - (NSString *)searchString; // a search string the user has provided, e.g. @"Jasmine Tea House San Francisco"
 - (NSUInteger)incomeLevel; // return actual annual income
+
 
 @end

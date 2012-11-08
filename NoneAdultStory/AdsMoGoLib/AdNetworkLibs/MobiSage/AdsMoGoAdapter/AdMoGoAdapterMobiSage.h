@@ -11,6 +11,8 @@
 
 @interface AdMoGoAdapterMobiSage : AdMoGoAdNetworkAdapter {
 	NSTimer *timer;
+    BOOL isStop;
+   
 }
 + (AdMoGoAdNetworkType)networkType;
 
