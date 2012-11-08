@@ -60,7 +60,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 3 : 4;
+    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 4 : 5;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -123,13 +123,8 @@
             break;
         case 2:
             if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                cell.textLabel.text = @"是否显示图片";
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
-                cell.accessoryView = switchView;
-                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
-                         animated:NO];
-                [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+                cell.textLabel.text = [NSString stringWithFormat:@"清空缓存: 已占%@",[self getCacheFolderSizeStr]];
+
             } else {
                 if (user) {
                     cell.text = [NSString stringWithFormat:@"%@ 已登入", user.username];
@@ -139,7 +134,7 @@
             }
             break;
         case 3:
-            if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
+            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
                 cell.textLabel.text = @"是否显示图片";
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
@@ -147,12 +142,75 @@
                 [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
                          animated:NO];
                 [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+            } else {
+                cell.textLabel.text = [NSString stringWithFormat:@"清空缓存: 已占%@",[self getCacheFolderSizeStr]];
             }
             break;
-        default:
-            break;
+        case 4:
+            cell.textLabel.text = @"是否显示图片";
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+            cell.accessoryView = switchView;
+            [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
+                     animated:NO];
+            [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
     }
     return cell;
+}
+
+/*计算APP缓存大小*/
+- (unsigned long long int) cacheFolderSize {
+    NSFileManager *_manager = [NSFileManager defaultManager];
+    NSArray *_cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *_cacheDirectory = [_cachePaths objectAtIndex:0];
+    NSLog(@"cacheDirectory: %@", _cacheDirectory);
+    NSArray *_cacheFileList;
+    NSEnumerator *_cacheEnumerator;
+    NSString *_cacheFilePath;
+    unsigned long long int _cacheFolderSize = 0;
+    
+    _cacheFileList = [_manager subpathsAtPath:_cacheDirectory];
+    _cacheEnumerator = [_cacheFileList objectEnumerator];
+    while (_cacheFilePath = [_cacheEnumerator nextObject]) {
+        NSDictionary *_cacheFileAttributes = [_manager fileAttributesAtPath:[_cacheDirectory stringByAppendingPathComponent:_cacheFilePath] traverseLink:YES];
+        _cacheFolderSize += [_cacheFileAttributes fileSize];
+    }
+    
+    return _cacheFolderSize;
+}
+
+- (NSString *)getCacheFolderSizeStr {
+    NSNumber *number = [NSNumber numberWithLongLong:[self cacheFolderSize]];
+    const unsigned int bytes = 1024 * 1024;
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [formatter setPositiveFormat:@"##0.00MB"];
+    NSNumber *partial = [NSNumber numberWithFloat:([number floatValue] / bytes)];
+    return [formatter stringFromNumber:partial];
+}
+
+/*清空APP缓存*/
+- (void)clearCache {
+    NSArray *_cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *_cacheDirectory = [_cachePaths objectAtIndex:0];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    NSArray *imagesFiles = [fileManager contentsOfDirectoryAtPath:_cacheDirectory error:&error];
+    for (NSString *file in imagesFiles) {
+        error = nil;
+        [fileManager removeItemAtPath:[_cacheDirectory stringByAppendingPathComponent:file] error:&error];
+        /* do error handling here */
+    }
+    [self didFinishClearCache];
+}
+
+- (void)didFinishClearCache {
+    [self.tableView reloadData];
+}
+- (void)viewDidAppear:(BOOL)animated {
+    [self.tableView reloadData];
+    NSLog(@"cache size: %lld", [self cacheFolderSize]); //in byte
 }
 
 - (void) switchChanged:(id)sender {
@@ -197,12 +255,31 @@
                 [self showLogin];
             }    
         } else {
-            //不响应
+            [self confirmClearCache];
         }
+    } else if(row == 3) {
+        [self confirmClearCache];
     }
 	[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 	NSLog(@"...didSelectRowAtIndexPath");
     
+}
+
+- (void)confirmClearCache {
+    UIActionSheet *actionsSheet = [[UIActionSheet alloc] initWithTitle:@"确认清除缓存？"
+                                                              delegate:self
+                                                     cancelButtonTitle:@"取消"
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:@"确定", nil];
+    [actionsSheet showInView:[[NoneAdultAppDelegate sharedAppDelegate] window]];
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    // Actions
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            [self clearCache];
+        }
+    }
 }
 
 - (void)showLogOut {
