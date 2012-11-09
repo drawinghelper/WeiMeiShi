@@ -101,7 +101,7 @@
     NSLog(@"webViewDidStartLoad...");
     HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.labelText = @"努力加载中...";
-    [HUD setOpacity:1.0f];
+    [HUD setOpacity:0.6f];
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     NSLog(@"webViewDidFinishLoad...");

@@ -51,4 +51,6 @@
 @optional
 - (NSString *) emailableCell:(EmailableCell *)cell emailAddressForCellAtIndexPath:(NSIndexPath *)indexPath;
 - (void) emailableCell:(EmailableCell *)cell didPressSendEmailOnCellAtIndexPath:(NSIndexPath *)indexPath;
+- (void) emailableCell:(EmailableCell *)cell didFinishCopy:(NSIndexPath *)indexPath;
+
 @end

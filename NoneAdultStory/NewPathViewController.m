@@ -431,7 +431,7 @@
     [super objectsWillLoad];
     HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     HUD.labelText = @"努力加载中...";
-    [HUD setOpacity:1.0f];
+    [HUD setOpacity:0.6f];
     
     // This method is called before a PFQuery is fired to get more objects
     NSLog(@"开始加载...");
@@ -580,12 +580,7 @@
              */
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = weiboContent;
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文字内容已复制"
-                                                                message:nil
-                                                               delegate:self
-                                                      cancelButtonTitle:@"确定"
-                                                      otherButtonTitles:nil];
-            [alertView show];
+            [self showHUDWithMessage:@"文本已复制"];
             
             return; 
             
@@ -957,7 +952,28 @@
     [self savePhoto];
     NSLog(@"保存图片");
 }
+- (void) emailableCell:(EmailableCell *)cell didFinishCopy:(NSIndexPath *)indexPath {
+    NSLog(@"复制好了！");
+    [self showHUDWithMessage:@"文本已复制"];
+}
 
+- (void)showHUDWithMessage: (NSString *)msgTxt {
+	
+	HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:HUD];
+	
+	// Make the customViews 37 by 37 pixels for best results (those are the bounds of the build-in progress indicators)
+	HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+	
+	// Set custom view mode
+	HUD.mode = MBProgressHUDModeCustomView;
+	
+	HUD.delegate = self;
+	HUD.labelText = msgTxt;
+	
+	[HUD show:YES];
+	[HUD hide:YES afterDelay:1];
+}
 #pragma mark -
 #pragma mark MBProgressHUDDelegate methods
 

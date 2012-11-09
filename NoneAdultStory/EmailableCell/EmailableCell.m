@@ -105,6 +105,9 @@ static const CFTimeInterval kLongPressMinimumDurationSeconds = 0.3;
         [[UIPasteboard generalPasteboard] setString:self.emailAddress];
     }
 
+    if ((self.delegate != nil) && [self.delegate respondsToSelector:@selector(emailableCell:didFinishCopy:)]) {
+        [self.delegate emailableCell:self didFinishCopy:self.indexPath];
+    }
     [self resignFirstResponder];
 }
 

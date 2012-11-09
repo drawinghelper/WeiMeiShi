@@ -491,7 +491,7 @@
     
     HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     HUD.labelText = @"努力加载中...";
-    [HUD setOpacity:1.0f];
+    [HUD setOpacity:0.6f];
 }
 #pragma mark -
 #pragma mark HTTP Response Methods
@@ -981,12 +981,7 @@
              */
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = weiboContent;
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文字内容已复制"
-                                                                message:nil
-                                                               delegate:self
-                                                      cancelButtonTitle:@"确定"
-                                                      otherButtonTitles:nil];
-            [alertView show];
+            [self showHUDWithMessage:@"文本已复制"];
             
             return; 
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 1) {
@@ -1044,7 +1039,7 @@
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    //[self showProgressHUDCompleteMessage: error ? NSLocalizedString(@"Failed", @"Informing the user a process has failed") : NSLocalizedString(@"Saved", @"Informing the user an item has been saved")];
+    //[self showHUDWithMessage:@"文本已复制": error ? @"图片保存失败！" : @"图片保存成功"];
 }
 
 #pragma mark - Action Sheet Delegate
@@ -1103,6 +1098,29 @@
     
     [self savePhoto];
     NSLog(@"保存图片");
+}
+
+- (void) emailableCell:(EmailableCell *)cell didFinishCopy:(NSIndexPath *)indexPath {
+    NSLog(@"复制好了！");
+    [self showHUDWithMessage:@"文本已复制"];
+}
+
+- (void)showHUDWithMessage: (NSString *)msgTxt {
+	
+	HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:HUD];
+	
+	// Make the customViews 37 by 37 pixels for best results (those are the bounds of the build-in progress indicators)
+	HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
+	
+	// Set custom view mode
+	HUD.mode = MBProgressHUDModeCustomView;
+	
+	HUD.delegate = self;
+	HUD.labelText = msgTxt;
+	
+	[HUD show:YES];
+	[HUD hide:YES afterDelay:1];
 }
 
 // Customize the appearance of table view cells.
