@@ -142,12 +142,31 @@
 {
     [super viewWillAppear:animated];
 
+    NSString *showAd = [MobClick getConfigParams:@"showAd"];
+    if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
+        showAd = @"NO";
+    }
+    //总：AudioToolbox、CoreLocation、CoreTelephony、MessageUI、SystemConfiguration、QuartzCore、EventKit、MapKit、libxml2
+    
+    if ([showAd isEqualToString:@"YES"]) {
+        //增加广告条显示
+        self.adView = [[AdMoGoView alloc] initWithAppKey:[[NoneAdultAppDelegate sharedAppDelegate] getMogoAppKey]
+                                                  adType:AdViewTypeNormalBanner
+                                             expressMode:NO
+                                      adMoGoViewDelegate:self];
+        
+        [adView setFrame:CGRectZero];
+        [self.navigationController.view addSubview:adView];
+    }
+    
     [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [adView removeFromSuperview];
     if (isInCommonView) {
         [self contract];
     }
@@ -159,26 +178,6 @@
     
     isInCommonView = YES;
     [self processPullMessage];
-
-    NSString *showAd = [MobClick getConfigParams:@"showAd"];
-    if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
-        showAd = @"NO";
-    }
-    //总：AudioToolbox、CoreLocation、CoreTelephony、MessageUI、SystemConfiguration、QuartzCore、EventKit、MapKit、libxml2
-
-    if ([showAd isEqualToString:@"YES"]) {
-        //增加广告条显示
-        /*self.adView = [AdMoGoView requestAdMoGoViewWithDelegate:self AndAdType:AdViewTypeNormalBanner
-                                                    ExpressMode:NO];
-        */
-        self.adView = [[AdMoGoView alloc] initWithAppKey:[[NoneAdultAppDelegate sharedAppDelegate] getMogoAppKey]
-                                             adType:AdViewTypeNormalBanner
-                                        expressMode:NO
-                                 adMoGoViewDelegate:self];
-
-        [adView setFrame:CGRectZero];
-        [self.navigationController.view addSubview:adView];
-    }
         
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
     btnRefresh.frame = CGRectMake(0, 0, 44, 44);
