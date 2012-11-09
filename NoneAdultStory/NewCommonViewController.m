@@ -959,14 +959,16 @@
                 [[NoneAdultAppDelegate sharedAppDelegate] scoreForShareUrl:currentDuanZi action:UIActionShare];
             }
         }
-        NSString *statusContent = nil;
         NSString *weiboContent = [currentDuanZi objectForKey:@"content"];
-        NSString *cuttedContent = [[NSString alloc] initWithString:weiboContent];
-        int cuttedLength = 136;
-        if (cuttedLength < [weiboContent length]) {
-            cuttedContent = [weiboContent substringToIndex:cuttedLength];
+        NSString *statusContent = weiboContent;
+        NSString *postfix = @" (来自 http://t.cn/zjPfre4 )";
+        int contentMaxLength = 140 - postfix.length;
+        
+        if ([statusContent length] > contentMaxLength) {
+            statusContent = [statusContent substringToIndex:contentMaxLength];
         }
-        statusContent = [NSString stringWithString:cuttedContent];
+        statusContent = [statusContent stringByAppendingString:postfix];
+        
         NSString *largeUrl = [currentDuanZi objectForKey:@"large_url"];
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         UIImage *shareImage = [manager imageWithURL:[NSURL URLWithString:largeUrl]];
