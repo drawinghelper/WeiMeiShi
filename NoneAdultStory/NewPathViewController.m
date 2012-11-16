@@ -560,7 +560,9 @@
         
         NSString *weiboContent = [currentDuanZi objectForKey:@"content"];
         NSString *statusContent = weiboContent;
-        NSString *postfix = @" (来自 http://t.cn/zjPfre4 )";
+        NSString *postfix = [NSString stringWithFormat:@" (来自 %@ )",
+                             [[NoneAdultAppDelegate sharedAppDelegate] getShareProfix]
+                             ];
         int contentMaxLength = 140 - postfix.length;
         
         if ([statusContent length] > contentMaxLength) {

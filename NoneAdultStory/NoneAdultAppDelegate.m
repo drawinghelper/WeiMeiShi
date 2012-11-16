@@ -186,6 +186,16 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
     return [appConfig objectForKey:@"UmengAppKey"];
 }
+- (NSString *)getAppCPAKey {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"AppCPAKey"];
+}
+- (NSString *)getShareProfix {
+    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
+                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
+    return [appConfig objectForKey:@"ShareProfix"];
+}
 
 - (NSString *)getNewTabCid {
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
@@ -399,8 +409,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //APPCPA
-    NSString *appKey = @"8542541d479b49a69622ddb7b1d9e48d" ;
-    NSString *deviceName = [[[UIDevice currentDevice ] name]
+    NSString *appKey = [[NoneAdultAppDelegate sharedAppDelegate] getAppCPAKey];
+    NSString *deviceName = [[[UIDevice currentDevice] name]
                             stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding ];
     NSString *url = [NSString stringWithFormat:@"http://c.appcpa.co/e?appkey=%@&deviceName=%@", appKey, deviceName];
     NSURLConnection *connection = [NSURLConnection
