@@ -752,7 +752,7 @@
                                                              delegate:self
                                                     cancelButtonTitle:@"取消" 
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles: @"复制文本",@"保存图片",@"新浪微博",@"腾讯微博", nil];//@"邮件分享", nil];     
+                                                    otherButtonTitles: @"复制文本",@"保存图片",@"微信朋友圈", @"微信好友",@"新浪微博",@"腾讯微博", nil];
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -991,6 +991,16 @@
             [self savePhoto];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
+            NSLog(@"custom event share_sina_haoxiao!");
+            //微信朋友圈分享
+            [[NoneAdultAppDelegate sharedAppDelegate] sendTextContent:weiboContent withScene:WXSceneTimeline];
+            return;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3) {
+            NSLog(@"custom event share_sina_haoxiao!");
+            //微信好友分享
+            [[NoneAdultAppDelegate sharedAppDelegate] sendTextContent:weiboContent withScene:WXSceneSession];
+            return;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 4) {
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
             [UMSNSService presentSNSInController:self 
@@ -1001,7 +1011,7 @@
             
             [UMSNSService setDataSendDelegate:self];
             return;
-        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3) {
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 5) {
             NSLog(@"custom event share_sina_haoxiao!");            
             [UMSNSService presentSNSInController:self 
                                           appkey:[[NoneAdultAppDelegate sharedAppDelegate] getUmengAppKey] 

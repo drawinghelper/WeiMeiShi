@@ -13,7 +13,7 @@
 #import "Appirater.h"
 #import <Parse/Parse.h>
 #import "FMDatabase.h"
-
+#import "WXApi.h"
 typedef enum {
     UIActionShare  = 0,
     UIActionCollect  = 1,
@@ -26,7 +26,7 @@ typedef enum {
     UIChannelHistory  = 2,
 } UIChannel;
 
-@interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, NSURLConnectionDelegate>{
+@interface NoneAdultAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, NSURLConnectionDelegate, WXApiDelegate>{
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -50,4 +50,6 @@ typedef enum {
 - (void)setNeedShowImage:(BOOL)needShowImage;
 
 - (void)scoreForShareUrl:(NSDictionary *)currentDuanZi action:(UIAction)action;
+- (void) sendTextContent:(NSString*)nsText withScene:(int)scene;
+
 @end

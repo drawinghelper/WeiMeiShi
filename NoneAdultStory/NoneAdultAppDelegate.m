@@ -402,9 +402,33 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     NSLog(@"失败，错误处理");
 }
 
+- (void) sendTextContent:(NSString*)nsText withScene:(int)scene
+{
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = YES;
+    req.text = nsText;
+    req.scene = scene;
+    
+    [WXApi sendReq:req];
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"didFinishLaunchingWithOptions...");
+    
+    //微信配置
+    NSArray *bundleURLTypes = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLTypes"];
+    NSDictionary *dic = [bundleURLTypes objectAtIndex:0];
+    NSArray *bundleURLSchemes = [dic objectForKey:@"CFBundleURLSchemes"];
+    [WXApi registerApp:[bundleURLSchemes objectAtIndex:0]];
     
     //Other code
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
