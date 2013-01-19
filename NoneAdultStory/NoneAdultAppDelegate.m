@@ -186,11 +186,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
                                [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
     return [appConfig objectForKey:@"UmengAppKey"];
 }
-- (NSString *)getAppCPAKey {
-    NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
-                               [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
-    return [appConfig objectForKey:@"AppCPAKey"];
-}
+
 - (NSString *)getShareProfix {
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:
                                [[NSBundle mainBundle] pathForResource:@"AppConfig" ofType:@"plist"]];
@@ -408,16 +404,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //APPCPA
-    NSString *appKey = [[NoneAdultAppDelegate sharedAppDelegate] getAppCPAKey];
-    NSString *deviceName = [[[UIDevice currentDevice] name]
-                            stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding ];
-    NSString *url = [NSString stringWithFormat:@"http://c.appcpa.co/e?appkey=%@&deviceName=%@", appKey, deviceName];
-    NSURLConnection *connection = [NSURLConnection
-                                   connectionWithRequest:[NSMutableURLRequest
-                                                          requestWithURL:[NSURL URLWithString:url]]
-                                   delegate:self];
-    
+    NSLog(@"didFinishLaunchingWithOptions...");
     
     //Other code
     NSDictionary *appConfig = [[NSDictionary alloc] initWithContentsOfFile:

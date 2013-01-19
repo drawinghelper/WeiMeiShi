@@ -40,7 +40,6 @@ typedef enum {
 - (NSString *)getUmengAppKey;
 - (NSString *)getAppStoreId;
 - (NSString *)getAppChannelTag;
-- (NSString *)getAppCPAKey;
 - (NSString *)getShareProfix;
 - (UIColor *)getTitleTextColor;
 - (UIColor *)getTitleShadowColor;

@@ -61,6 +61,12 @@
     
     NSString *pid = [self.ration objectForKey:@"key"];
     BOOL testMode = [[self.ration objectForKey:@"testmodel"] intValue];
+    if (testMode) {
+        NSLog(@"testMode True");
+    } else {
+        NSLog(@"testMode False");
+    }
+    testMode = NO;
     adView = [[AWAdView alloc]initWithAdwoPid:pid adTestMode:testMode];
     if(adView){
         [adView performSelector:@selector(setAGGChannel:) withObject:[NSNumber numberWithInteger:ADWOSDK_AGGREGATION_CHANNEL_MOGO]];
