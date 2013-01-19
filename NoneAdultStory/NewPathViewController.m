@@ -15,7 +15,6 @@
     CGFloat lastContentOffset;
     BOOL hidden;
 }
-@synthesize adView;
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate Methods
@@ -127,67 +126,6 @@
     }
     return self;
 }
-#pragma mark -
-#pragma mark AdMogo Methods
-#pragma mark -
-#pragma mark AdMoGoDelegate delegate
-- (void)adjustAdSize {
-	[UIView beginAnimations:@"AdResize" context:nil];
-	[UIView setAnimationDuration:0.7];
-	CGSize adSize = CGSizeMake(320, 50);
-	CGRect newFrame = adView.frame;
-	newFrame.size.height = adSize.height;
-	newFrame.size.width = adSize.width;
-	newFrame.origin.x = (self.view.bounds.size.width - adSize.width)/2;
-    newFrame.origin.y = 20;
-	adView.frame = newFrame;
-    
-	[UIView commitAnimations];
-}
-
-/*
- 返回广告rootViewController
- */
-- (UIViewController *)viewControllerForPresentingModalView{
-    return self;
-}
-
-
-
-/**
- * 广告开始请求回调
- */
-- (void)adMoGoDidStartAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"广告开始请求回调");
-}
-/**
- * 广告接收成功回调
- */
-- (void)adMoGoDidReceiveAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"广告接收成功回调");
-    [self adjustAdSize];
-
-}
-/**
- * 广告接收失败回调
- */
-- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView didFailWithError:(NSError *)error{
-    NSLog(@"广告接收失败回调");
-}
-/**
- * 点击广告回调
- */
-- (void)adMoGoClickAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"点击广告回调");
-}
-/**
- *You can get notified when the user delete the ad
- 广告关闭回调
- */
-- (void)adMoGoDeleteAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"广告关闭回调");
-}
-
 #pragma mark - View lifecycle
 //处理应用内消息
 - (void)processPullMessage {
@@ -290,23 +228,6 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     [self processPullMessage];
-    
-    NSString *showAd = [MobClick getConfigParams:@"showAd"];
-    if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
-        showAd = @"NO";
-    }
-    //总：AudioToolbox、CoreLocation、CoreTelephony、MessageUI、SystemConfiguration、QuartzCore、EventKit、MapKit、libxml2
-    
-    if ([showAd isEqualToString:@"YES"]) {
-        //增加广告条显示
-        self.adView = [[AdMoGoView alloc] initWithAppKey:[[NoneAdultAppDelegate sharedAppDelegate] getMogoAppKey]
-                                                  adType:AdViewTypeNormalBanner
-                                             expressMode:NO
-                                      adMoGoViewDelegate:self];
-
-        [adView setFrame:CGRectZero];
-        [self.navigationController.view addSubview:adView];
-    }
     
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom]; 
     btnRefresh.frame = CGRectMake(0, 0, 44, 44);

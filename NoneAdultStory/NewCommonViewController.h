@@ -13,7 +13,8 @@
 #import "UIImageView+WebCache.h"
 #import "EGORefreshTableHeaderView.h"
 #import "MBProgressHUD.h"
-#import "AdMoGoView.h"
+#import "AdSageDelegate.h" 
+#import "AdSageView.h"
 #import "NoneAdultDetailViewController.h"
 #import "NSString+HTML.h"
 #import "UMTableViewDemo.h"
@@ -24,9 +25,8 @@
 #define BOTTOM_SECTION_HEIGHT 34.0f
 #define HORIZONTAL_PADDING 16.0f
 
-@interface NewCommonViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdMoGoDelegate> {
-    AdMoGoView *adView;
-
+@interface NewCommonViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdSageDelegate> {
+    AdSageView *adView;
     MBProgressHUD *HUD;
 
     IBOutlet UITableView *tableView;
@@ -58,7 +58,6 @@
     BOOL isInCommonView;
 }
 @property(nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) AdMoGoView *adView;
 
 - (void)reloadTableViewDataSource;
 - (void)doneLoadingTableViewData;

@@ -13,7 +13,6 @@
 #import "MBProgressHUD.h"
 #import "UMSNSService.h"
 #import "NoneAdultAppDelegate.h"
-#import "AdMoGoView.h"
 #import "UMTableViewDemo.h"
 #import "EmailableCell.h"
 
@@ -23,8 +22,7 @@
 #define HORIZONTAL_PADDING 16.0f
 
 
-@interface NewPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate, UIAlertViewDelegate, AdMoGoDelegate> {
-    AdMoGoView *adView;
+@interface NewPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
 
     MBProgressHUD *HUD;
     PFObject *currentDuanZi;
@@ -35,6 +33,5 @@
     
     UIImage *currentImage;
 }
-@property (nonatomic, retain) AdMoGoView *adView;
 
 @end

@@ -19,7 +19,6 @@
 
 @implementation NewCommonViewController
 @synthesize tableView;
-@synthesize adView;
 
 #pragma mark - The Magic!
 
@@ -84,19 +83,6 @@
 
 #pragma mark -
 #pragma mark AdMoGoDelegate delegate
-- (void)adjustAdSize {
-	[UIView beginAnimations:@"AdResize" context:nil];
-	[UIView setAnimationDuration:0.7];
-	CGSize adSize = CGSizeMake(320, 50);
-	CGRect newFrame = adView.frame;
-	newFrame.size.height = adSize.height;
-	newFrame.size.width = adSize.width;
-	newFrame.origin.x = (self.view.bounds.size.width - adSize.width)/2;
-    newFrame.origin.y = 20;
-	adView.frame = newFrame;
-    
-	[UIView commitAnimations];
-}
 
 /*
  返回广告rootViewController
@@ -105,73 +91,25 @@
     return self;
 }
 
-/**
- * 广告开始请求回调
- */
-- (void)adMoGoDidStartAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"广告开始请求回调");
-}
-/**
- * 广告接收成功回调
- */
-- (void)adMoGoDidReceiveAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"广告接收成功回调");
-    [self adjustAdSize];
-}
-/**
- * 广告接收失败回调
- */
-- (void)adMoGoDidFailToReceiveAd:(AdMoGoView *)adMoGoView didFailWithError:(NSError *)error{
-    NSLog(@"广告接收失败回调");
-}
-/**
- * 点击广告回调
- */
-- (void)adMoGoClickAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"点击广告回调");
-}
-/**
- *You can get notified when the user delete the ad
- 广告关闭回调
- */
-- (void)adMoGoDeleteAd:(AdMoGoView *)adMoGoView{
-    NSLog(@"广告关闭回调");
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    NSString *showAd = [MobClick getConfigParams:@"showAd"];
-    if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
-        showAd = @"NO";
-    }
-    //总：AudioToolbox、CoreLocation、CoreTelephony、MessageUI、SystemConfiguration、QuartzCore、EventKit、MapKit、libxml2
-    
-    if ([showAd isEqualToString:@"YES"]) {
-        //增加广告条显示
-        self.adView = [[AdMoGoView alloc] initWithAppKey:[[NoneAdultAppDelegate sharedAppDelegate] getMogoAppKey]
-                                                  adType:AdViewTypeNormalBanner
-                                             expressMode:NO
-                                      adMoGoViewDelegate:self];
-        
-        [adView setFrame:CGRectZero];
-        [self.navigationController.view addSubview:adView];
-    }
-    
     [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [adView removeFromSuperview];
+    [adView pauseAdRequest];
     if (isInCommonView) {
         [self contract];
     }
 }
-
+- (void)viewDidAppear:(BOOL)animated
+{
+    [adView continueAdRequest];
+    [super viewDidAppear:animated];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -231,6 +169,19 @@
         UIBarButtonItem *customBarItem = [[UIBarButtonItem alloc] initWithCustomView:button];
         self.navigationItem.leftBarButtonItem = customBarItem;
     }
+    
+    
+    NSString *showAd = [MobClick getConfigParams:@"showAd"];
+    if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
+        showAd = @"NO";
+    }    
+    //if ([showAd isEqualToString:@"YES"]) {
+        adView = [AdSageView requestAdSageBannerAdView:self
+                                              sizeType:AdSageBannerAdViewSize_320X50];
+        CGSize adSize = [adView actualAdSize];
+        adView.frame = CGRectMake(0, 20, self.view.frame.size.width, adSize.height);
+        [self.view addSubview:adView];
+    //}
 }
 
 -(void)back {

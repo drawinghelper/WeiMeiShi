@@ -12,7 +12,8 @@
 #import "MBProgressHUD.h"
 #import "UMSNSService.h"
 #import "NoneAdultAppDelegate.h"
-#import "AdMoGoView.h"
+#import "AdSageDelegate.h"
+#import "AdSageView.h"
 #import "UMTableViewDemo.h"
 #import "EmailableCell.h"
 
@@ -21,8 +22,8 @@
 #define BOTTOM_SECTION_HEIGHT 34.0f
 #define HORIZONTAL_PADDING 16.0f
 
-@interface HistoryPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate, AdMoGoDelegate> {
-    AdMoGoView *adView;
+@interface HistoryPathViewController : PFQueryTableViewController<MBProgressHUDDelegate, UMSNSDataSendDelegate, UIActionSheetDelegate, AdSageDelegate> {
+    AdSageView *adView;
     MBProgressHUD *HUD;
     PFObject *currentDuanZi;
     
@@ -31,6 +32,5 @@
     
     UIImage *currentImage;
 }
-@property (nonatomic, retain) AdMoGoView *adView;
 
 @end

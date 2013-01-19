@@ -115,8 +115,8 @@
     firstLoaded = YES;
     self.tableView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1];
     
-    if (self.adView != nil) {
-        [self.adView removeFromSuperview];
+    if (adView != nil) {
+        [adView removeFromSuperview];
     }
 }
 
