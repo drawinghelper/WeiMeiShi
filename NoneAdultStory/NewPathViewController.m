@@ -206,7 +206,11 @@
             // they want to rate it
             NSString *cancelUrl = [pullmessageInfo objectForKey:@"cancelurl"];
             if (![cancelUrl isEqualToString:@""]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:cancelUrl]];
+                if ([cancelUrl isEqualToString:@"mobisage"]) {
+                    [recmdView OpenAdSageRecmdModalView];
+                } else {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:cancelUrl]];
+                }
             }
             break;
         }
@@ -214,7 +218,11 @@
         {
             NSString *okUrl = [pullmessageInfo objectForKey:@"okurl"];
             if (![okUrl isEqualToString:@""]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:okUrl]];
+                if ([okUrl isEqualToString:@"mobisage"]) {
+                    [recmdView OpenAdSageRecmdModalView];
+                } else {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:okUrl]];
+                }
             }
             break;
         }
