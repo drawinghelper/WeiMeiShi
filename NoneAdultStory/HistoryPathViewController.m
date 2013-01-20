@@ -36,11 +36,11 @@
     {
         // scroll up
         if(scrollView.isTracking && (abs(differenceFromLast)>1))
-            [self expand];
+            ;//            [self expand];
     }
     else {
-        if(scrollView.isTracking && (abs(differenceFromLast)>1))
-            [self contract];
+        if(scrollView.isTracking && (abs(differenceFromLast)>1)) 
+            ;//            [self contract];
     }
     
 }
@@ -55,7 +55,7 @@
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
 {
-    [self contract];
+//    [self contract];
     return YES;
 }
 
@@ -147,17 +147,17 @@
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    NSString *showAd = [MobClick getConfigParams:@"showAd"];
+    NSString *showAd = [MobClick getConfigParams:@"showAdHistory"];
     if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
         showAd = @"NO";
     }
-    //if ([showAd isEqualToString:@"YES"]) {
-    adView = [AdSageView requestAdSageBannerAdView:self
-                                          sizeType:AdSageBannerAdViewSize_320X50];
-    CGSize adSize = [adView actualAdSize];
-    adView.frame = CGRectMake(0, 20, self.view.frame.size.width, adSize.height);
-    [self.view addSubview:adView];
-    //}
+    if ([showAd isEqualToString:@"YES"]) {
+        adView = [AdSageView requestAdSageBannerAdView:self
+                                              sizeType:AdSageBannerAdViewSize_320X50];
+        CGSize adSize = [adView actualAdSize];
+        adView.frame = CGRectMake(0, 40+44+5, self.view.frame.size.width, adSize.height);
+        [self.navigationController.view addSubview:adView];
+    }
     
     UIButton *btnRefresh = [UIButton buttonWithType:UIButtonTypeCustom];
     btnRefresh.frame = CGRectMake(0, 0, 44, 44);
@@ -216,7 +216,7 @@
 {
     [super viewWillDisappear:animated];
     [adView pauseAdRequest];
-    [self contract];
+//    [self contract];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

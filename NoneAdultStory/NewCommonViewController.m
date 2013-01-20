@@ -175,13 +175,13 @@
     if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
         showAd = @"NO";
     }    
-    //if ([showAd isEqualToString:@"YES"]) {
+    if ([showAd isEqualToString:@"YES"]) {
         adView = [AdSageView requestAdSageBannerAdView:self
                                               sizeType:AdSageBannerAdViewSize_320X50];
         CGSize adSize = [adView actualAdSize];
-        adView.frame = CGRectMake(0, 20, self.view.frame.size.width, adSize.height);
+        adView.frame = CGRectMake(0, 25, self.view.frame.size.width, adSize.height);
         [self.view addSubview:adView];
-    //}
+    }
 }
 
 -(void)back {
