@@ -14,7 +14,7 @@
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        [[AdSageManager getInstance] setAdSageKey:@"b9d05c2bb7c340b7ac19e435cf72125b"];
+        [[AdSageManager getInstance] setAdSageKey:@"de5c646025f2451dbf5cea46eb66ac07"];
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([NoneAdultAppDelegate class]));
     }
 }
