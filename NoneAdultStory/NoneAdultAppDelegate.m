@@ -573,6 +573,38 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     [self buryRoutineNotification];
 }
 
+- (BOOL)isNeedAlert {
+    BOOL retVal = [[NoneAdultAppDelegate sharedAppDelegate] getNeedAlertDefault];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *needAlertNum = [defaults objectForKey:@"needAlert"];
+    if (needAlertNum == nil) {
+        [defaults setObject:[NSNumber numberWithBool:retVal] forKey:@"needAlert"];
+        [defaults synchronize];
+    } else {
+        retVal = [needAlertNum boolValue];
+    }
+    return retVal;
+}
+- (void)setNeedAlert:(BOOL)needAlert {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSNumber numberWithBool:needAlert] forKey:@"needAlert"];
+    [defaults synchronize];
+    
+    [self cancelOrBuryRoutineNotification];
+}
+
+- (BOOL)getNeedAlertDefault {
+    return YES;
+}
+
+- (void)cancelOrBuryRoutineNotification {
+    if ([self isNeedAlert]) {
+        [self buryRoutineNotification];
+    } else {
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    }
+}
+
 - (void)buryRoutineNotification {
     //删除所有本地应用外推送
     [[UIApplication sharedApplication] cancelAllLocalNotifications];

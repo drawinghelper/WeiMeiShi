@@ -60,7 +60,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 4 : 5;
+    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 5 : 6;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -147,15 +147,41 @@
             }
             break;
         case 4:
-            cell.textLabel.text = @"是否显示图片";
+            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
+                //显示是否提醒
+                cell.textLabel.text = @"内容更新提醒";
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+                cell.accessoryView = switchView;
+                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedAlert] animated:NO];
+                [switchView addTarget:self action:@selector(alertSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+            } else {
+                cell.textLabel.text = @"是否显示图片";
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+                cell.accessoryView = switchView;
+                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
+                         animated:NO];
+                [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+            }
+            break;
+        case 5:
+            //显示是否提醒
+            cell.textLabel.text = @"内容更新提醒";
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
             cell.accessoryView = switchView;
-            [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
-                     animated:NO];
-            [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+            [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedAlert] animated:NO];
+            [switchView addTarget:self action:@selector(alertSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+            break;
     }
     return cell;
+}
+
+- (void) alertSwitchChanged:(id)sender {
+    UISwitch* switchControl = sender;
+    NSLog( @"The switch is %@", switchControl.on ? @"ON" : @"OFF" );
+    [[NoneAdultAppDelegate sharedAppDelegate] setNeedAlert:switchControl.on];
 }
 
 /*计算APP缓存大小*/

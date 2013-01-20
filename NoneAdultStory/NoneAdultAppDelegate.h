@@ -52,4 +52,6 @@ typedef enum {
 - (void)scoreForShareUrl:(NSDictionary *)currentDuanZi action:(UIAction)action;
 - (void) sendTextContent:(NSString*)nsText withScene:(int)scene;
 
+- (BOOL)isNeedAlert;
+- (void)setNeedAlert:(BOOL)needAlert;
 @end
