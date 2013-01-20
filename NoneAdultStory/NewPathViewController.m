@@ -15,6 +15,11 @@
     CGFloat lastContentOffset;
     BOOL hidden;
 }
+#pragma mark - MobiSageRecommendDelegate
+- (UIViewController *)viewControllerForPresentingModalView
+{
+    return self;
+}
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate Methods
@@ -235,6 +240,7 @@
     UIImage *btnImage = [UIImage imageNamed:@"refresh.png"];
     [btnRefresh setImage:btnImage forState:UIControlStateNormal];
     
+    /*
     UIButton *btnLianMeng = [UIButton buttonWithType:UIButtonTypeCustom];
     btnLianMeng.frame = CGRectMake(0, 0, 55, 30);
     [btnLianMeng addTarget:self action:@selector(showLianMeng) forControlEvents:UIControlEventTouchUpInside];
@@ -244,8 +250,12 @@
     [btnLianMeng.titleLabel setFont:[UIFont boldSystemFontOfSize:12.0]];
     [btnLianMeng.titleLabel setShadowOffset:CGSizeMake(0, 0.2f)];
     [btnLianMeng.titleLabel setShadowColor:[UIColor lightGrayColor]];
-    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnLianMeng];
+    */
+    recmdView = [[MobiSageRecommendView
+                  alloc]initWithDelegate:self andImg:nil];
+    recmdView.frame = CGRectMake(10, 10,recmdView.frame.size.width, recmdView.frame.size.height);
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:recmdView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnRefresh];
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] 
@@ -406,7 +416,7 @@
                                                              delegate:self
                                                     cancelButtonTitle:@"取消" 
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"复制文本",@"保存图片",@"新浪微博",@"腾讯微博", nil];     
+                                                    otherButtonTitles:@"复制文本",@"保存图片",@"微信朋友圈", @"微信好友",@"新浪微博",@"腾讯微博", nil];     
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -512,6 +522,16 @@
             [self savePhoto];
             return;
         } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 2) {
+            NSLog(@"custom event share_sina_haoxiao!");
+            //微信朋友圈分享
+            [[NoneAdultAppDelegate sharedAppDelegate] sendTextContent:weiboContent withScene:WXSceneTimeline];
+            return;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3) {
+            NSLog(@"custom event share_sina_haoxiao!");
+            //微信好友分享
+            [[NoneAdultAppDelegate sharedAppDelegate] sendTextContent:weiboContent withScene:WXSceneSession];
+            return;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 4) {
             
             NSLog(@"custom event share_sina_budong!");
             /*[MobClick event:@"share_sina_budong"];*/
@@ -523,7 +543,7 @@
             
             [UMSNSService setDataSendDelegate:self];
             return;
-        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 3) {
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex + 5) {
             NSLog(@"custom event share_sina_haoxiao!");            
             [UMSNSService presentSNSInController:self 
                                           appkey:[[NoneAdultAppDelegate sharedAppDelegate] getUmengAppKey] 

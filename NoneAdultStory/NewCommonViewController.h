@@ -15,6 +15,7 @@
 #import "MBProgressHUD.h"
 #import "AdSageDelegate.h" 
 #import "AdSageView.h"
+#import "MobiSageRecommendSDK.h"
 #import "NoneAdultDetailViewController.h"
 #import "NSString+HTML.h"
 #import "UMTableViewDemo.h"
@@ -25,8 +26,9 @@
 #define BOTTOM_SECTION_HEIGHT 34.0f
 #define HORIZONTAL_PADDING 16.0f
 
-@interface NewCommonViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdSageDelegate> {
+@interface NewCommonViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdSageDelegate, MobiSageRecommendDelegate> {
     AdSageView *adView;
+    MobiSageRecommendView *recmdView;
     MBProgressHUD *HUD;
 
     IBOutlet UITableView *tableView;
