@@ -26,16 +26,6 @@
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>900</string>
-			<key>title</key>
-			<string>励志箴言</string>
-			<key>subtitle</key>
-			<string>就算只有影子陪伴，也要对自己微笑</string>
-			<key>icon</key>
-			<string>channel_zhenyan.png</string>
-		</dict>
-		<dict>
-			<key>cid</key>
 			<string>902</string>
 			<key>title</key>
 			<string>唯美英语</string>
@@ -66,7 +56,7 @@
 		</dict>
 	</array>
 	<key>NewTabCid</key>
-	<string>899</string>
+	<string>1646</string>
 	<key>UmengAppKey</key>
 	<string>505dd1e05270150d1b000154</string>
 	<key>ParseConfig</key>

@@ -488,63 +488,15 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     
     self.tabBarController = [[UITabBarController alloc] init];
     
-    NSString *showChannel = [MobClick getConfigParams:@"showChannel"];
-    if (showChannel == nil || showChannel == [NSNull null]  || [showChannel isEqualToString:@""]) {
-        showChannel = @"NO";
-    }
-    
-    //为过审和推广初期内容高质量，只显示精选；之后可以显示未精选过的最新笑话
-    if ([[NoneAdultAppDelegate sharedAppDelegate] isAdmin]) {
-        self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                                 newCommonNavViewController, 
-                                                 newPathNavViewController,
-                                                 historyTopNavViewController,
-                                                 channelNavViewController,
-                                                 collectNavViewController,
-                                                 //searchController,
-                                                 settingNavViewController,
-                                                 nil];
-    } else {
-        if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-            self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                                         newPathNavViewController,
-                                                         historyTopNavViewController,
-                                                         channelNavViewController,
-                                                         collectNavViewController,
-                                                         //searchController,
-                                                         settingNavViewController,
-                                                         nil];
-            if ([showChannel isEqualToString:@"NO"]) {
-                self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                                         newPathNavViewController,
-                                                         historyTopNavViewController,
-                                                         //channelNavViewController,
-                                                         collectNavViewController,
-                                                         //searchController,
-                                                         settingNavViewController,
-                                                         nil];
-            }
-        } else {
-            self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                                     newCommonNavViewController, 
-                                                     historyTopNavViewController,
-                                                     channelNavViewController,
-                                                     collectNavViewController,
-                                                     //searchController,
-                                                     settingNavViewController,
-                                                     nil];
-            if ([showChannel isEqualToString:@"NO"]) {
-                self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-                                                         newCommonNavViewController, 
-                                                         historyTopNavViewController,
-                                                         //channelNavViewController,
-                                                         collectNavViewController,
-                                                         //searchController,
-                                                         settingNavViewController,
-                                                         nil];
-            }
-        }
-    }
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:
+                                             newCommonNavViewController, 
+                                             historyTopNavViewController,
+                                             channelNavViewController,
+                                             collectNavViewController,
+                                             //searchController,
+                                             settingNavViewController,
+                                             nil];
+
         
     self.window.rootViewController = self.tabBarController;
     [NSThread sleepForTimeInterval:1.0];
