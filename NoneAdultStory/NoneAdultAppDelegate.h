@@ -14,6 +14,7 @@
 #import <Parse/Parse.h>
 #import "FMDatabase.h"
 #import "WXApi.h"
+#import "APService.h"
 typedef enum {
     UIActionShare  = 0,
     UIActionCollect  = 1,

@@ -89,6 +89,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
             NSLog(@"Failed to subscribe to the broadcast channel.");
         }
     }];
+    
+    // Required
+    [APService registerDeviceToken:newDeviceToken];
 }
 
 + (NoneAdultAppDelegate *)sharedAppDelegate
@@ -504,9 +507,16 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     [self animateSplashScreen];
 
     [Appirater appLaunched:YES];
-    
-    application.applicationIconBadgeNumber = 0;
     [self buryRoutineNotification];
+    
+    //补充jpush代码
+    // Required
+    [APService
+     registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                         UIRemoteNotificationTypeSound |
+                                         UIRemoteNotificationTypeAlert)];
+    // Required
+    [APService setupWithOption:launchOptions];
     
     return YES;
 }
@@ -515,6 +525,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     //从push过来默认来最热tab
     //[self.tabBarController setSelectedIndex:1];
     [PFPush handlePush:userInfo];
+    
+    // Required
+    [APService handleRemoteNotification:userInfo];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -647,6 +660,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive...");
+    application.applicationIconBadgeNumber = 0;
     //1. 按照score表中的分数上传parse
     //1.1 找到需要更新的parseobject
     //1.2 使用incrementKey:byAmount:为新的score

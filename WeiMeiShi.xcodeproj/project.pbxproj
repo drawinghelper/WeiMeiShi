@@ -18,6 +18,9 @@
 		3E1C488F170181CF0081CD40 /* nav_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E1C4884170181CF0081CD40 /* nav_bg@2x.png */; };
 		3E1C4890170181CF0081CD40 /* share_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E1C4885170181CF0081CD40 /* share_normal.png */; };
 		3E1C4891170181CF0081CD40 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E1C4886170181CF0081CD40 /* star@2x.png */; };
+		3E1C489517018FA60081CD40 /* libPushSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C489417018FA60081CD40 /* libPushSDK.a */; };
+		3E1C4897170191190081CD40 /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E1C4896170191190081CD40 /* PushConfig.plist */; };
+		3E1C48991701985B0081CD40 /* libPushSDK-Simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C48981701985B0081CD40 /* libPushSDK-Simulator.a */; };
 		3E2860FF164BEC20000385AB /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E2860FE164BEC20000385AB /* libstdc++.6.0.9.dylib */; };
 		3E286101164BEC48000385AB /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E286100164BEC48000385AB /* libiconv.dylib */; };
 		3E286103164BEC78000385AB /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E286102164BEC78000385AB /* CoreFoundation.framework */; };
@@ -217,6 +220,10 @@
 		3E1C4884170181CF0081CD40 /* nav_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_bg@2x.png"; sourceTree = "<group>"; };
 		3E1C4885170181CF0081CD40 /* share_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_normal.png; sourceTree = "<group>"; };
 		3E1C4886170181CF0081CD40 /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star@2x.png"; sourceTree = "<group>"; };
+		3E1C489317018FA60081CD40 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
+		3E1C489417018FA60081CD40 /* libPushSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPushSDK.a; sourceTree = "<group>"; };
+		3E1C4896170191190081CD40 /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
+		3E1C48981701985B0081CD40 /* libPushSDK-Simulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libPushSDK-Simulator.a"; sourceTree = "<group>"; };
 		3E2860FE164BEC20000385AB /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
 		3E286100164BEC48000385AB /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		3E286102164BEC78000385AB /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -515,12 +522,25 @@
 				3EFC3E4C15ADBDDD001FE663 /* libUFPTableView.a in Frameworks */,
 				3E8D414516AAA2DB00F85979 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 				3E8D41A916AADC1600F85979 /* libMobiSageMediatorSDK_2.0.0.a in Frameworks */,
+				3E1C489517018FA60081CD40 /* libPushSDK.a in Frameworks */,
+				3E1C48991701985B0081CD40 /* libPushSDK-Simulator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E1C489217018FA60081CD40 /* jpush */ = {
+			isa = PBXGroup;
+			children = (
+				3E1C489317018FA60081CD40 /* APService.h */,
+				3E1C489417018FA60081CD40 /* libPushSDK.a */,
+				3E1C48981701985B0081CD40 /* libPushSDK-Simulator.a */,
+				3E1C4896170191190081CD40 /* PushConfig.plist */,
+			);
+			path = jpush;
+			sourceTree = "<group>";
+		};
 		3E8B8B5A1649F8AB00C4C2B5 /* EmailableCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -890,6 +910,7 @@
 		3EF46CFE155168E500A8FF4A /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3E1C489217018FA60081CD40 /* jpush */,
 				3E8D414616AADC1600F85979 /* MobiSageMediatorSDK_2.0.0 */,
 				3E8D414116AAA2DB00F85979 /* WeixinSDK */,
 				3E8B8B5A1649F8AB00C4C2B5 /* EmailableCell */,
@@ -1190,6 +1211,7 @@
 				3E1C488F170181CF0081CD40 /* nav_bg@2x.png in Resources */,
 				3E1C4890170181CF0081CD40 /* share_normal.png in Resources */,
 				3E1C4891170181CF0081CD40 /* star@2x.png in Resources */,
+				3E1C4897170191190081CD40 /* PushConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1340,14 +1362,15 @@
 					"\"$(SRCROOT)/NoneAdultStory/AdsMoGoLib/AdNetworkLibs/Adwo_SDK_300/adwoSDKLib\"",
 					"\"$(SRCROOT)/NoneAdultStory/WeixinSDK\"",
 					"\"$(SRCROOT)/NoneAdultStory/MobiSageMediatorSDK_2.0.0\"",
+					"\"$(SRCROOT)/NoneAdultStory/jpush\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
 				);
 				PRODUCT_NAME = weimeishi;
-				PROVISIONING_PROFILE = "3BFDA760-5C99-4E09-B417-CEA2F21FB496";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3BFDA760-5C99-4E09-B417-CEA2F21FB496";
+				PROVISIONING_PROFILE = "54DC6CA2-020D-40AD-B797-8DE5A87C2690";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "54DC6CA2-020D-40AD-B797-8DE5A87C2690";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1433,6 +1456,7 @@
 					"\"$(SRCROOT)/NoneAdultStory/AdsMoGoLib/AdNetworkLibs/Adwo_SDK_300/adwoSDKLib\"",
 					"\"$(SRCROOT)/NoneAdultStory/WeixinSDK\"",
 					"\"$(SRCROOT)/NoneAdultStory/MobiSageMediatorSDK_2.0.0\"",
+					"\"$(SRCROOT)/NoneAdultStory/jpush\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1476,6 +1500,7 @@
 					"\"$(SRCROOT)/NoneAdultStory/AdsMoGoLib/AdNetworkLibs/Adwo_SDK_300/adwoSDKLib\"",
 					"\"$(SRCROOT)/NoneAdultStory/WeixinSDK\"",
 					"\"$(SRCROOT)/NoneAdultStory/MobiSageMediatorSDK_2.0.0\"",
+					"\"$(SRCROOT)/NoneAdultStory/jpush\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

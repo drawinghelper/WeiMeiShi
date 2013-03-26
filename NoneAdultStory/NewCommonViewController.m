@@ -182,6 +182,11 @@
         showAd = @"NO";
     }    
     if ([showAd isEqualToString:@"YES"]) {
+        /*
+        adView = [AdSageView requestAdSageFullScreenAdView:self];
+        [self.view addSubview:adView];
+        */
+        
         adView = [AdSageView requestAdSageBannerAdView:self
                                               sizeType:AdSageBannerAdViewSize_320X50];
         CGSize adSize = [adView actualAdSize];
