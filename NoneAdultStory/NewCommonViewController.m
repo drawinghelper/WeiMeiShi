@@ -139,7 +139,6 @@
                        alloc]initWithDelegate:self andImg:nil];
     recmdView.frame = CGRectMake(10, 10,recmdView.frame.size.width, recmdView.frame.size.height);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:recmdView];
-    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btnRefresh];
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg.png"] 
@@ -164,9 +163,8 @@
     [self performRefresh];
     self.tableView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1];
     
-    //分类页的“返回”按钮定制化
-    if (![self.title isEqualToString:@"最新"] 
-        && ![self.title isEqualToString:@"收藏"]) {
+    //分类和收藏页的“返回”按钮定制化
+    if (![self.title isEqualToString:@"最新"]) {
         UIImage *buttonImage = [UIImage imageNamed:@"custombackbutton.png"];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setImage:buttonImage forState:UIControlStateNormal];

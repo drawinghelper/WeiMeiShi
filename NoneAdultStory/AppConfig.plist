@@ -6,23 +6,103 @@
 	<array>
 		<dict>
 			<key>cid</key>
+			<string>1721</string>
+			<key>title</key>
+			<string>家常菜</string>
+			<key>subtitle</key>
+			<string>140个字浓缩美味的烹饪过程</string>
+			<key>icon</key>
+			<string>food_new.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1856</string>
+			<key>title</key>
+			<string>异国美味</string>
+			<key>subtitle</key>
+			<string>带你吃遍全球美味</string>
+			<key>icon</key>
+			<string>yiguo.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1848</string>
+			<key>title</key>
+			<string>川菜</string>
+			<key>subtitle</key>
+			<string>口味清鲜醇浓并重</string>
+			<key>icon</key>
+			<string>chuancai.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1849</string>
+			<key>title</key>
+			<string>湘菜</string>
+			<key>subtitle</key>
+			<string>湘西菜擅长香酸辣</string>
+			<key>icon</key>
+			<string>xiangcai.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1850</string>
+			<key>title</key>
+			<string>粤菜</string>
+			<key>subtitle</key>
+			<string>力求清中鲜、淡中求美</string>
+			<key>icon</key>
+			<string>yuecai.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1464</string>
+			<key>title</key>
+			<string>甜品</string>
+			<key>subtitle</key>
+			<string>每天少出点不会变胖的</string>
+			<key>icon</key>
+			<string>tianpin.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1862</string>
+			<key>title</key>
+			<string>烘焙</string>
+			<key>subtitle</key>
+			<string>看到就流口水的小饼干</string>
+			<key>icon</key>
+			<string>hongbei.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
 			<string>925</string>
 			<key>title</key>
 			<string>红酒</string>
 			<key>subtitle</key>
-			<string>每天领你品味不一样的生活</string>
+			<string>喝出健康、高品位</string>
 			<key>icon</key>
 			<string>wine_new.png</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>35</string>
+			<string>1867</string>
 			<key>title</key>
-			<string>菜品</string>
+			<string>咖啡</string>
 			<key>subtitle</key>
-			<string>140个字浓缩美味的烹饪过程</string>
+			<string>每天赋予你力量与热情</string>
 			<key>icon</key>
-			<string>food_new.png</string>
+			<string>kafei.png</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1868</string>
+			<key>title</key>
+			<string>品茶</string>
+			<key>subtitle</key>
+			<string>每天领你品味不一样的生活</string>
+			<key>icon</key>
+			<string>pincha.png</string>
 		</dict>
 	</array>
 	<key>TitleTextColor</key>

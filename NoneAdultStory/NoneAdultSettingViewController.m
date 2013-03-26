@@ -60,7 +60,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? 5 : 6;
+    return 6;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -104,72 +104,34 @@
     
     // Configure the cell...
     NSUInteger row = [indexPath row];
-    PFUser *user = [PFUser currentUser];
-    
+    UISwitch *switchView = nil;
     switch (row) {
         case 0:
-            cell.text = [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? @"用着不爽提意见" : @"评五星鼓励我";
+            cell.text = @"我的收藏";
             break;
         case 1:
-            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                if (user) {
-                    cell.text = [NSString stringWithFormat:@"%@ 已登录", user.username];
-                } else {
-                    cell.text = @"登录";
-                }
-            } else {
-                cell.text = @"用着不爽提意见";
-            }
+            cell.text = [[NoneAdultAppDelegate sharedAppDelegate] isInReview] ? @"帮我们评分" : @"评五星鼓励我";
             break;
         case 2:
-            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                cell.textLabel.text = [NSString stringWithFormat:@"清空缓存: 已占%@",[self getCacheFolderSizeStr]];
-
-            } else {
-                if (user) {
-                    cell.text = [NSString stringWithFormat:@"%@ 已登入", user.username];
-                } else {
-                    cell.text = @"登录";
-                }
-            }
+            cell.text = @"用着不爽提意见";
             break;
         case 3:
-            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                cell.textLabel.text = @"是否显示图片";
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
-                cell.accessoryView = switchView;
-                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
-                         animated:NO];
-                [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-            } else {
-                cell.textLabel.text = [NSString stringWithFormat:@"清空缓存: 已占%@",[self getCacheFolderSizeStr]];
-            }
+            cell.textLabel.text = [NSString stringWithFormat:@"清空缓存: 已占%@",[self getCacheFolderSizeStr]];
             break;
         case 4:
-            if ([[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-                //显示是否提醒
-                cell.textLabel.text = @"内容更新提醒";
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
-                cell.accessoryView = switchView;
-                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedAlert] animated:NO];
-                [switchView addTarget:self action:@selector(alertSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-            } else {
-                cell.textLabel.text = @"是否显示图片";
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
-                cell.accessoryView = switchView;
-                [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
-                         animated:NO];
-                [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-            }
+            cell.textLabel.text = @"是否显示图片";
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+            cell.accessoryView = switchView;
+            [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedShowImage]
+                     animated:NO];
+            [switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
             break;
         case 5:
             //显示是否提醒
             cell.textLabel.text = @"内容更新提醒";
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+            switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
             cell.accessoryView = switchView;
             [switchView setOn:[[NoneAdultAppDelegate sharedAppDelegate] isNeedAlert] animated:NO];
             [switchView addTarget:self action:@selector(alertSwitchChanged:) forControlEvents:UIControlEventValueChanged];
@@ -254,36 +216,15 @@
 	//UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
 	NSUInteger row = [indexPath row];
-    PFUser *user = [PFUser currentUser];
-
-	if(row == 0){
-        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-            NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [[NoneAdultAppDelegate sharedAppDelegate] getAppStoreId]];  
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-        } else {
-            [self umengFeedback];
-        }
-    } else if (row == 1) {
-        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-            [self umengFeedback];
-        } else {
-            if (user) {
-                [self showLogOut];
-            } else {
-                [self showLogin];
-            }
-        }
-    } else if(row == 2){
-        if (![[NoneAdultAppDelegate sharedAppDelegate] isInReview]) {
-            if (user) {
-                [self showLogOut];
-            } else {
-                [self showLogin];
-            }    
-        } else {
-            [self confirmClearCache];
-        }
-    } else if(row == 3) {
+    if (row == 0) {
+        UIViewController *collectViewController = [[CollectedViewController alloc] initWithNibName:@"CollectedViewController" bundle:nil withTitle:@"收藏"];
+        [self.navigationController pushViewController:collectViewController animated:YES];
+    } else if(row == 1){
+        NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [[NoneAdultAppDelegate sharedAppDelegate] getAppStoreId]];  
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    } else if (row == 2) {
+        [self umengFeedback];
+    } else if(row == 3){
         [self confirmClearCache];
     }
 	[self.tableView deselectRowAtIndexPath:indexPath animated:YES];

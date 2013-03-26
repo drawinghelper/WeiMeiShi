@@ -494,9 +494,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:
                                              newCommonNavViewController, 
                                              historyTopNavViewController,
-                                             //channelNavViewController,
-                                             collectNavViewController,
+                                             channelNavViewController,
                                              searchController,
+                                             //collectNavViewController,
                                              settingNavViewController,
                                              nil];
 
