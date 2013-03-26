@@ -182,16 +182,17 @@
         showAd = @"NO";
     }    
     if ([showAd isEqualToString:@"YES"]) {
-        /*
-        adView = [AdSageView requestAdSageFullScreenAdView:self];
-        [self.view addSubview:adView];
-        */
         
+        adView = [AdSageView requestAdSageFullScreenAdView:self];
+        adView.frame = CGRectMake(0, 20, 320, 460);
+        [[[[UIApplication sharedApplication] delegate] window] addSubview:adView];
+        
+        /*
         adView = [AdSageView requestAdSageBannerAdView:self
                                               sizeType:AdSageBannerAdViewSize_320X50];
         CGSize adSize = [adView actualAdSize];
         adView.frame = CGRectMake(0, 25, self.view.frame.size.width, adSize.height);
-        [self.view addSubview:adView];
+        [self.view addSubview:adView];*/
     }
 }
 

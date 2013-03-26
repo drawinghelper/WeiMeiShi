@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3EF46CCA1551635C00A8FF4A"
-               BuildableName = "wangxiaojian.app"
+               BuildableName = "weimeishi.app"
                BlueprintName = "WeiMeiShi"
                ReferencedContainer = "container:WeiMeiShi.xcodeproj">
             </BuildableReference>
@@ -32,7 +32,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3EF46CCA1551635C00A8FF4A"
-            BuildableName = "wangxiaojian.app"
+            BuildableName = "weimeishi.app"
             BlueprintName = "WeiMeiShi"
             ReferencedContainer = "container:WeiMeiShi.xcodeproj">
          </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3EF46CCA1551635C00A8FF4A"
-            BuildableName = "wangxiaojian.app"
+            BuildableName = "weimeishi.app"
             BlueprintName = "WeiMeiShi"
             ReferencedContainer = "container:WeiMeiShi.xcodeproj">
          </BuildableReference>
@@ -69,7 +69,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3EF46CCA1551635C00A8FF4A"
-            BuildableName = "wangxiaojian.app"
+            BuildableName = "weimeishi.app"
             BlueprintName = "WeiMeiShi"
             ReferencedContainer = "container:WeiMeiShi.xcodeproj">
          </BuildableReference>
