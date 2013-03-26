@@ -20,7 +20,7 @@
 		3E1C4891170181CF0081CD40 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E1C4886170181CF0081CD40 /* star@2x.png */; };
 		3E1C489517018FA60081CD40 /* libPushSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C489417018FA60081CD40 /* libPushSDK.a */; };
 		3E1C4897170191190081CD40 /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E1C4896170191190081CD40 /* PushConfig.plist */; };
-		3E1C48991701985B0081CD40 /* libPushSDK-Simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1C48981701985B0081CD40 /* libPushSDK-Simulator.a */; };
+		3E22835E1701E2E20074C003 /* close_x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E22835D1701E2E20074C003 /* close_x.png */; };
 		3E2860FF164BEC20000385AB /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E2860FE164BEC20000385AB /* libstdc++.6.0.9.dylib */; };
 		3E286101164BEC48000385AB /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E286100164BEC48000385AB /* libiconv.dylib */; };
 		3E286103164BEC78000385AB /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E286102164BEC78000385AB /* CoreFoundation.framework */; };
@@ -223,7 +223,7 @@
 		3E1C489317018FA60081CD40 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
 		3E1C489417018FA60081CD40 /* libPushSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPushSDK.a; sourceTree = "<group>"; };
 		3E1C4896170191190081CD40 /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
-		3E1C48981701985B0081CD40 /* libPushSDK-Simulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libPushSDK-Simulator.a"; sourceTree = "<group>"; };
+		3E22835D1701E2E20074C003 /* close_x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_x.png; sourceTree = "<group>"; };
 		3E2860FE164BEC20000385AB /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
 		3E286100164BEC48000385AB /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		3E286102164BEC78000385AB /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -523,7 +523,6 @@
 				3E8D414516AAA2DB00F85979 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 				3E8D41A916AADC1600F85979 /* libMobiSageMediatorSDK_2.0.0.a in Frameworks */,
 				3E1C489517018FA60081CD40 /* libPushSDK.a in Frameworks */,
-				3E1C48991701985B0081CD40 /* libPushSDK-Simulator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,7 +534,6 @@
 			children = (
 				3E1C489317018FA60081CD40 /* APService.h */,
 				3E1C489417018FA60081CD40 /* libPushSDK.a */,
-				3E1C48981701985B0081CD40 /* libPushSDK-Simulator.a */,
 				3E1C4896170191190081CD40 /* PushConfig.plist */,
 			);
 			path = jpush;
@@ -563,6 +561,7 @@
 		3E8D414616AADC1600F85979 /* MobiSageMediatorSDK_2.0.0 */ = {
 			isa = PBXGroup;
 			children = (
+				3E22835D1701E2E20074C003 /* close_x.png */,
 				3E8D414716AADC1600F85979 /* libMobiSageMediatorSDK_2.0.0.a */,
 				3E8D414816AADC1600F85979 /* Other File */,
 				3E8D41A216AADC1600F85979 /* Public File */,
@@ -1212,6 +1211,7 @@
 				3E1C4890170181CF0081CD40 /* share_normal.png in Resources */,
 				3E1C4891170181CF0081CD40 /* star@2x.png in Resources */,
 				3E1C4897170191190081CD40 /* PushConfig.plist in Resources */,
+				3E22835E1701E2E20074C003 /* close_x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

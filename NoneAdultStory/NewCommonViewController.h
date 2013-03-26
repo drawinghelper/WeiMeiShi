@@ -28,6 +28,7 @@
 
 @interface NewCommonViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EGORefreshTableHeaderDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UMSNSDataSendDelegate, MBProgressHUDDelegate, AdSageDelegate, MobiSageRecommendDelegate> {
     AdSageView *adView;
+    AdSageView *fullScreenAdView;
     MobiSageRecommendView *recmdView;
     MBProgressHUD *HUD;
 

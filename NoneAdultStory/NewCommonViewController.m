@@ -176,26 +176,39 @@
         self.navigationItem.leftBarButtonItem = customBarItem;
     }
     
-    
+    //banner广告设置
     NSString *showAd = [MobClick getConfigParams:@"showAd"];
     if (showAd == nil || showAd == [NSNull null]  || [showAd isEqualToString:@""]) {
         showAd = @"NO";
-    }    
+    }
     if ([showAd isEqualToString:@"YES"]) {
-        
-        adView = [AdSageView requestAdSageFullScreenAdView:self];
-        adView.frame = CGRectMake(0, 20, 320, 460);
-        [[[[UIApplication sharedApplication] delegate] window] addSubview:adView];
-        
-        /*
         adView = [AdSageView requestAdSageBannerAdView:self
                                               sizeType:AdSageBannerAdViewSize_320X50];
         CGSize adSize = [adView actualAdSize];
         adView.frame = CGRectMake(0, 25, self.view.frame.size.width, adSize.height);
-        [self.view addSubview:adView];*/
+        [self.view addSubview:adView];
+    }
+    
+    //全屏广告设置
+    NSString *showFullScreenAd = [MobClick getConfigParams:@"showFullScreenAd"];
+    if (showFullScreenAd == nil || showFullScreenAd == [NSNull null]  || [showFullScreenAd isEqualToString:@""]) {
+        showFullScreenAd = @"NO";
+    }
+    if ([showFullScreenAd isEqualToString:@"YES"] && [self.title isEqualToString:@"最新"]) {
+        fullScreenAdView = [AdSageView requestAdSageFullScreenAdView:self];
+        fullScreenAdView.frame = CGRectMake(0, 20, 320, 460);
+        [[[[UIApplication sharedApplication] delegate] window] addSubview:fullScreenAdView];
+        
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(320-42, 20, 42, 42)];
+        [btn setBackgroundImage:[UIImage imageNamed:@"close_x"] forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(closeFullScreenAd:) forControlEvents:UIControlEventTouchUpInside];
+        [[[[UIApplication sharedApplication] delegate] window] addSubview:btn];
     }
 }
-
+- (void)closeFullScreenAd:(id)sender {
+    [sender removeFromSuperview];
+    [fullScreenAdView removeFromSuperview];
+}
 -(void)back {
     [self.navigationController popViewControllerAnimated:YES];
 }
