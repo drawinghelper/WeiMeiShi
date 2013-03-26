@@ -125,7 +125,7 @@
         self.paginationEnabled = NO;
         
         // The number of objects to show per page
-        self.objectsPerPage = 20;
+        self.objectsPerPage = 100;
     }
     return self;
 }

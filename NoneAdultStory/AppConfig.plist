@@ -6,35 +6,74 @@
 	<array>
 		<dict>
 			<key>cid</key>
-			<string>925</string>
+			<string>1646</string>
 			<key>title</key>
-			<string>红酒</string>
+			<string>情感彻悟</string>
 			<key>subtitle</key>
-			<string>每天领你品味不一样的生活</string>
+			<string>有时明明知道这么做会让自己难过</string>
 			<key>icon</key>
-			<string>wine_new.png</string>
+			<string>channel_qinggan.jpg</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>35</string>
+			<string>889</string>
 			<key>title</key>
-			<string>菜品</string>
+			<string>人生语录</string>
 			<key>subtitle</key>
-			<string>140个字浓缩美味的烹饪过程</string>
+			<string>如果方向错了，停下来就是前进</string>
 			<key>icon</key>
-			<string>food_new.png</string>
+			<string>channel_rensheng.jpg</string>
 		</dict>
 		<dict>
 			<key>cid</key>
-			<string>1721</string>
+			<string>902</string>
 			<key>title</key>
-			<string>家常菜</string>
+			<string>唯美英语</string>
 			<key>subtitle</key>
-			<string>家常菜</string>
+			<string>Anger is only one letter short of danger</string>
 			<key>icon</key>
-			<string>food_new.png</string>
+			<string>channel_yingyu.jpg</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>922</string>
+			<key>title</key>
+			<string>职场锦囊</string>
+			<key>subtitle</key>
+			<string>思想如钻子，必须集中在一点钻下去</string>
+			<key>icon</key>
+			<string>channel_zhichang.jpg</string>
+		</dict>
+		<dict>
+			<key>cid</key>
+			<string>1262</string>
+			<key>title</key>
+			<string>禅悟心语</string>
+			<key>subtitle</key>
+			<string>很多人心做不了主，都是心随物转</string>
+			<key>icon</key>
+			<string>channel_chanwu.jpg</string>
 		</dict>
 	</array>
+	<key>NewTabCid</key>
+	<string>1646</string>
+	<key>UmengAppKey</key>
+	<string>505dd1e05270150d1b000154</string>
+	<key>ParseConfig</key>
+	<dict>
+		<key>applicationId</key>
+		<string>oESEBB1iy7tOWTyVNYv9dwLYN1WLvCUrAqHCLPjZ</string>
+		<key>clientKey</key>
+		<string>XvkmsHe6p4UlHqhScn113tlrkrJAnF7q37040Eoy</string>
+	</dict>
+	<key>AlertKeyword</key>
+	<string>王小贱语录</string>
+	<key>AppStoreId</key>
+	<string>564488008</string>
+	<key>AppChannelTag</key>
+	<string>App Store</string>
+	<key>MoGoAppKey</key>
+	<string>f80cab2f2e5b4e7d85139bec51cd346b</string>
 	<key>TitleTextColor</key>
 	<dict>
 		<key>red</key>
@@ -53,25 +92,6 @@
 		<key>blue</key>
 		<integer>255</integer>
 	</dict>
-	<key>NewTabCid</key>
-	<string>35</string>
-	<key>UmengAppKey</key>
-	<string>4fffced85270157a3c00004e</string>
-	<key>ParseConfig</key>
-	<dict>
-		<key>applicationId</key>
-		<string>zdEAPvE4kYUg0q7XhtWAa2iCvoV9FNQpxwFcHngB</string>
-		<key>clientKey</key>
-		<string>Y0VdVm9vyUb1ISNvTVFpLyk8hpvZs91ondkbnNaQ</string>
-	</dict>
-	<key>AlertKeyword</key>
-	<string>菜谱</string>
-	<key>AppStoreId</key>
-	<string>545287581</string>
-	<key>AppChannelTag</key>
-	<string>App Store</string>
-	<key>MoGoAppKey</key>
-	<string>8263cdaa8f724e2293b2f9f3aff849ee</string>
 	<key>ShowImageDefault</key>
 	<true/>
 </dict>
